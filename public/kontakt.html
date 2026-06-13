@@ -564,6 +564,18 @@ body.menu-open .overlay-nav a{transform:translateY(0)}
 .overlay-cta{margin-top:2.2rem; opacity:0; transform:translateY(16px);
   transition:opacity .5s var(--ease) .35s, transform .5s var(--ease) .35s}
 body.menu-open .overlay-cta{opacity:1; transform:none}
+.overlay-lang{margin-top:1.6rem; display:flex; flex-wrap:wrap; align-items:center; gap:.5rem;
+  opacity:0; transform:translateY(16px);
+  transition:opacity .5s var(--ease) .4s, transform .5s var(--ease) .4s}
+body.menu-open .overlay-lang{opacity:1; transform:none}
+.overlay-lang-label{width:100%; font-size:.78rem; font-weight:600; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--muted)}
+.lang-btn{font:inherit; font-size:.82rem; font-weight:600; color:var(--pine);
+  border:1.5px solid var(--line); background:var(--card);
+  padding:.4rem .9rem; border-radius:var(--r-pill); cursor:pointer;
+  transition:background-color .25s var(--ease), border-color .25s var(--ease), color .25s var(--ease)}
+.lang-btn:hover{background:var(--sage-tint); border-color:var(--sage)}
+.lang-btn[aria-current="true"]{background:var(--pine); color:var(--surface); border-color:var(--pine)}
 .overlay-foot{position:absolute; left:var(--pad); right:var(--pad); bottom:calc(var(--pad) + env(safe-area-inset-bottom));
   display:flex; flex-wrap:wrap; gap:.4rem 1.4rem; font-size:.86rem; color:var(--muted);
   opacity:0; transition:opacity .5s var(--ease) .45s}
@@ -577,8 +589,20 @@ body.menu-open{overflow:hidden}
 }
 @media (prefers-reduced-motion:reduce){
   .overlay{transition:none}
-  .overlay-nav a,.overlay-cta,.overlay-foot{transition:none; transform:none; opacity:1}
+  .overlay-nav a,.overlay-cta,.overlay-lang,.overlay-foot{transition:none; transform:none; opacity:1}
 }
+
+/* ---------- RTL (Arabic) ---------- */
+html[dir="rtl"] .hero-cta,
+html[dir="rtl"] .footer-bar,
+html[dir="rtl"] .overlay-foot,
+html[dir="rtl"] .overlay-lang,
+html[dir="rtl"] .lang-chips,
+html[dir="rtl"] .hub-meta,
+html[dir="rtl"] .k-row,
+html[dir="rtl"] .field-row{direction:rtl}
+html[dir="rtl"] .overlay-close{right:auto; left:var(--pad)}
+html[dir="rtl"] .skip-link{left:auto; right:1rem}
 
 /* ---------- Playful floating toys (decorative) ---------- */
 .toys{position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:0}
@@ -596,9 +620,20 @@ body.menu-open{overflow:hidden}
 @media (prefers-reduced-motion:reduce){ .toy{animation:none} }
 
 </style>
+<script>
+(function(){
+  try{
+    var l=localStorage.getItem('bambini-lang');
+    if(l && l!=='de'){
+      document.documentElement.setAttribute('lang', l);
+      if(l==='ar') document.documentElement.setAttribute('dir','rtl');
+    }
+  }catch(e){}
+})();
+</script>
 </head>
-<body>
-<a class="skip-link" href="#main">Zum Inhalt springen</a>
+<body data-i18n-page="kontakt">
+<a class="skip-link" href="#main" data-i18n="a11y.skip">Zum Inhalt springen</a>
 
 <!-- Animated pastel wave background -->
 <div class="bgwaves" aria-hidden="true">
@@ -617,35 +652,45 @@ body.menu-open{overflow:hidden}
     </a>
     <nav aria-label="Hauptnavigation">
       <ul class="nav-links">
-        <li><a href="index.html#leistungen">Leistungen</a></li>
-        <li><a href="index.html#aerztin">Ihre Ärztin</a></li>
-        <li><a href="index.html#praxis">Praxis &amp; Zeiten</a></li>
-        <li><a href="team.html">Team</a></li>
-        <li><a href="kontakt.html" aria-current="page" style="color:var(--pine); font-weight:600">Kontakt</a></li>
+        <li><a href="index.html#leistungen" data-i18n="nav.leistungen">Leistungen</a></li>
+        <li><a href="index.html#aerztin" data-i18n="nav.aerztin">Ihre Ärztin</a></li>
+        <li><a href="index.html#praxis" data-i18n="nav.praxis">Praxis &amp; Zeiten</a></li>
+        <li><a href="team.html" data-i18n="nav.team">Team</a></li>
+        <li><a href="kontakt.html" aria-current="page" style="color:var(--pine); font-weight:600" data-i18n="nav.kontakt">Kontakt</a></li>
       </ul>
     </nav>
-      <button class="burger" id="burger" aria-label="Menü öffnen" aria-expanded="false" aria-controls="overlay">
+      <button class="burger" id="burger" aria-label="Menü öffnen" aria-expanded="false" aria-controls="overlay" data-i18n-attr="aria-label:nav.menuOpen">
         <span></span><span></span><span></span>
       </button>
-    <a class="btn btn-primary" href="index.html#termin" data-magnetic>Termin vereinbaren</a>
+    <a class="btn btn-primary" href="index.html#termin" data-magnetic data-i18n="nav.cta">Termin vereinbaren</a>
   </div>
 </header>
 
 <!-- Fullscreen overlay menu -->
 <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-label="Menü" inert>
-  <button class="overlay-close" id="overlayClose" aria-label="Menü schließen"></button>
+  <button class="overlay-close" id="overlayClose" aria-label="Menü schließen" data-i18n-attr="aria-label:nav.menuClose"></button>
   <nav aria-label="Mobile Navigation">
     <ul class="overlay-nav">
-        <li><a href="index.html" style="--d:0.08s"><span class="idx">01</span>Start</a></li>
-        <li><a href="index.html#leistungen" style="--d:0.15s"><span class="idx">02</span>Leistungen</a></li>
-        <li><a href="team.html" style="--d:0.22s"><span class="idx">03</span>Team</a></li>
-        <li><a href="index.html#praxis" style="--d:0.29s"><span class="idx">04</span>Praxis & Zeiten</a></li>
-        <li><a href="kontakt.html" aria-current="page" style="--d:0.36s"><span class="idx">05</span>Kontakt</a></li>
+        <li><a href="index.html" style="--d:0.08s"><span class="idx">01</span><span data-i18n="overlay.start">Start</span></a></li>
+        <li><a href="index.html#leistungen" style="--d:0.15s"><span class="idx">02</span><span data-i18n="nav.leistungen">Leistungen</span></a></li>
+        <li><a href="team.html" style="--d:0.22s"><span class="idx">03</span><span data-i18n="nav.team">Team</span></a></li>
+        <li><a href="index.html#praxis" style="--d:0.29s"><span class="idx">04</span><span data-i18n="nav.praxis">Praxis &amp; Zeiten</span></a></li>
+        <li><a href="kontakt.html" aria-current="page" style="--d:0.36s"><span class="idx">05</span><span data-i18n="nav.kontakt">Kontakt</span></a></li>
     </ul>
   </nav>
   <div class="overlay-cta">
-    <a class="btn btn-primary" href="index.html#termin">Termin vereinbaren
+    <a class="btn btn-primary" href="index.html#termin"><span data-i18n="nav.cta">Termin vereinbaren</span>
       <svg class="arr" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 3.5 13.5 8 9 12.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  </div>
+  <div class="overlay-lang" role="group" aria-label="Sprache / Language">
+    <span class="overlay-lang-label">Sprache · Language</span>
+    <button type="button" class="lang-btn" data-lang="de" aria-current="true">DE</button>
+    <button type="button" class="lang-btn" data-lang="en">EN</button>
+    <button type="button" class="lang-btn" data-lang="es">ES</button>
+    <button type="button" class="lang-btn" data-lang="fr">FR</button>
+    <button type="button" class="lang-btn" data-lang="tr">TR</button>
+    <button type="button" class="lang-btn" data-lang="ru">RU</button>
+    <button type="button" class="lang-btn" data-lang="ar">AR</button>
   </div>
   <div class="overlay-foot">
     <a href="tel:+4313460671">01 / 346 06 71</a>
@@ -663,9 +708,9 @@ body.menu-open{overflow:hidden}
     <span class="toy " style="top:87%;right:3%;width:58px;height:auto;--r:-12deg;--t:7.6s;--dl:0.0s"><svg viewBox="0 0 60 90"><ellipse cx="30" cy="30" rx="24" ry="28" fill="#FFE5E7" stroke="#C24B61" stroke-width="2.5"/><path d="M30 58l-4 8h8z" fill="#C24B61"/><path d="M30 66c4 6-4 10 0 18" stroke="#C24B61" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></span>
   </div>
 <div class="container">
-    <span class="eyebrow hero-fade" style="--d:.05s">Kontakt</span>
-    <h1 class="hero-fade" style="--d:.12s">Wir sind <em>für Sie da.</em></h1>
-    <p class="lede hero-fade" style="--d:.3s; margin-top:1.1rem">
+    <span class="eyebrow hero-fade" style="--d:.05s" data-i18n="nav.kontakt">Kontakt</span>
+    <h1 class="hero-fade" style="--d:.12s" data-i18n-html="kontakt.title">Wir sind <em>für Sie da.</em></h1>
+    <p class="lede hero-fade" style="--d:.3s; margin-top:1.1rem" data-i18n="kontakt.lede">
       Wenn Sie Fragen zu unseren Leistungen und Angeboten haben, nutzen Sie einfach das
       Formular – wir melden uns umgehend bei Ihnen.
     </p>
@@ -689,64 +734,64 @@ body.menu-open{overflow:hidden}
         <ul class="k-rows">
           <li class="k-row">
             <span class="k-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.3 7-11a7 7 0 0 0-14 0c0 4.7 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg></span>
-            <div><span class="lbl">Adresse</span><span class="val">Altmannsdorfer Straße 89/2/5<br>1120 Wien</span></div>
+            <div><span class="lbl" data-i18n="kontakt.addressLabel">Adresse</span><span class="val">Altmannsdorfer Straße 89/2/5<br>1120 Wien</span></div>
           </li>
           <li class="k-row">
             <span class="k-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 6.5 8.5 6 8.5-6"/></svg></span>
-            <div><span class="lbl">E-Mail</span><a href="mailto:office@bambini-kinderpraxis.at">office@bambini-kinderpraxis.at</a></div>
+            <div><span class="lbl" data-i18n="kontakt.emailLabel">E-Mail</span><a href="mailto:office@bambini-kinderpraxis.at">office@bambini-kinderpraxis.at</a></div>
           </li>
           <li class="k-row">
             <span class="k-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 4h4l1.5 4.5L8 10c1 2.5 3.5 5 6 6l1.5-2.5L20 15v4a1.5 1.5 0 0 1-1.7 1.5C10.5 19.6 4.4 13.5 3.5 5.7A1.5 1.5 0 0 1 5 4z"/></svg></span>
-            <div><span class="lbl">Telefon</span><a href="tel:+4313460671">01 / 346 06 71</a></div>
+            <div><span class="lbl" data-i18n="kontakt.phoneLabel">Telefon</span><a href="tel:+4313460671">01 / 346 06 71</a></div>
           </li>
         </ul>
         <div class="k-map">
-          <iframe title="Standort der Praxis auf der Karte" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          <iframe title="Standort der Praxis auf der Karte" data-i18n-attr="title:kontakt.mapTitle" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
             src="https://www.google.com/maps?q=Altmannsdorfer%20Stra%C3%9Fe%2089,%201120%20Wien&output=embed"></iframe>
         </div>
       </aside>
 
       <div class="k-form reveal" style="--d:.1s">
-        <p>Pflichtfelder sind mit <span style="color:var(--terra)">*</span> markiert.</p>
+        <p data-i18n-html="kontakt.required">Pflichtfelder sind mit <span style="color:var(--terra)">*</span> markiert.</p>
         <form id="kontakt" novalidate>
-          <p class="k-legend">Kontaktinformation</p>
+          <p class="k-legend" data-i18n="kontakt.legend1">Kontaktinformation</p>
           <div class="field-row">
             <div class="field">
-              <label for="kName">Name <span class="req">*</span></label>
-              <input id="kName" name="name" type="text" autocomplete="name" placeholder="Vor- &amp; Nachname" required>
+              <label for="kName" data-i18n-html="kontakt.nameLabel">Name <span class="req">*</span></label>
+              <input id="kName" name="name" type="text" autocomplete="name" placeholder="Vor- &amp; Nachname" data-i18n-attr="placeholder:kontakt.namePlaceholder" required>
             </div>
             <div class="field">
-              <label for="kFirma">Firma</label>
-              <input id="kFirma" name="firma" type="text" autocomplete="organization" placeholder="optional">
+              <label for="kFirma" data-i18n="kontakt.firmaLabel">Firma</label>
+              <input id="kFirma" name="firma" type="text" autocomplete="organization" placeholder="optional" data-i18n-attr="placeholder:kontakt.optional">
             </div>
           </div>
           <div class="field-row">
             <div class="field">
-              <label for="kMail">E-Mail <span class="req">*</span></label>
-              <input id="kMail" name="email" type="email" autocomplete="email" placeholder="name@beispiel.at" required>
+              <label for="kMail" data-i18n-html="kontakt.mailLabel">E-Mail <span class="req">*</span></label>
+              <input id="kMail" name="email" type="email" autocomplete="email" placeholder="name@beispiel.at" data-i18n-attr="placeholder:kontakt.mailPlaceholder" required>
             </div>
             <div class="field">
-              <label for="kTel">Telefon</label>
-              <input id="kTel" name="telefon" type="tel" autocomplete="tel" placeholder="optional">
+              <label for="kTel" data-i18n="kontakt.phoneLabel">Telefon</label>
+              <input id="kTel" name="telefon" type="tel" autocomplete="tel" placeholder="optional" data-i18n-attr="placeholder:kontakt.optional">
             </div>
           </div>
 
-          <p class="k-legend">Weitere Informationen</p>
+          <p class="k-legend" data-i18n="kontakt.legend2">Weitere Informationen</p>
           <label class="k-recall" for="kRecall">
             <input id="kRecall" name="rueckruf" type="checkbox">
-            Bitte um Rückruf
+            <span data-i18n="kontakt.recall">Bitte um Rückruf</span>
           </label>
           <div class="field">
-            <label for="kMsg">Nachricht <span class="req">*</span></label>
-            <textarea id="kMsg" name="nachricht" placeholder="Ihre Nachricht an uns …" required></textarea>
+            <label for="kMsg" data-i18n-html="kontakt.msgLabel">Nachricht <span class="req">*</span></label>
+            <textarea id="kMsg" name="nachricht" placeholder="Ihre Nachricht an uns …" data-i18n-attr="placeholder:kontakt.msgPlaceholder" required></textarea>
           </div>
 
           <label class="check" for="kDsgvo">
             <input id="kDsgvo" name="dsgvo" type="checkbox" required>
-            <span>Die <a href="datenschutz.html" target="_blank" rel="noopener">Datenschutzerklärung</a> habe ich gelesen und akzeptiert. <span class="req">*</span></span>
+            <span data-i18n-html="kontakt.dsgvo">Die <a href="datenschutz.html" target="_blank" rel="noopener">Datenschutzerklärung</a> habe ich gelesen und akzeptiert. <span class="req">*</span></span>
           </label>
 
-          <button class="btn btn-primary" type="submit" data-magnetic>Nachricht abschicken
+          <button class="btn btn-primary" type="submit" data-magnetic><span data-i18n="kontakt.submit">Nachricht abschicken</span>
             <svg class="arr" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 3.5 13.5 8 9 12.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
           <p class="k-ok" id="kOk" role="status" aria-live="polite"></p>
         </form>
@@ -762,11 +807,11 @@ body.menu-open{overflow:hidden}
     <div class="footer-grid">
       <div>
         <h4>Bambini Kinder Praxis</h4>
-        <p style="max-width:38ch">Kinder- und Jugendheilkunde in 1120 Wien.
+        <p style="max-width:38ch" data-i18n="footer.about">Kinder- und Jugendheilkunde in 1120 Wien.
         Wir begleiten Ihr Kind von der Geburt bis zum 18.&nbsp;Geburtstag – mit Fachwissen, Empathie und Zeit.</p>
       </div>
       <div>
-        <h4>Kontakt</h4>
+        <h4 data-i18n="nav.kontakt">Kontakt</h4>
         <ul>
           <li>Altmannsdorfer Str. 89/2/5</li>
           <li>1120 Wien</li>
@@ -775,36 +820,36 @@ body.menu-open{overflow:hidden}
         </ul>
       </div>
       <div>
-        <h4>Rechtliches</h4>
+        <h4 data-i18n="footer.legal">Rechtliches</h4>
         <ul>
-          <li><a href="impressum.html">Impressum</a></li>
-          <li><a href="datenschutz.html">Datenschutz</a></li>
-          <li><a href="#">Barrierefreiheit</a></li>
+          <li><a href="impressum.html" data-i18n="footer.impressum">Impressum</a></li>
+          <li><a href="datenschutz.html" data-i18n="footer.datenschutz">Datenschutz</a></li>
+          <li><a href="#" data-i18n="footer.accessibility">Barrierefreiheit</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bar">
       <span>© <span id="year"></span> Bambini Kinder Praxis · Dr. med. Boshra Alsebaie</span>
-      <span>Mit <span style="color:var(--terra)">♥</span> in Meidling</span>
+      <span><span data-i18n="footer.with">Mit</span> <span style="color:var(--terra)">♥</span> <span data-i18n="footer.inMeidling">in Meidling</span></span>
     </div>
   </div>
 </footer>
 
 <!-- ===================== MOBILE TAB BAR ===================== -->
-<nav class="tabbar" aria-label="Schnellzugriff">
+<nav class="tabbar" data-i18n-attr="aria-label:tabbar.aria" aria-label="Schnellzugriff">
   <div class="tabbar-inner">
     <a class="tab tab-cta" href="index.html#termin">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 9.5h17M8 3v4M16 3v4M12 12.5v5M9.5 15h5"/></svg>Termin</a>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 9.5h17M8 3v4M16 3v4M12 12.5v5M9.5 15h5"/></svg><span data-i18n="tabbar.termin">Termin</span></a>
     <a class="tab" href="tel:+4313460671">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l1.5 4.5L8 10c1 2.5 3.5 5 6 6l1.5-2.5L20 15v4a1.5 1.5 0 0 1-1.7 1.5C10.5 19.6 4.4 13.5 3.5 5.7A1.5 1.5 0 0 1 5 4z"/></svg>Anrufen</a>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l1.5 4.5L8 10c1 2.5 3.5 5 6 6l1.5-2.5L20 15v4a1.5 1.5 0 0 1-1.7 1.5C10.5 19.6 4.4 13.5 3.5 5.7A1.5 1.5 0 0 1 5 4z"/></svg><span data-i18n="tabbar.anrufen">Anrufen</span></a>
     <a class="tab" href="index.html#leistungen">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg>Leistungen</a>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg><span data-i18n="nav.leistungen">Leistungen</span></a>
     <a class="tab" href="index.html#praxis">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>Zeiten</a>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span data-i18n="tabbar.zeiten">Zeiten</span></a>
   </div>
 </nav>
 
-
+<script src="js/i18n.js"></script>
 <script>
 (function(){
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -826,6 +871,26 @@ body.menu-open{overflow:hidden}
       btn.addEventListener('pointerleave',()=>{btn.style.transform='';});
     });
   }
+  /* Übersetzbare Texte für das Kontaktformular; werden bei Sprachwechsel
+     über das "i18n:change"-Event aktualisiert (siehe i18n.js + /i18n/kontakt.json). */
+  const STR_DE={
+    formMissing:'Bitte füllen Sie Name, E-Mail und Nachricht aus und akzeptieren Sie die Datenschutzerklärung.',
+    formSubject:'Kontaktanfrage über die Website',
+    formBodyName:'Name',
+    formBodyFirma:'Firma',
+    formBodyMail:'E-Mail',
+    formBodyPhone:'Telefon',
+    formBodyRecall:'Rückruf gewünscht',
+    formBodyRecallYes:'ja',
+    formBodyRecallNo:'nein',
+    formBodyMsg:'Nachricht',
+    formSuccess:'Danke! Ihr E-Mail-Programm öffnet sich mit der fertigen Nachricht – alternativ erreichen Sie uns unter 01 / 346 06 71.'
+  };
+  let STR=STR_DE;
+  addEventListener('i18n:change', e=>{
+    STR = e.detail && e.detail.dyn ? {...STR_DE, ...e.detail.dyn} : STR_DE;
+  });
+
   const form=document.getElementById('kontakt');
   form.addEventListener('submit',e=>{
     e.preventDefault();
@@ -835,19 +900,19 @@ body.menu-open{overflow:hidden}
     const dsgvo=document.getElementById('kDsgvo').checked;
     if(!name||!mail||!msg||!dsgvo){
       ok.className='k-ok show'; ok.style.background='var(--pink)'; ok.style.color='var(--terra-dk)';
-      ok.textContent='Bitte füllen Sie Name, E-Mail und Nachricht aus und akzeptieren Sie die Datenschutzerklärung.';
+      ok.textContent=STR.formMissing;
       const first=!name?'kName':!mail?'kMail':!msg?'kMsg':'kDsgvo';
       document.getElementById(first).focus(); return;
     }
-    const body=[`Name: ${name}`, `Firma: ${v('kFirma')||'–'}`, `E-Mail: ${mail}`,
-                `Telefon: ${v('kTel')||'–'}`,
-                `Rückruf gewünscht: ${document.getElementById('kRecall').checked?'ja':'nein'}`,
-                '', 'Nachricht:', msg].join('\n');
+    const body=[`${STR.formBodyName}: ${name}`, `${STR.formBodyFirma}: ${v('kFirma')||'–'}`, `${STR.formBodyMail}: ${mail}`,
+                `${STR.formBodyPhone}: ${v('kTel')||'–'}`,
+                `${STR.formBodyRecall}: ${document.getElementById('kRecall').checked?STR.formBodyRecallYes:STR.formBodyRecallNo}`,
+                '', `${STR.formBodyMsg}:`, msg].join('\n');
     location.href='mailto:office@bambini-kinderpraxis.at'
-      +'?subject='+encodeURIComponent('Kontaktanfrage über die Website')
+      +'?subject='+encodeURIComponent(STR.formSubject)
       +'&body='+encodeURIComponent(body);
     ok.className='k-ok show'; ok.style.background=''; ok.style.color='';
-    ok.textContent='Danke! Ihr E-Mail-Programm öffnet sich mit der fertigen Nachricht – alternativ erreichen Sie uns unter 01 / 346 06 71.';
+    ok.textContent=STR.formSuccess;
   });
 
   /* Hamburger overlay menu */

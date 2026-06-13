@@ -493,6 +493,18 @@ body.menu-open .overlay-nav a{transform:translateY(0)}
 .overlay-cta{margin-top:2.2rem; opacity:0; transform:translateY(16px);
   transition:opacity .5s var(--ease) .35s, transform .5s var(--ease) .35s}
 body.menu-open .overlay-cta{opacity:1; transform:none}
+.overlay-lang{margin-top:1.6rem; display:flex; flex-wrap:wrap; align-items:center; gap:.5rem;
+  opacity:0; transform:translateY(16px);
+  transition:opacity .5s var(--ease) .4s, transform .5s var(--ease) .4s}
+body.menu-open .overlay-lang{opacity:1; transform:none}
+.overlay-lang-label{width:100%; font-size:.78rem; font-weight:600; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--muted)}
+.lang-btn{font:inherit; font-size:.82rem; font-weight:600; color:var(--pine);
+  border:1.5px solid var(--line); background:var(--card);
+  padding:.4rem .9rem; border-radius:var(--r-pill); cursor:pointer;
+  transition:background-color .25s var(--ease), border-color .25s var(--ease), color .25s var(--ease)}
+.lang-btn:hover{background:var(--sage-tint); border-color:var(--sage)}
+.lang-btn[aria-current="true"]{background:var(--pine); color:var(--surface); border-color:var(--pine)}
 .overlay-foot{position:absolute; left:var(--pad); right:var(--pad); bottom:calc(var(--pad) + env(safe-area-inset-bottom));
   display:flex; flex-wrap:wrap; gap:.4rem 1.4rem; font-size:.86rem; color:var(--muted);
   opacity:0; transition:opacity .5s var(--ease) .45s}
@@ -506,8 +518,20 @@ body.menu-open{overflow:hidden}
 }
 @media (prefers-reduced-motion:reduce){
   .overlay{transition:none}
-  .overlay-nav a,.overlay-cta,.overlay-foot{transition:none; transform:none; opacity:1}
+  .overlay-nav a,.overlay-cta,.overlay-lang,.overlay-foot{transition:none; transform:none; opacity:1}
 }
+
+/* ---------- RTL (Arabic) ---------- */
+html[dir="rtl"] .hero-cta,
+html[dir="rtl"] .footer-bar,
+html[dir="rtl"] .overlay-foot,
+html[dir="rtl"] .overlay-lang,
+html[dir="rtl"] .lang-chips,
+html[dir="rtl"] .hub-meta,
+html[dir="rtl"] .ds-layout,
+html[dir="rtl"] .ds-toc a{direction:rtl}
+html[dir="rtl"] .overlay-close{right:auto; left:var(--pad)}
+html[dir="rtl"] .skip-link{left:auto; right:1rem}
 
 /* ---------- Playful floating toys (decorative) ---------- */
 .toys{position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:0}
@@ -556,9 +580,20 @@ body.menu-open{overflow:hidden}
 @media (max-width:900px){ .ds-layout{grid-template-columns:1fr} .ds-toc{position:static} }
 
 </style>
+<script>
+(function(){
+  try{
+    var l=localStorage.getItem('bambini-lang');
+    if(l && l!=='de'){
+      document.documentElement.setAttribute('lang', l);
+      if(l==='ar') document.documentElement.setAttribute('dir','rtl');
+    }
+  }catch(e){}
+})();
+</script>
 </head>
-<body>
-<a class="skip-link" href="#main">Zum Inhalt springen</a>
+<body data-i18n-page="datenschutz">
+<a class="skip-link" href="#main" data-i18n="a11y.skip">Zum Inhalt springen</a>
 
 <!-- Animated pastel wave background -->
 <div class="bgwaves" aria-hidden="true">
@@ -577,35 +612,45 @@ body.menu-open{overflow:hidden}
     </a>
     <nav aria-label="Hauptnavigation">
       <ul class="nav-links">
-        <li><a href="index.html#leistungen">Leistungen</a></li>
-        <li><a href="index.html#aerztin">Ihre Ärztin</a></li>
-        <li><a href="index.html#praxis">Praxis &amp; Zeiten</a></li>
-        <li><a href="team.html">Team</a></li>
-        <li><a href="kontakt.html">Kontakt</a></li>
+        <li><a href="index.html#leistungen" data-i18n="nav.leistungen">Leistungen</a></li>
+        <li><a href="index.html#aerztin" data-i18n="nav.aerztin">Ihre Ärztin</a></li>
+        <li><a href="index.html#praxis" data-i18n="nav.praxis">Praxis &amp; Zeiten</a></li>
+        <li><a href="team.html" data-i18n="nav.team">Team</a></li>
+        <li><a href="kontakt.html" data-i18n="nav.kontakt">Kontakt</a></li>
       </ul>
     </nav>
-      <button class="burger" id="burger" aria-label="Menü öffnen" aria-expanded="false" aria-controls="overlay">
+      <button class="burger" id="burger" aria-label="Menü öffnen" aria-expanded="false" aria-controls="overlay" data-i18n-attr="aria-label:nav.menuOpen">
         <span></span><span></span><span></span>
       </button>
-    <a class="btn btn-primary" href="index.html#termin" data-magnetic>Termin vereinbaren</a>
+    <a class="btn btn-primary" href="index.html#termin" data-magnetic data-i18n="nav.cta">Termin vereinbaren</a>
   </div>
 </header>
 
 <!-- Fullscreen overlay menu -->
 <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-label="Menü" inert>
-  <button class="overlay-close" id="overlayClose" aria-label="Menü schließen"></button>
+  <button class="overlay-close" id="overlayClose" aria-label="Menü schließen" data-i18n-attr="aria-label:nav.menuClose"></button>
   <nav aria-label="Mobile Navigation">
     <ul class="overlay-nav">
-        <li><a href="index.html" aria-current="page" style="--d:0.08s"><span class="idx">01</span>Start</a></li>
-        <li><a href="index.html#leistungen" aria-current="page" style="--d:0.15s"><span class="idx">02</span>Leistungen</a></li>
-        <li><a href="team.html" style="--d:0.22s"><span class="idx">03</span>Team</a></li>
-        <li><a href="index.html#praxis" aria-current="page" style="--d:0.29s"><span class="idx">04</span>Praxis & Zeiten</a></li>
-        <li><a href="kontakt.html" style="--d:0.36s"><span class="idx">05</span>Kontakt</a></li>
+        <li><a href="index.html" aria-current="page" style="--d:0.08s"><span class="idx">01</span><span data-i18n="overlay.start">Start</span></a></li>
+        <li><a href="index.html#leistungen" aria-current="page" style="--d:0.15s"><span class="idx">02</span><span data-i18n="nav.leistungen">Leistungen</span></a></li>
+        <li><a href="team.html" style="--d:0.22s"><span class="idx">03</span><span data-i18n="nav.team">Team</span></a></li>
+        <li><a href="index.html#praxis" aria-current="page" style="--d:0.29s"><span class="idx">04</span><span data-i18n="nav.praxis">Praxis & Zeiten</span></a></li>
+        <li><a href="kontakt.html" style="--d:0.36s"><span class="idx">05</span><span data-i18n="nav.kontakt">Kontakt</span></a></li>
     </ul>
   </nav>
   <div class="overlay-cta">
-    <a class="btn btn-primary" href="index.html#termin">Termin vereinbaren
+    <a class="btn btn-primary" href="index.html#termin"><span data-i18n="nav.cta">Termin vereinbaren</span>
       <svg class="arr" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 3.5 13.5 8 9 12.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  </div>
+  <div class="overlay-lang" role="group" aria-label="Sprache / Language">
+    <span class="overlay-lang-label">Sprache · Language</span>
+    <button type="button" class="lang-btn" data-lang="de" aria-current="true">DE</button>
+    <button type="button" class="lang-btn" data-lang="en">EN</button>
+    <button type="button" class="lang-btn" data-lang="es">ES</button>
+    <button type="button" class="lang-btn" data-lang="fr">FR</button>
+    <button type="button" class="lang-btn" data-lang="tr">TR</button>
+    <button type="button" class="lang-btn" data-lang="ru">RU</button>
+    <button type="button" class="lang-btn" data-lang="ar">AR</button>
   </div>
   <div class="overlay-foot">
     <a href="tel:+4313460671">01 / 346 06 71</a>
@@ -617,9 +662,9 @@ body.menu-open{overflow:hidden}
 <main id="main">
 <section class="ds-hero">
   <div class="container">
-    <span class="eyebrow hero-fade" style="--d:.05s">Rechtliches</span>
-    <h1 class="hero-fade" style="--d:.12s">Datenschutz&shy;erklärung</h1>
-    <p class="lede hero-fade" style="--d:.3s; margin-top:1rem">
+    <span class="eyebrow hero-fade" style="--d:.05s" data-i18n="footer.legal">Rechtliches</span>
+    <h1 class="hero-fade" style="--d:.12s" data-i18n="ds.title">Datenschutz&shy;erklärung</h1>
+    <p class="lede hero-fade" style="--d:.3s; margin-top:1rem" data-i18n="ds.lede">
       Der Schutz Ihrer persönlichen Daten ist uns ein wichtiges Anliegen – besonders, wenn es um die Gesundheit Ihres Kindes geht.
     </p>
   </div>
@@ -629,92 +674,92 @@ body.menu-open{overflow:hidden}
   <div class="container">
     <div class="ds-layout">
       <aside class="ds-toc reveal" aria-label="Inhaltsverzeichnis">
-        <p>Inhalt</p>
+        <p data-i18n="ds.tocLabel">Inhalt</p>
         <ol>
-          <li><a href="#ds1">Datenschutz auf einen Blick</a></li>
-          <li><a href="#ds2">Verantwortliche Stelle</a></li>
-          <li><a href="#ds3">Hosting</a></li>
-          <li><a href="#ds4">Allgemeine Hinweise &amp; Pflichtinfos</a></li>
-          <li><a href="#ds5">Datenerfassung auf dieser Website</a></li>
-          <li><a href="#ds6">Ihre Rechte</a></li>
+          <li><a href="#ds1" data-i18n="ds.toc1">Datenschutz auf einen Blick</a></li>
+          <li><a href="#ds2" data-i18n="ds.toc2">Verantwortliche Stelle</a></li>
+          <li><a href="#ds3" data-i18n="ds.toc3">Hosting</a></li>
+          <li><a href="#ds4" data-i18n="ds.toc4">Allgemeine Hinweise &amp; Pflichtinfos</a></li>
+          <li><a href="#ds5" data-i18n="ds.toc5">Datenerfassung auf dieser Website</a></li>
+          <li><a href="#ds6" data-i18n="ds.toc6">Ihre Rechte</a></li>
         </ol>
       </aside>
 
       <div class="ds-body reveal" style="--d:.1s">
 
         <section id="ds1">
-          <h2><span class="n">1</span>Datenschutz auf einen Blick</h2>
-          <h3>Allgemeine Hinweise</h3>
-          <p>Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können. Ausführliche Informationen zum Thema Datenschutz entnehmen Sie der unter diesem Text aufgeführten Datenschutzerklärung.</p>
-          <h3>Wie erfassen wir Ihre Daten?</h3>
-          <p>Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen. Hierbei kann es sich z.&nbsp;B. um Daten handeln, die Sie in ein Kontaktformular eingeben. Andere Daten werden automatisch oder nach Ihrer Einwilligung beim Besuch der Website durch unsere IT-Systeme erfasst. Das sind vor allem technische Daten (z.&nbsp;B. Internetbrowser, Betriebssystem oder Uhrzeit des Seitenaufrufs). Die Erfassung dieser Daten erfolgt automatisch, sobald Sie diese Website betreten.</p>
-          <h3>Wofür nutzen wir Ihre Daten?</h3>
-          <p>Ein Teil der Daten wird erhoben, um eine fehlerfreie Bereitstellung der Website zu gewährleisten. Andere Daten können zur Bearbeitung Ihrer Anfrage verwendet werden, etwa wenn Sie über das Kontaktformular mit uns in Verbindung treten.</p>
-          <h3>Welche Rechte haben Sie bezüglich Ihrer Daten?</h3>
-          <p>Sie haben jederzeit das Recht, unentgeltlich Auskunft über Herkunft, Empfänger und Zweck Ihrer gespeicherten personenbezogenen Daten zu erhalten. Sie haben außerdem ein Recht, die Berichtigung oder Löschung dieser Daten zu verlangen. Hierzu sowie zu weiteren Fragen zum Thema Datenschutz können Sie sich jederzeit an uns wenden.</p>
+          <h2><span class="n">1</span><span data-i18n="ds.h1title">Datenschutz auf einen Blick</span></h2>
+          <h3 data-i18n="ds.s1h3a">Allgemeine Hinweise</h3>
+          <p data-i18n="ds.s1p1">Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können. Ausführliche Informationen zum Thema Datenschutz entnehmen Sie der unter diesem Text aufgeführten Datenschutzerklärung.</p>
+          <h3 data-i18n="ds.s1h3b">Wie erfassen wir Ihre Daten?</h3>
+          <p data-i18n="ds.s1p2">Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen. Hierbei kann es sich z.&nbsp;B. um Daten handeln, die Sie in ein Kontaktformular eingeben. Andere Daten werden automatisch oder nach Ihrer Einwilligung beim Besuch der Website durch unsere IT-Systeme erfasst. Das sind vor allem technische Daten (z.&nbsp;B. Internetbrowser, Betriebssystem oder Uhrzeit des Seitenaufrufs). Die Erfassung dieser Daten erfolgt automatisch, sobald Sie diese Website betreten.</p>
+          <h3 data-i18n="ds.s1h3c">Wofür nutzen wir Ihre Daten?</h3>
+          <p data-i18n="ds.s1p3">Ein Teil der Daten wird erhoben, um eine fehlerfreie Bereitstellung der Website zu gewährleisten. Andere Daten können zur Bearbeitung Ihrer Anfrage verwendet werden, etwa wenn Sie über das Kontaktformular mit uns in Verbindung treten.</p>
+          <h3 data-i18n="ds.s1h3d">Welche Rechte haben Sie bezüglich Ihrer Daten?</h3>
+          <p data-i18n="ds.s1p4">Sie haben jederzeit das Recht, unentgeltlich Auskunft über Herkunft, Empfänger und Zweck Ihrer gespeicherten personenbezogenen Daten zu erhalten. Sie haben außerdem ein Recht, die Berichtigung oder Löschung dieser Daten zu verlangen. Hierzu sowie zu weiteren Fragen zum Thema Datenschutz können Sie sich jederzeit an uns wenden.</p>
         </section>
 
         <section id="ds2">
-          <h2><span class="n">2</span>Verantwortliche Stelle</h2>
-          <p>Verantwortliche Stelle für die Datenverarbeitung auf dieser Website ist:</p>
-          <div class="ds-card">
+          <h2><span class="n">2</span><span data-i18n="ds.h2title">Verantwortliche Stelle</span></h2>
+          <p data-i18n="ds.s2p1">Verantwortliche Stelle für die Datenverarbeitung auf dieser Website ist:</p>
+          <div class="ds-card" data-i18n-html="ds.s2card">
             Bambini Kinder Praxis – Dr. med. Boshra Alsebaie<br>
             Altmannsdorfer Straße 89/2/5, 1120 Wien<br>
             Telefon: <a href="tel:+4313460671">01 / 346 06 71</a><br>
             E-Mail: <a href="mailto:office@bambini-kinderpraxis.at">office@bambini-kinderpraxis.at</a>
           </div>
-          <p>Verantwortliche Stelle ist die natürliche oder juristische Person, die allein oder gemeinsam mit anderen über die Zwecke und Mittel der Verarbeitung von personenbezogenen Daten entscheidet.</p>
+          <p data-i18n="ds.s2p2">Verantwortliche Stelle ist die natürliche oder juristische Person, die allein oder gemeinsam mit anderen über die Zwecke und Mittel der Verarbeitung von personenbezogenen Daten entscheidet.</p>
         </section>
 
         <section id="ds3">
-          <h2><span class="n">3</span>Hosting</h2>
-          <p>Diese Website wird bei einem externen Dienstleister gehostet. Die personenbezogenen Daten, die auf dieser Website erfasst werden, werden auf den Servern des Hosters gespeichert. Hierbei kann es sich v.&nbsp;a. um IP-Adressen, Kontaktanfragen, Meta- und Kommunikationsdaten sowie sonstige Daten handeln, die über eine Website generiert werden.</p>
-          <p>Das Hosting erfolgt zum Zweck der sicheren, schnellen und zuverlässigen Bereitstellung unseres Online-Angebots durch einen professionellen Anbieter. Sofern eine entsprechende Vereinbarung erforderlich ist, besteht mit dem Hoster ein Vertrag über Auftragsverarbeitung.</p>
+          <h2><span class="n">3</span><span data-i18n="ds.h3title">Hosting</span></h2>
+          <p data-i18n="ds.s3p1">Diese Website wird bei einem externen Dienstleister gehostet. Die personenbezogenen Daten, die auf dieser Website erfasst werden, werden auf den Servern des Hosters gespeichert. Hierbei kann es sich v.&nbsp;a. um IP-Adressen, Kontaktanfragen, Meta- und Kommunikationsdaten sowie sonstige Daten handeln, die über eine Website generiert werden.</p>
+          <p data-i18n="ds.s3p2">Das Hosting erfolgt zum Zweck der sicheren, schnellen und zuverlässigen Bereitstellung unseres Online-Angebots durch einen professionellen Anbieter. Sofern eine entsprechende Vereinbarung erforderlich ist, besteht mit dem Hoster ein Vertrag über Auftragsverarbeitung.</p>
         </section>
 
         <section id="ds4">
-          <h2><span class="n">4</span>Allgemeine Hinweise &amp; Pflichtinformationen</h2>
-          <h3>Datenschutz</h3>
-          <p>Die Betreiber dieser Seiten nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend den gesetzlichen Datenschutzvorschriften (insbesondere DSGVO und österreichisches DSG) sowie dieser Datenschutzerklärung.</p>
-          <h3>Widerruf Ihrer Einwilligung</h3>
-          <p>Viele Datenverarbeitungsvorgänge sind nur mit Ihrer ausdrücklichen Einwilligung möglich. Sie können eine bereits erteilte Einwilligung jederzeit widerrufen. Die Rechtmäßigkeit der bis zum Widerruf erfolgten Datenverarbeitung bleibt vom Widerruf unberührt.</p>
-          <h3>SSL- bzw. TLS-Verschlüsselung</h3>
-          <p>Diese Seite nutzt aus Sicherheitsgründen und zum Schutz der Übertragung vertraulicher Inhalte eine SSL- bzw. TLS-Verschlüsselung. Eine verschlüsselte Verbindung erkennen Sie daran, dass die Adresszeile des Browsers von „http://“ auf „https://“ wechselt.</p>
+          <h2><span class="n">4</span><span data-i18n="ds.h4title">Allgemeine Hinweise &amp; Pflichtinformationen</span></h2>
+          <h3 data-i18n="ds.s4h3a">Datenschutz</h3>
+          <p data-i18n="ds.s4p1">Die Betreiber dieser Seiten nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend den gesetzlichen Datenschutzvorschriften (insbesondere DSGVO und österreichisches DSG) sowie dieser Datenschutzerklärung.</p>
+          <h3 data-i18n="ds.s4h3b">Widerruf Ihrer Einwilligung</h3>
+          <p data-i18n="ds.s4p2">Viele Datenverarbeitungsvorgänge sind nur mit Ihrer ausdrücklichen Einwilligung möglich. Sie können eine bereits erteilte Einwilligung jederzeit widerrufen. Die Rechtmäßigkeit der bis zum Widerruf erfolgten Datenverarbeitung bleibt vom Widerruf unberührt.</p>
+          <h3 data-i18n="ds.s4h3c">SSL- bzw. TLS-Verschlüsselung</h3>
+          <p data-i18n="ds.s4p3">Diese Seite nutzt aus Sicherheitsgründen und zum Schutz der Übertragung vertraulicher Inhalte eine SSL- bzw. TLS-Verschlüsselung. Eine verschlüsselte Verbindung erkennen Sie daran, dass die Adresszeile des Browsers von „http://“ auf „https://“ wechselt.</p>
         </section>
 
         <section id="ds5">
-          <h2><span class="n">5</span>Datenerfassung auf dieser Website</h2>
-          <h3>Kontaktformular &amp; Terminanfrage</h3>
-          <p>Wenn Sie uns über das Kontakt- oder Anfrageformular Anfragen zukommen lassen, werden Ihre Angaben aus dem Formular inklusive der von Ihnen dort angegebenen Kontaktdaten zwecks Bearbeitung der Anfrage und für den Fall von Anschlussfragen bei uns gespeichert. Diese Daten geben wir nicht ohne Ihre Einwilligung weiter.</p>
-          <p>Die Verarbeitung dieser Daten erfolgt auf Grundlage Ihrer Einwilligung bzw. zur Durchführung vorvertraglicher Maßnahmen. Sie können diese Einwilligung jederzeit widerrufen. Die Daten verbleiben bei uns, bis Sie uns zur Löschung auffordern oder der Zweck für die Datenspeicherung entfällt.</p>
-          <h3>Server-Log-Dateien</h3>
-          <p>Der Provider der Seiten erhebt und speichert automatisch Informationen in sogenannten Server-Log-Dateien, die Ihr Browser automatisch an uns übermittelt. Dies sind:</p>
+          <h2><span class="n">5</span><span data-i18n="ds.h5title">Datenerfassung auf dieser Website</span></h2>
+          <h3 data-i18n="ds.s5h3a">Kontaktformular &amp; Terminanfrage</h3>
+          <p data-i18n="ds.s5p1">Wenn Sie uns über das Kontakt- oder Anfrageformular Anfragen zukommen lassen, werden Ihre Angaben aus dem Formular inklusive der von Ihnen dort angegebenen Kontaktdaten zwecks Bearbeitung der Anfrage und für den Fall von Anschlussfragen bei uns gespeichert. Diese Daten geben wir nicht ohne Ihre Einwilligung weiter.</p>
+          <p data-i18n="ds.s5p2">Die Verarbeitung dieser Daten erfolgt auf Grundlage Ihrer Einwilligung bzw. zur Durchführung vorvertraglicher Maßnahmen. Sie können diese Einwilligung jederzeit widerrufen. Die Daten verbleiben bei uns, bis Sie uns zur Löschung auffordern oder der Zweck für die Datenspeicherung entfällt.</p>
+          <h3 data-i18n="ds.s5h3b">Server-Log-Dateien</h3>
+          <p data-i18n="ds.s5p3">Der Provider der Seiten erhebt und speichert automatisch Informationen in sogenannten Server-Log-Dateien, die Ihr Browser automatisch an uns übermittelt. Dies sind:</p>
           <ul>
-            <li>Browsertyp und Browserversion</li>
-            <li>verwendetes Betriebssystem</li>
-            <li>Referrer-URL</li>
-            <li>Hostname des zugreifenden Rechners</li>
-            <li>Uhrzeit der Serveranfrage</li>
-            <li>IP-Adresse</li>
+            <li data-i18n="ds.s5li1">Browsertyp und Browserversion</li>
+            <li data-i18n="ds.s5li2">verwendetes Betriebssystem</li>
+            <li data-i18n="ds.s5li3">Referrer-URL</li>
+            <li data-i18n="ds.s5li4">Hostname des zugreifenden Rechners</li>
+            <li data-i18n="ds.s5li5">Uhrzeit der Serveranfrage</li>
+            <li data-i18n="ds.s5li6">IP-Adresse</li>
           </ul>
-          <p>Eine Zusammenführung dieser Daten mit anderen Datenquellen wird nicht vorgenommen. Die Erfassung dieser Daten erfolgt zur technisch fehlerfreien Darstellung und Optimierung der Website.</p>
+          <p data-i18n="ds.s5p4">Eine Zusammenführung dieser Daten mit anderen Datenquellen wird nicht vorgenommen. Die Erfassung dieser Daten erfolgt zur technisch fehlerfreien Darstellung und Optimierung der Website.</p>
         </section>
 
         <section id="ds6">
-          <h2><span class="n">6</span>Ihre Rechte</h2>
-          <p>Sie haben im Rahmen der geltenden gesetzlichen Bestimmungen jederzeit das Recht auf:</p>
+          <h2><span class="n">6</span><span data-i18n="ds.h6title">Ihre Rechte</span></h2>
+          <p data-i18n="ds.s6p1">Sie haben im Rahmen der geltenden gesetzlichen Bestimmungen jederzeit das Recht auf:</p>
           <ul>
-            <li>Auskunft über Ihre gespeicherten personenbezogenen Daten,</li>
-            <li>Berichtigung unrichtiger Daten,</li>
-            <li>Löschung Ihrer bei uns gespeicherten Daten,</li>
-            <li>Einschränkung der Datenverarbeitung,</li>
-            <li>Datenübertragbarkeit sowie</li>
-            <li>Widerspruch gegen die Verarbeitung.</li>
+            <li data-i18n="ds.s6li1">Auskunft über Ihre gespeicherten personenbezogenen Daten,</li>
+            <li data-i18n="ds.s6li2">Berichtigung unrichtiger Daten,</li>
+            <li data-i18n="ds.s6li3">Löschung Ihrer bei uns gespeicherten Daten,</li>
+            <li data-i18n="ds.s6li4">Einschränkung der Datenverarbeitung,</li>
+            <li data-i18n="ds.s6li5">Datenübertragbarkeit sowie</li>
+            <li data-i18n="ds.s6li6">Widerspruch gegen die Verarbeitung.</li>
           </ul>
-          <p>Zudem steht Ihnen ein Beschwerderecht bei der zuständigen Aufsichtsbehörde zu. In Österreich ist dies die Österreichische Datenschutzbehörde (<a href="https://www.dsb.gv.at/" target="_blank" rel="noopener">dsb.gv.at</a>). Bei Fragen wenden Sie sich gerne jederzeit an uns.</p>
+          <p data-i18n-html="ds.s6p2">Zudem steht Ihnen ein Beschwerderecht bei der zuständigen Aufsichtsbehörde zu. In Österreich ist dies die Österreichische Datenschutzbehörde (<a href="https://www.dsb.gv.at/" target="_blank" rel="noopener">dsb.gv.at</a>). Bei Fragen wenden Sie sich gerne jederzeit an uns.</p>
         </section>
 
-        <p class="ds-note">Diese Datenschutzerklärung dient als allgemeine Vorlage und ersetzt keine individuelle Rechtsberatung. Bitte lassen Sie die Angaben vor Veröffentlichung rechtlich prüfen.</p>
+        <p class="ds-note" data-i18n="ds.note">Diese Datenschutzerklärung dient als allgemeine Vorlage und ersetzt keine individuelle Rechtsberatung. Bitte lassen Sie die Angaben vor Veröffentlichung rechtlich prüfen.</p>
       </div>
     </div>
   </div>
@@ -726,11 +771,11 @@ body.menu-open{overflow:hidden}
     <div class="footer-grid">
       <div>
         <h4>Bambini Kinder Praxis</h4>
-        <p style="max-width:38ch">Kinder- und Jugendheilkunde in 1120 Wien.
+        <p style="max-width:38ch" data-i18n="footer.about">Kinder- und Jugendheilkunde in 1120 Wien.
         Wir begleiten Ihr Kind von der Geburt bis zum 18.&nbsp;Geburtstag – mit Fachwissen, Empathie und Zeit.</p>
       </div>
       <div>
-        <h4>Kontakt</h4>
+        <h4 data-i18n="nav.kontakt">Kontakt</h4>
         <ul>
           <li>Altmannsdorfer Str. 89/2/5</li>
           <li>1120 Wien</li>
@@ -739,36 +784,36 @@ body.menu-open{overflow:hidden}
         </ul>
       </div>
       <div>
-        <h4>Rechtliches</h4>
+        <h4 data-i18n="footer.legal">Rechtliches</h4>
         <ul>
-          <li><a href="impressum.html">Impressum</a></li>
-          <li><a href="datenschutz.html" aria-current="page">Datenschutz</a></li>
-          <li><a href="#">Barrierefreiheit</a></li>
+          <li><a href="impressum.html" data-i18n="footer.impressum">Impressum</a></li>
+          <li><a href="datenschutz.html" aria-current="page" data-i18n="footer.datenschutz">Datenschutz</a></li>
+          <li><a href="#" data-i18n="footer.accessibility">Barrierefreiheit</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bar">
       <span>© <span id="year"></span> Bambini Kinder Praxis · Dr. med. Boshra Alsebaie</span>
-      <span>Mit <span style="color:var(--terra)">♥</span> in Meidling</span>
+      <span><span data-i18n="footer.with">Mit</span> <span style="color:var(--terra)">♥</span> <span data-i18n="footer.inMeidling">in Meidling</span></span>
     </div>
   </div>
 </footer>
 
 <!-- ===================== MOBILE TAB BAR ===================== -->
-<nav class="tabbar" aria-label="Schnellzugriff">
+<nav class="tabbar" aria-label="Schnellzugriff" data-i18n-attr="aria-label:tabbar.aria">
   <div class="tabbar-inner">
     <a class="tab tab-cta" href="index.html#termin">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 9.5h17M8 3v4M16 3v4M12 12.5v5M9.5 15h5"/></svg>Termin</a>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 9.5h17M8 3v4M16 3v4M12 12.5v5M9.5 15h5"/></svg><span data-i18n="tabbar.termin">Termin</span></a>
     <a class="tab" href="tel:+4313460671">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l1.5 4.5L8 10c1 2.5 3.5 5 6 6l1.5-2.5L20 15v4a1.5 1.5 0 0 1-1.7 1.5C10.5 19.6 4.4 13.5 3.5 5.7A1.5 1.5 0 0 1 5 4z"/></svg>Anrufen</a>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l1.5 4.5L8 10c1 2.5 3.5 5 6 6l1.5-2.5L20 15v4a1.5 1.5 0 0 1-1.7 1.5C10.5 19.6 4.4 13.5 3.5 5.7A1.5 1.5 0 0 1 5 4z"/></svg><span data-i18n="tabbar.anrufen">Anrufen</span></a>
     <a class="tab" href="index.html#leistungen">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg>Leistungen</a>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg><span data-i18n="nav.leistungen">Leistungen</span></a>
     <a class="tab" href="index.html#praxis">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>Zeiten</a>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span data-i18n="tabbar.zeiten">Zeiten</span></a>
   </div>
 </nav>
 
-
+<script src="js/i18n.js"></script>
 <script>
 (function(){
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
