@@ -1045,16 +1045,24 @@ body.menu-open{overflow:hidden}
   function viennaDateStr(){
     return new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Vienna'}).format(new Date());
   }
+  function addDays(dateStr, days){
+    const [y,m,d]=dateStr.split('-').map(Number);
+    const dt=new Date(Date.UTC(y,m-1,d));
+    dt.setUTCDate(dt.getUTCDate()+days);
+    return dt.toISOString().slice(0,10);
+  }
   function renderHours(today){
     const tb=document.querySelector('#hoursTable tbody'); if(!tb) return;
     tb.innerHTML='';
-    const todayFeiertag=feiertagFor(viennaDateStr());
+    const todayStr=viennaDateStr();
     for(let i=1;i<=7;i++){
       const d=i%7, slots=HOURS[d];
       const tr=document.createElement('tr'); if(d===today) tr.className='today';
       const c1=document.createElement('td'); c1.textContent=DAYS[d];
       const c2=document.createElement('td');
-      if(d===today && todayFeiertag) c2.textContent=`geschlossen \u2013 Feiertag: ${todayFeiertag.name}`;
+      const offset=(d-today+7)%7;
+      const feiertag=feiertagFor(addDays(todayStr,offset));
+      if(feiertag) c2.textContent=`geschlossen \u2013 Feiertag: ${feiertag.name}`;
       else c2.textContent=slots.length? slots.map(s=>`${s[0]} \u2013 ${s[1]}`).join('  \u00B7  ') : 'geschlossen';
       tr.append(c1,c2); tb.appendChild(tr);
     }
@@ -1085,8 +1093,10 @@ body.menu-open{overflow:hidden}
       txt.textContent=`Jetzt ge\u00F6ffnet \u00B7 schlie\u00DFt um ${closesAt} Uhr`;
     }else{
       el.classList.add('closed');
+      const todayStr=viennaDateStr();
       for(let i=0;i<8;i++){
         const d=(day+i)%7;
+        if(feiertagFor(addDays(todayStr,i))) continue;
         for(const[s] of HOURS[d]){
           if(i>0||min<toMin(s)){
             const when=i===0?'heute':i===1?'morgen':`am ${DAYS[d]}`;
