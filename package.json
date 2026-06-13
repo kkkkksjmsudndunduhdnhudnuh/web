@@ -1,0 +1,15 @@
+{
+  "name": "bambini-kinderpraxis",
+  "version": "1.0.0",
+  "description": "Website der Bambini Kinder Praxis",
+  "private": true,
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1",
+    "express-session": "^1.19.0"
+  }
+}

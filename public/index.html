@@ -364,6 +364,11 @@ body.loaded .hero-fade{opacity:1; transform:none}
   letter-spacing:.06em; color:#BCD0B6; margin-left:.5rem; text-transform:uppercase}
 .hub-meta{margin-top:1.4rem; font-size:.9rem; color:#C9CFBA; display:grid; gap:.35rem}
 .hub-meta a{color:#F2F1E5; text-decoration-color:rgba(255,255,255,.35); text-underline-offset:3px}
+.hub-feiertage{margin-top:1.1rem; font-size:.86rem; color:#C9CFBA}
+.hub-feiertage strong{color:#F2F1E5; font-weight:600}
+.hub-feiertage ul{list-style:none; display:grid; gap:.3rem; margin-top:.45rem}
+.hub-feiertage li{display:flex; gap:.6rem}
+.hub-feiertage .fdate{color:#F2F1E5; font-weight:600; font-variant-numeric:tabular-nums; flex:none}
 
 /* Conversational form */
 .form-card{background:var(--surface); color:var(--ink); border-radius:var(--r-md);
@@ -869,6 +874,7 @@ body.menu-open{overflow:hidden}
         <table class="hours" id="hoursTable" aria-label="Öffnungszeiten">
           <tbody></tbody>
         </table>
+        <div class="hub-feiertage" id="feiertageNote"></div>
         <div class="hub-meta">
           <span>Altmannsdorfer Straße 89/2/5 · 1120 Wien</span>
           <span>Tel. <a href="tel:+4313460671">+43 1 346 06 71</a> · <a href="mailto:office@bambini-kinderpraxis.at">office@bambini-kinderpraxis.at</a></span>
@@ -938,6 +944,7 @@ body.menu-open{overflow:hidden}
     <div class="footer-bar">
       <span>© <span id="year"></span> Bambini Kinder Praxis · Dr. med. Boshra Alsebaie</span>
       <span>Mit <span style="color:var(--terra)">♥</span> in Meidling</span>
+      <span><a href="staff.html">Mitarbeiterbereich</a></span>
     </div>
   </div>
 </footer>
@@ -1024,6 +1031,10 @@ body.menu-open{overflow:hidden}
                6:[], 0:[]};
   const DAYS=['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
   const toMin=t=>{const[h,m]=t.split(':').map(Number);return h*60+m;};
+  let FEIERTAGE=[];
+  const feiertagFor=dateStr=>FEIERTAGE.find(f=>f.datum===dateStr);
+  const fmtFeiertagDate=iso=>{const[y,m,d]=iso.split('-'); return `${d}.${m}.${y}`;};
+  const escHtml=str=>{const d=document.createElement('div'); d.textContent=str??''; return d.innerHTML;};
   function viennaNow(){
     const parts=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Vienna',
       weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());
@@ -1031,22 +1042,42 @@ body.menu-open{overflow:hidden}
     const day={'Sun':0,'Mon':1,'Tue':2,'Wed':3,'Thu':4,'Fri':5,'Sat':6}[get('weekday')];
     return {day, min:(Number(get('hour'))%24)*60+Number(get('minute'))};
   }
+  function viennaDateStr(){
+    return new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Vienna'}).format(new Date());
+  }
   function renderHours(today){
     const tb=document.querySelector('#hoursTable tbody'); if(!tb) return;
     tb.innerHTML='';
+    const todayFeiertag=feiertagFor(viennaDateStr());
     for(let i=1;i<=7;i++){
       const d=i%7, slots=HOURS[d];
       const tr=document.createElement('tr'); if(d===today) tr.className='today';
       const c1=document.createElement('td'); c1.textContent=DAYS[d];
       const c2=document.createElement('td');
-      c2.textContent=slots.length? slots.map(s=>`${s[0]} \u2013 ${s[1]}`).join('  \u00B7  ') : 'geschlossen';
+      if(d===today && todayFeiertag) c2.textContent=`geschlossen \u2013 Feiertag: ${todayFeiertag.name}`;
+      else c2.textContent=slots.length? slots.map(s=>`${s[0]} \u2013 ${s[1]}`).join('  \u00B7  ') : 'geschlossen';
       tr.append(c1,c2); tb.appendChild(tr);
     }
+  }
+  function renderFeiertageList(){
+    const el=document.getElementById('feiertageNote'); if(!el) return;
+    const today=viennaDateStr();
+    const upcoming=FEIERTAGE.filter(f=>f.datum>=today).sort((a,b)=>a.datum.localeCompare(b.datum)).slice(0,5);
+    if(!upcoming.length){ el.innerHTML=''; return; }
+    el.innerHTML='<strong>Feiertage &amp; Schlie\u00DFtage</strong><ul>'+
+      upcoming.map(f=>`<li><span class="fdate">${fmtFeiertagDate(f.datum)}</span><span>${escHtml(f.name)}</span></li>`).join('')+
+      '</ul>';
   }
   function status(){
     const el=document.getElementById('status'), txt=document.getElementById('statusText');
     if(!el) return;
     const {day,min}=viennaNow(); renderHours(day);
+    const feiertag=feiertagFor(viennaDateStr());
+    if(feiertag){
+      el.classList.add('closed');
+      txt.textContent=`Geschlossen \u00B7 Feiertag: ${feiertag.name}`;
+      return;
+    }
     let closesAt=null;
     for(const[s,e] of HOURS[day]) if(min>=toMin(s)&&min<toMin(e)) closesAt=e;
     if(closesAt){
@@ -1067,6 +1098,9 @@ body.menu-open{overflow:hidden}
     }
   }
   status(); setInterval(status,60000);
+  fetch('/api/feiertage').then(r=>r.ok?r.json():[]).then(data=>{
+    FEIERTAGE=Array.isArray(data)?data:[]; status(); renderFeiertageList();
+  }).catch(()=>{});
 
   /* Conversational form -> prefilled e-mail */
   const form=document.getElementById('anfrage');
@@ -1086,6 +1120,9 @@ body.menu-open{overflow:hidden}
                 `Wunschzeit: ${document.getElementById('fWhen').value}`,
                 `Anliegen: ${v('fTopic')||'\u2013'}`,
                 `R\u00FCckmeldung an: ${contact}`].join('\n');
+    fetch('/api/termine',{method:'POST',headers:{'Content-Type':'application/json'},keepalive:true,
+      body:JSON.stringify({name, alter:v('fAge'), wann:document.getElementById('fWhen').value, anliegen:v('fTopic'), kontakt:contact})
+    }).catch(()=>{});
     location.href='mailto:office@bambini-kinderpraxis.at'
       +'?subject='+encodeURIComponent('Terminanfrage \u00FCber die Website')
       +'&body='+encodeURIComponent(body);
