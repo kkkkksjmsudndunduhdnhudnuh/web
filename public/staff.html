@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Mitarbeiterbereich · Bambini Kinder Praxis Wien</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,340..640,0..100,0;1,9..144,340..640,0..100,0&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   BAMBINI KINDER PRAXIS — Design Tokens
+   Sage-led warm palette · Fraunces (SOFT) + Inter
+   ============================================================ */
+:root{
+  --bg:        #FBF9F1;
+  --surface:   #FFFEFB;
+  --card:      #FFFFFE;
+  --ink:       #2B302A;
+  --muted:     #585F51;
+  --pine:      #36503F;   /* deep green — brand */
+  --sage:      #8FB58C;
+  --sage-tint: #DDF2D3;
+  --terra:     #C24B61;   /* rose CTA */
+  --terra-dk:  #AC3C52;
+  --blush:     #FFE5E7;
+  --line:      #E9E4D6;
+  /* theme pastels */
+  --tea:#D0F0C0; --pink:#FFE5E7; --lilac:#F3E4F5; --vanilla:#FCEFB4;
+
+  --font-display:"Fraunces", Georgia, serif;
+  --font-body:"Inter", system-ui, -apple-system, sans-serif;
+
+  --soft:"SOFT" 85, "WONK" 0;
+
+  --r-sm:14px; --r-md:24px; --r-lg:32px; --r-pill:999px;
+
+  --shadow-card: 0 1px 2px rgba(43,48,42,.04), 0 10px 30px -18px rgba(54,80,63,.18);
+  --shadow-lift: 0 24px 50px -20px rgba(54,80,63,.30), 0 6px 14px -8px rgba(54,80,63,.14);
+
+  --ease: cubic-bezier(.22,.61,.21,1);
+  --ease-spring: cubic-bezier(.34,1.45,.4,1);
+  --dur: .55s;
+
+  --pad: clamp(1.25rem, 4vw, 3rem);
+  --max: 1180px;
+}
+
+/* ---------- Base ---------- */
+*{box-sizing:border-box; margin:0; padding:0}
+html{scroll-behavior:smooth}
+html:focus-within{scroll-behavior:smooth}
+body{
+  background:transparent;
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:1.0625rem;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+::selection{background:var(--sage-tint); color:var(--pine)}
+img,svg{display:block; max-width:100%}
+a{color:inherit}
+button{font:inherit; color:inherit; background:none; border:0; cursor:pointer}
+h1,h2,h3{
+  font-family:var(--font-display);
+  font-variation-settings:var(--soft);
+  font-weight:540;
+  line-height:1.08;
+  letter-spacing:-.01em;
+  color:var(--ink);
+}
+h1 em, h2 em{font-style:italic; font-weight:480; color:var(--pine)}
+:focus-visible{outline:3px solid var(--terra); outline-offset:3px; border-radius:6px}
+
+.skip-link{
+  position:fixed; top:-100px; left:1rem; z-index:200;
+  background:var(--pine); color:var(--surface);
+  padding:.7rem 1.2rem; border-radius:var(--r-pill);
+  transition:top .3s var(--ease);
+}
+.skip-link:focus{top:1rem}
+
+.container{width:min(var(--max), 100% - 2*var(--pad)); margin-inline:auto}
+.section{padding-block:clamp(4.5rem, 9vw, 7.5rem)}
+
+.eyebrow{
+  display:inline-flex; align-items:center; gap:.6rem;
+  font-size:.78rem; font-weight:600; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--pine);
+}
+.eyebrow::before{content:""; width:26px; height:2px; background:var(--sage); border-radius:2px}
+
+.lede{color:var(--muted); max-width:56ch}
+
+/* ---------- Reveal-on-scroll system ---------- */
+.reveal{opacity:0; transform:translateY(26px);
+  transition:opacity .8s var(--ease) var(--d,0s), transform .8s var(--ease) var(--d,0s)}
+.reveal.in-view{opacity:1; transform:none}
+
+/* ---------- Buttons (magnetic-ready) ---------- */
+.btn{
+  position:relative; display:inline-flex; align-items:center; gap:.6rem;
+  padding:1rem 1.7rem; border-radius:var(--r-pill);
+  font-weight:600; font-size:1rem; text-decoration:none;
+  transition:transform .35s var(--ease), box-shadow .35s var(--ease),
+             background-color .35s var(--ease), color .35s var(--ease);
+  will-change:transform;
+}
+.btn-primary{background:var(--terra); color:#FFF8F2; box-shadow:0 10px 24px -10px rgba(194,75,97,.45)}
+.btn-primary:hover{background:var(--terra-dk); box-shadow:0 16px 32px -12px rgba(172,60,82,.5)}
+.btn-ghost{color:var(--pine); border:1.5px solid rgba(54,80,63,.35)}
+.btn-ghost:hover{background:var(--pine); color:var(--surface); border-color:var(--pine)}
+.btn .arr{transition:transform .35s var(--ease-spring)}
+.btn:hover .arr{transform:translateX(4px)}
+
+/* ---------- Animated pastel wave background ---------- */
+.bgwaves{position:fixed; inset:0; z-index:-2; overflow:hidden; pointer-events:none}
+.wave-base{position:absolute; inset:0; animation:cycle 48s ease-in-out infinite}
+.wave{position:absolute; left:0; width:200%; bottom:-6vh; height:55vh; opacity:.9;
+  will-change:transform;
+  animation:drift 22s linear infinite, cycle 48s ease-in-out infinite;
+  animation-delay:0s,-12s}
+.wave.w2{bottom:auto; top:-8vh; height:44vh; opacity:.8;
+  animation:driftFlip 30s linear infinite, cycle 48s ease-in-out infinite;
+  animation-delay:0s,-24s}
+.wave.w3{bottom:16vh; height:36vh; opacity:.6;
+  animation:drift 42s linear infinite reverse, cycle 48s ease-in-out infinite;
+  animation-delay:0s,-36s}
+@keyframes cycle{
+  0%,100%{color:var(--tea);     background-color:var(--tea)}
+  25%    {color:var(--pink);    background-color:var(--pink)}
+  50%    {color:var(--lilac);   background-color:var(--lilac)}
+  75%    {color:var(--vanilla); background-color:var(--vanilla)}}
+@keyframes drift{
+  0%  {transform:translate(0,0)}
+  25% {transform:translate(-12.5%,1.6vh)}
+  50% {transform:translate(-25%,0)}
+  75% {transform:translate(-37.5%,-1.6vh)}
+  100%{transform:translate(-50%,0)}}
+@keyframes driftFlip{
+  0%  {transform:translate(0,0) scaleY(-1)}
+  25% {transform:translate(-12.5%,-1.4vh) scaleY(-1)}
+  50% {transform:translate(-25%,0) scaleY(-1)}
+  75% {transform:translate(-37.5%,1.4vh) scaleY(-1)}
+  100%{transform:translate(-50%,0) scaleY(-1)}}
+
+/* ---------- Header ---------- */
+.nav{
+  position:sticky; top:0; z-index:100;
+  background:color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid transparent;
+  transition:border-color .4s var(--ease), background-color .4s var(--ease);
+}
+.nav.scrolled{border-bottom-color:var(--line)}
+.nav-inner{display:flex; align-items:center; justify-content:space-between; gap:1.5rem; padding-block:.9rem}
+.brand{display:flex; align-items:baseline; gap:.55rem; text-decoration:none}
+.brand-mark{font-family:var(--font-display); font-variation-settings:var(--soft);
+  font-weight:600; font-size:1.55rem; color:var(--pine); letter-spacing:-.01em}
+.brand-sub{font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
+.nav-links{display:flex; gap:2rem; list-style:none}
+.nav-links a{text-decoration:none; font-weight:500; font-size:.95rem; color:var(--muted);
+  transition:color .3s var(--ease)}
+.nav-links a:hover{color:var(--pine)}
+.nav .btn{padding:.7rem 1.3rem; font-size:.92rem}
+
+/* ---------- Hero ---------- */
+.hero{position:relative; padding-block:clamp(3rem,7vw,6rem) clamp(4rem,8vw,6.5rem); overflow:clip}
+
+/* ---------- Footer ---------- */
+.footer{background:rgba(255,254,250,.6); backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px); padding:3.5rem 0 7rem}
+.footer-grid{display:grid; grid-template-columns:2fr 1fr 1fr; gap:2.5rem}
+.footer h4{font-family:var(--font-display); font-variation-settings:var(--soft);
+  font-weight:560; font-size:1.05rem; color:var(--pine); margin-bottom:.8rem}
+.footer p, .footer a, .footer li{font-size:.92rem; color:var(--muted)}
+.footer ul{list-style:none; display:grid; gap:.45rem}
+.footer a{text-decoration:none}
+.footer a:hover{color:var(--pine); text-decoration:underline; text-underline-offset:3px}
+.footer-bar{display:flex; flex-wrap:wrap; justify-content:space-between; gap:1rem;
+  border-top:1px solid var(--line); margin-top:2.8rem; padding-top:1.6rem;
+  font-size:.84rem; color:var(--muted)}
+.footer-bar a{color:var(--muted); text-decoration:underline; text-underline-offset:3px}
+.footer-bar a:hover{color:var(--pine)}
+
+/* ---------- Mobile tab bar ---------- */
+.tabbar{position:fixed; left:0; right:0; bottom:0; z-index:110; display:none;
+  background:color-mix(in srgb, var(--surface) 92%, transparent);
+  backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  border-top:1px solid var(--line);
+  padding:.55rem max(.8rem, env(safe-area-inset-left)) max(.55rem, env(safe-area-inset-bottom))}
+.tabbar-inner{display:grid; grid-template-columns:repeat(4,1fr); gap:.3rem}
+.tab{display:flex; flex-direction:column; align-items:center; gap:.22rem;
+  font-size:.68rem; font-weight:600; color:var(--muted); text-decoration:none;
+  padding:.35rem .2rem; border-radius:12px; transition:color .3s, background-color .3s}
+.tab svg{width:22px; height:22px; stroke:currentColor; fill:none;
+  stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round}
+.tab:hover, .tab:focus-visible{color:var(--pine); background:var(--sage-tint)}
+.tab.tab-cta{color:var(--terra)}
+
+/* ---------- Responsive ---------- */
+@media (max-width:860px){
+  .nav-links{display:none}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .tabbar{display:block}
+  body{padding-bottom:0}
+}
+@media (max-width:560px){
+  .footer-grid{grid-template-columns:1fr}
+  .nav .btn{display:none}
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001s !important; animation-iteration-count:1 !important;
+    transition-duration:.001s !important}
+  .reveal{transform:none !important; opacity:1 !important}
+}
+
+.overlay-close{position:absolute; top:max(1rem,env(safe-area-inset-top)); right:var(--pad);
+  z-index:135; width:46px; height:46px; border-radius:var(--r-pill);
+  border:1.5px solid var(--line); background:var(--surface);
+  display:grid; place-items:center; opacity:0; transform:scale(.7) rotate(-90deg);
+  transition:opacity .4s var(--ease) .3s, transform .5s var(--ease-spring) .3s,
+             background-color .3s var(--ease), border-color .3s var(--ease)}
+.overlay-close:hover{background:var(--sage-tint); border-color:var(--sage)}
+body.menu-open .overlay-close{opacity:1; transform:scale(1) rotate(0)}
+.overlay-close::before, .overlay-close::after{content:""; position:absolute;
+  width:18px; height:2px; border-radius:2px; background:var(--pine)}
+.overlay-close::before{transform:rotate(45deg)}
+.overlay-close::after{transform:rotate(-45deg)}
+
+/* ---------- Hamburger + overlay menu ---------- */
+.burger{display:none; position:relative; z-index:130; width:46px; height:46px;
+  border-radius:var(--r-pill); border:1.5px solid var(--line); background:var(--surface);
+  align-items:center; justify-content:center; flex-direction:column; gap:5px;
+  transition:background-color .3s var(--ease), border-color .3s var(--ease)}
+.burger:hover{background:var(--sage-tint)}
+.burger span{display:block; width:20px; height:2px; border-radius:2px; background:var(--pine);
+  transition:transform .4s var(--ease), opacity .25s var(--ease)}
+body.menu-open .burger span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+body.menu-open .burger span:nth-child(2){opacity:0}
+body.menu-open .burger span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+.overlay{position:fixed; inset:0; z-index:120; display:flex; flex-direction:column;
+  justify-content:center; padding:var(--pad);
+  background:color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+  clip-path:circle(0% at calc(100% - 46px) 46px);
+  transition:clip-path .6s var(--ease); pointer-events:none; visibility:hidden}
+body.menu-open .overlay{clip-path:circle(150% at calc(100% - 46px) 46px);
+  pointer-events:auto; visibility:visible}
+.overlay-nav{list-style:none; display:grid; gap:.35rem; width:min(var(--max),100% - 2*var(--pad)); margin-inline:auto}
+.overlay-nav li{overflow:hidden}
+.overlay-nav a{display:flex; align-items:baseline; gap:1rem; text-decoration:none;
+  font-family:var(--font-display); font-variation-settings:var(--soft); font-weight:560;
+  font-size:clamp(2rem,8vw,3.4rem); color:var(--ink); line-height:1.25;
+  padding-block:.35rem;
+  transform:translateY(120%); transition:transform .6s var(--ease) var(--d,0s), color .3s}
+body.menu-open .overlay-nav a{transform:translateY(0)}
+.overlay-nav a:hover{color:var(--pine)}
+.overlay-nav a[aria-current="page"]{color:var(--pine)}
+.overlay-nav .idx{font-family:var(--font-body); font-size:.9rem; font-weight:600;
+  color:var(--sage); letter-spacing:.1em}
+.overlay-cta{margin-top:2.2rem; opacity:0; transform:translateY(16px);
+  transition:opacity .5s var(--ease) .35s, transform .5s var(--ease) .35s}
+body.menu-open .overlay-cta{opacity:1; transform:none}
+.overlay-foot{position:absolute; left:var(--pad); right:var(--pad); bottom:calc(var(--pad) + env(safe-area-inset-bottom));
+  display:flex; flex-wrap:wrap; gap:.4rem 1.4rem; font-size:.86rem; color:var(--muted);
+  opacity:0; transition:opacity .5s var(--ease) .45s}
+body.menu-open .overlay-foot{opacity:1}
+.overlay-foot a{color:var(--muted); text-decoration:none}
+.overlay-foot a:hover{color:var(--pine)}
+body.menu-open{overflow:hidden}
+@media (max-width:860px){
+  .burger{display:flex}
+  .nav .btn{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .overlay{transition:none}
+  .overlay-nav a,.overlay-cta,.overlay-foot{transition:none; transform:none; opacity:1}
+}
+
+/* ---------- Staff hero ---------- */
+.staff-hero{padding-block:clamp(3rem,7vw,5rem) clamp(1rem,3vw,1.5rem)}
+.staff-hero h1{font-size:clamp(2.3rem,5vw,3.6rem); margin-top:1rem}
+
+/* ---------- Login ---------- */
+.login-wrap{max-width:440px; margin-inline:auto}
+.login-card{background:var(--card); border:1px solid var(--line); border-radius:var(--r-lg);
+  padding:clamp(1.6rem,4vw,2.4rem); box-shadow:var(--shadow-card)}
+.login-card h2{font-size:1.6rem}
+.field{display:grid; gap:.4rem; margin-top:1.2rem}
+.field label{font-size:.85rem; font-weight:600; color:var(--pine)}
+.field input{font:inherit; font-size:1rem; padding:.8rem 1rem; border-radius:var(--r-sm);
+  border:1.5px solid var(--line); background:var(--surface); color:var(--ink);
+  transition:border-color .3s var(--ease), background-color .3s var(--ease)}
+.field input:focus{outline:none; border-color:var(--terra); background:#fff}
+.login-msg{display:none; margin-top:1.1rem; border-radius:var(--r-sm); padding:.8rem 1rem;
+  font-size:.9rem; font-weight:500}
+.login-msg.show{display:block}
+.login-msg.error{background:var(--blush); color:var(--terra-dk)}
+.login-card .btn{margin-top:1.6rem; width:100%; justify-content:center}
+
+/* ---------- Dashboard ---------- */
+#dashboardView{display:none}
+#dashboardView.show{display:block}
+.staff-topbar{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
+  gap:1rem; margin-bottom:2.4rem}
+.staff-topbar p{color:var(--muted); margin-top:.3rem}
+.staff-grid{display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); gap:clamp(1.5rem,4vw,2.5rem)}
+@media (max-width:900px){ .staff-grid{grid-template-columns:1fr} }
+
+.panel{background:var(--card); border:1px solid var(--line); border-radius:var(--r-lg);
+  padding:clamp(1.4rem,3.5vw,2.2rem); box-shadow:var(--shadow-card)}
+.panel h2{font-size:1.5rem}
+.panel > p.lede{margin-top:.4rem; font-size:.92rem}
+.panel-list{display:grid; gap:1rem; margin-top:1.5rem}
+
+.termin-card{border:1px solid var(--line); border-radius:var(--r-md); padding:1.1rem 1.3rem;
+  background:var(--surface); transition:opacity .3s var(--ease)}
+.termin-card.erledigt{opacity:.55}
+.termin-head{display:flex; justify-content:space-between; gap:1rem; align-items:flex-start}
+.termin-head strong{font-family:var(--font-display); font-variation-settings:var(--soft);
+  font-size:1.15rem; font-weight:560; color:var(--ink)}
+.termin-meta{font-size:.82rem; color:var(--muted); margin-top:.2rem}
+.termin-body{margin-top:.7rem; font-size:.94rem; color:var(--ink); display:grid; gap:.3rem}
+.termin-body span{color:var(--muted)}
+.termin-actions{display:flex; gap:.6rem; margin-top:1rem; flex-wrap:wrap}
+.btn-sm{padding:.5rem 1rem; font-size:.85rem; border-radius:var(--r-pill); font-weight:600;
+  border:1.5px solid var(--line); transition:background-color .25s var(--ease), border-color .25s var(--ease), color .25s var(--ease)}
+.btn-sm.done{color:var(--pine)}
+.btn-sm.done:hover{background:var(--sage-tint); border-color:var(--sage)}
+.btn-sm.del{color:var(--terra-dk)}
+.btn-sm.del:hover{background:var(--blush); border-color:var(--terra)}
+.status-pill{font-size:.72rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase;
+  padding:.3rem .7rem; border-radius:var(--r-pill); flex:none}
+.status-pill.offen{background:var(--sage-tint); color:var(--pine)}
+.status-pill.erledigt{background:var(--line); color:var(--muted)}
+
+.feiertag-form{display:grid; gap:.8rem; margin-top:1.5rem}
+.feiertag-form .row{display:flex; gap:.6rem; flex-wrap:wrap}
+.feiertag-form input{font:inherit; font-size:.95rem; padding:.75rem 1rem; border-radius:var(--r-sm);
+  border:1.5px solid var(--line); background:var(--surface); color:var(--ink); flex:1; min-width:140px}
+.feiertag-form input:focus{outline:none; border-color:var(--terra)}
+.feiertag-list{list-style:none; display:grid; gap:.6rem; margin-top:1.5rem}
+.feiertag-list li{display:flex; align-items:center; justify-content:space-between; gap:1rem;
+  border:1px solid var(--line); border-radius:var(--r-sm); padding:.7rem 1rem; font-size:.92rem}
+.feiertag-list .fdate{font-weight:600; color:var(--pine); white-space:nowrap}
+.empty-note{color:var(--muted); font-size:.92rem; margin-top:1rem}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+<!-- Animated pastel wave background -->
+<div class="bgwaves" aria-hidden="true">
+  <div class="wave-base"></div>
+  <svg class="wave w1" viewBox="0 0 2880 320" preserveAspectRatio="none"><path fill="currentColor" d="M0,160 C240,250 480,70 720,160 C960,250 1200,70 1440,160 C1680,250 1920,70 2160,160 C2400,250 2640,70 2880,160 L2880,320 L0,320 Z"/></svg>
+  <svg class="wave w2" viewBox="0 0 2880 320" preserveAspectRatio="none"><path fill="currentColor" d="M0,160 C240,195 480,125 720,160 C960,195 1200,125 1440,160 C1680,195 1920,125 2160,160 C2400,195 2640,125 2880,160 L2880,320 L0,320 Z"/></svg>
+  <svg class="wave w3" viewBox="0 0 2880 320" preserveAspectRatio="none"><path fill="currentColor" d="M0,160 C240,230 480,90 720,160 C960,230 1200,90 1440,160 C1680,230 1920,90 2160,160 C2400,230 2640,90 2880,160 L2880,320 L0,320 Z"/></svg>
+</div>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav" id="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="index.html" aria-label="Bambini Kinder Praxis – zur Startseite">
+      <span class="brand-mark">Bambini</span>
+      <span class="brand-sub">Kinder&nbsp;Praxis · Wien</span>
+    </a>
+    <nav aria-label="Hauptnavigation">
+      <ul class="nav-links">
+        <li><a href="index.html#leistungen">Leistungen</a></li>
+        <li><a href="index.html#aerztin">Ihre Ärztin</a></li>
+        <li><a href="index.html#praxis">Praxis &amp; Zeiten</a></li>
+        <li><a href="team.html">Team</a></li>
+        <li><a href="kontakt.html">Kontakt</a></li>
+      </ul>
+    </nav>
+      <button class="burger" id="burger" aria-label="Menü öffnen" aria-expanded="false" aria-controls="overlay">
+        <span></span><span></span><span></span>
+      </button>
+    <a class="btn btn-primary" href="index.html#termin" data-magnetic>Termin vereinbaren</a>
+  </div>
+</header>
+
+<!-- Fullscreen overlay menu -->
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-label="Menü" inert>
+  <button class="overlay-close" id="overlayClose" aria-label="Menü schließen"></button>
+  <nav aria-label="Mobile Navigation">
+    <ul class="overlay-nav">
+        <li><a href="index.html" style="--d:0.08s"><span class="idx">01</span>Start</a></li>
+        <li><a href="index.html#leistungen" style="--d:0.15s"><span class="idx">02</span>Leistungen</a></li>
+        <li><a href="team.html" style="--d:0.22s"><span class="idx">03</span>Team</a></li>
+        <li><a href="index.html#praxis" style="--d:0.29s"><span class="idx">04</span>Praxis & Zeiten</a></li>
+        <li><a href="kontakt.html" style="--d:0.36s"><span class="idx">05</span>Kontakt</a></li>
+    </ul>
+  </nav>
+  <div class="overlay-cta">
+    <a class="btn btn-primary" href="index.html#termin">Termin vereinbaren
+      <svg class="arr" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 3.5 13.5 8 9 12.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  </div>
+  <div class="overlay-foot">
+    <a href="tel:+4313460671">01 / 346 06 71</a>
+    <a href="mailto:office@bambini-kinderpraxis.at">office@bambini-kinderpraxis.at</a>
+    <span>Altmannsdorfer Straße 89/2/5, 1120 Wien</span>
+  </div>
+</div>
+
+<main id="main">
+<section class="staff-hero">
+  <div class="container">
+    <span class="eyebrow hero-fade" style="--d:.05s">Intern</span>
+    <h1 class="hero-fade" style="--d:.12s">Mitarbeiter&shy;bereich</h1>
+    <p class="lede hero-fade" style="--d:.3s; margin-top:1rem">
+      Terminanfragen einsehen und die Praxis-Feiertage verwalten.
+    </p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="container">
+
+    <!-- ===================== LOGIN ===================== -->
+    <div class="login-wrap reveal" id="loginView">
+      <div class="login-card">
+        <h2>Anmelden</h2>
+        <p class="lede" style="margin-top:.4rem; font-size:.92rem">Bitte melden Sie sich mit Ihren Mitarbeiter-Zugangsdaten an.</p>
+        <form id="loginForm" novalidate>
+          <div class="field">
+            <label for="lUser">Benutzername</label>
+            <input id="lUser" name="username" type="text" autocomplete="username" required>
+          </div>
+          <div class="field">
+            <label for="lPass">Passwort</label>
+            <input id="lPass" name="password" type="password" autocomplete="current-password" required>
+          </div>
+          <p class="login-msg error" id="loginMsg" role="alert"></p>
+          <button class="btn btn-primary" type="submit">Anmelden</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ===================== DASHBOARD ===================== -->
+    <div id="dashboardView">
+      <div class="staff-topbar reveal">
+        <div>
+          <span class="eyebrow">Mitarbeiterbereich</span>
+          <p>Angemeldet als <strong>bambini</strong></p>
+        </div>
+        <button class="btn btn-ghost" id="logoutBtn" type="button">Abmelden</button>
+      </div>
+
+      <div class="staff-grid">
+        <!-- Terminanfragen -->
+        <section class="panel reveal" aria-labelledby="termineH">
+          <h2 id="termineH">Terminanfragen</h2>
+          <p class="lede">Alle über das Formular „Termin anfragen“ eingegangenen Anfragen.</p>
+          <div class="panel-list" id="termineList">
+            <p class="empty-note">Anfragen werden geladen …</p>
+          </div>
+        </section>
+
+        <!-- Feiertage -->
+        <section class="panel reveal" style="--d:.08s" aria-labelledby="feiertageH">
+          <h2 id="feiertageH">Feiertage &amp; Schließtage</h2>
+          <p class="lede">Diese Termine werden auf der Startseite bei den Öffnungszeiten angezeigt.</p>
+          <form class="feiertag-form" id="feiertagForm" novalidate>
+            <div class="row">
+              <input type="date" id="fDatum" name="datum" aria-label="Datum" required>
+              <input type="text" id="fName" name="name" placeholder="Bezeichnung (z. B. Weihnachten)" aria-label="Bezeichnung" required>
+            </div>
+            <button class="btn btn-primary" type="submit" style="justify-content:center">Feiertag hinzufügen</button>
+          </form>
+          <ul class="feiertag-list" id="feiertagList">
+            <li class="empty-note" style="border:0; padding:.4rem 0">Feiertage werden geladen …</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h4>Bambini Kinder Praxis</h4>
+        <p style="max-width:38ch">Kinder- und Jugendheilkunde in 1120 Wien.
+        Wir begleiten Ihr Kind von der Geburt bis zum 18.&nbsp;Geburtstag – mit Fachwissen, Empathie und Zeit.</p>
+      </div>
+      <div>
+        <h4>Kontakt</h4>
+        <ul>
+          <li>Altmannsdorfer Str. 89/2/5</li>
+          <li>1120 Wien</li>
+          <li><a href="tel:+4313460671">+43 1 346 06 71</a></li>
+          <li><a href="mailto:office@bambini-kinderpraxis.at">office@bambini-kinderpraxis.at</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Rechtliches</h4>
+        <ul>
+          <li><a href="impressum.html">Impressum</a></li>
+          <li><a href="datenschutz.html">Datenschutz</a></li>
+          <li><a href="#">Barrierefreiheit</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <span>© <span id="year"></span> Bambini Kinder Praxis · Dr. med. Boshra Alsebaie</span>
+      <span>Mit <span style="color:var(--terra)">♥</span> in Meidling</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ===================== MOBILE TAB BAR ===================== -->
+<nav class="tabbar" aria-label="Schnellzugriff">
+  <div class="tabbar-inner">
+    <a class="tab tab-cta" href="index.html#termin">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 9.5h17M8 3v4M16 3v4M12 12.5v5M9.5 15h5"/></svg>Termin</a>
+    <a class="tab" href="tel:+4313460671">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l1.5 4.5L8 10c1 2.5 3.5 5 6 6l1.5-2.5L20 15v4a1.5 1.5 0 0 1-1.7 1.5C10.5 19.6 4.4 13.5 3.5 5.7A1.5 1.5 0 0 1 5 4z"/></svg>Anrufen</a>
+    <a class="tab" href="index.html#leistungen">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg>Leistungen</a>
+    <a class="tab" href="index.html#praxis">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>Zeiten</a>
+  </div>
+</nav>
+
+<script>
+(function(){
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>document.body.classList.add('loaded')));
+  const nav=document.getElementById('nav');
+  const onScrollNav=()=>nav.classList.toggle('scrolled', scrollY>8);
+  addEventListener('scroll', onScrollNav, {passive:true}); onScrollNav();
+  const io=new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('in-view'); io.unobserve(e.target);}
+  }),{threshold:.12, rootMargin:'0px 0px -6% 0px'});
+  document.querySelectorAll('.reveal').forEach(el=> reduce? el.classList.add('in-view') : io.observe(el));
+
+  (function(){
+    const burger=document.getElementById('burger'), overlay=document.getElementById('overlay');
+    if(!burger||!overlay) return;
+    const close=()=>{document.body.classList.remove('menu-open');
+      burger.setAttribute('aria-expanded','false'); overlay.setAttribute('inert','');};
+    const open=()=>{document.body.classList.add('menu-open');
+      burger.setAttribute('aria-expanded','true'); overlay.removeAttribute('inert');
+      const f=overlay.querySelector('a'); if(f) f.focus({preventScroll:true});};
+    burger.addEventListener('click',()=>document.body.classList.contains('menu-open')?close():open());
+    overlay.querySelectorAll('a').forEach(a=>a.addEventListener('click',close));
+    const x=document.getElementById('overlayClose'); if(x) x.addEventListener('click',close);
+    addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('menu-open'))close();});
+  })();
+  document.getElementById('year').textContent=new Date().getFullYear();
+
+  /* ---------- Staff dashboard ---------- */
+  const loginView=document.getElementById('loginView');
+  const dashboardView=document.getElementById('dashboardView');
+  const loginForm=document.getElementById('loginForm');
+  const loginMsg=document.getElementById('loginMsg');
+  const logoutBtn=document.getElementById('logoutBtn');
+  const termineList=document.getElementById('termineList');
+  const feiertagForm=document.getElementById('feiertagForm');
+  const feiertagList=document.getElementById('feiertagList');
+
+  function showDashboard(show){
+    loginView.style.display = show ? 'none' : '';
+    dashboardView.classList.toggle('show', show);
+    if(show){ loadTermine(); loadFeiertage(); }
+  }
+
+  async function checkSession(){
+    try{
+      const res=await fetch('/api/session');
+      const data=await res.json();
+      showDashboard(!!data.loggedIn);
+    }catch{ showDashboard(false); }
+  }
+
+  loginForm?.addEventListener('submit', async e=>{
+    e.preventDefault();
+    loginMsg.classList.remove('show');
+    const username=document.getElementById('lUser').value.trim();
+    const password=document.getElementById('lPass').value;
+    try{
+      const res=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,password})});
+      if(res.ok){ loginForm.reset(); showDashboard(true); }
+      else{
+        const data=await res.json().catch(()=>({}));
+        loginMsg.textContent = data.error || 'Anmeldung fehlgeschlagen.';
+        loginMsg.classList.add('show');
+      }
+    }catch{
+      loginMsg.textContent='Verbindung zum Server fehlgeschlagen.';
+      loginMsg.classList.add('show');
+    }
+  });
+
+  logoutBtn?.addEventListener('click', async ()=>{
+    try{ await fetch('/api/logout',{method:'POST'}); } catch{}
+    showDashboard(false);
+  });
+
+  const fmtDate=iso=>{
+    try{ return new Date(iso).toLocaleString('de-AT',{dateStyle:'medium',timeStyle:'short'}); }
+    catch{ return iso; }
+  };
+
+  async function loadTermine(){
+    termineList.innerHTML='<p class="empty-note">Anfragen werden geladen …</p>';
+    try{
+      const res=await fetch('/api/termine');
+      if(!res.ok) throw new Error();
+      const items=await res.json();
+      if(!items.length){ termineList.innerHTML='<p class="empty-note">Noch keine Terminanfragen.</p>'; return; }
+      termineList.innerHTML='';
+      items.forEach(t=>{
+        const card=document.createElement('div');
+        card.className='termin-card'+(t.status==='erledigt'?' erledigt':'');
+        card.innerHTML=`
+          <div class="termin-head">
+            <div>
+              <strong></strong>
+              <div class="termin-meta"></div>
+            </div>
+            <span class="status-pill ${t.status==='erledigt'?'erledigt':'offen'}">${t.status==='erledigt'?'Erledigt':'Offen'}</span>
+          </div>
+          <div class="termin-body">
+            <div><span>Alter des Kindes:</span> ${t.alter? esc(t.alter): '–'}</div>
+            <div><span>Wunschzeit:</span> ${esc(t.wann)||'–'}</div>
+            <div><span>Anliegen:</span> ${t.anliegen? esc(t.anliegen): '–'}</div>
+            <div><span>Kontakt:</span> ${esc(t.kontakt)}</div>
+          </div>
+          <div class="termin-actions">
+            <button class="btn-sm done" type="button" data-id="${t.id}" data-action="toggle">${t.status==='erledigt'?'Als offen markieren':'Als erledigt markieren'}</button>
+            <button class="btn-sm del" type="button" data-id="${t.id}" data-action="delete">Löschen</button>
+          </div>`;
+        card.querySelector('strong').textContent=t.name;
+        card.querySelector('.termin-meta').textContent='Eingegangen am '+fmtDate(t.createdAt);
+        termineList.appendChild(card);
+      });
+    }catch{
+      termineList.innerHTML='<p class="empty-note">Anfragen konnten nicht geladen werden.</p>';
+    }
+  }
+
+  function esc(str){
+    const d=document.createElement('div'); d.textContent=str ?? ''; return d.innerHTML;
+  }
+
+  termineList?.addEventListener('click', async e=>{
+    const btn=e.target.closest('button[data-action]');
+    if(!btn) return;
+    const id=btn.dataset.id, action=btn.dataset.action;
+    if(action==='delete'){
+      if(!confirm('Diese Terminanfrage wirklich löschen?')) return;
+      await fetch('/api/termine/'+id,{method:'DELETE'});
+    }else if(action==='toggle'){
+      const erledigt=btn.textContent.trim().startsWith('Als erledigt');
+      await fetch('/api/termine/'+id,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status: erledigt?'erledigt':'offen'})});
+    }
+    loadTermine();
+  });
+
+  const fmtDateShort=iso=>{
+    const [y,m,d]=iso.split('-');
+    return `${d}.${m}.${y}`;
+  };
+
+  async function loadFeiertage(){
+    feiertagList.innerHTML='<li class="empty-note" style="border:0; padding:.4rem 0">Feiertage werden geladen …</li>';
+    try{
+      const res=await fetch('/api/feiertage');
+      if(!res.ok) throw new Error();
+      const items=await res.json();
+      if(!items.length){ feiertagList.innerHTML='<li class="empty-note" style="border:0; padding:.4rem 0">Noch keine Feiertage hinterlegt.</li>'; return; }
+      feiertagList.innerHTML='';
+      items.forEach(f=>{
+        const li=document.createElement('li');
+        li.innerHTML=`<span><span class="fdate">${fmtDateShort(f.datum)}</span> &nbsp; ${esc(f.name)}</span>
+          <button class="btn-sm del" type="button" data-id="${f.id}">Entfernen</button>`;
+        feiertagList.appendChild(li);
+      });
+    }catch{
+      feiertagList.innerHTML='<li class="empty-note" style="border:0; padding:.4rem 0">Feiertage konnten nicht geladen werden.</li>';
+    }
+  }
+
+  feiertagList?.addEventListener('click', async e=>{
+    const btn=e.target.closest('button[data-id]');
+    if(!btn) return;
+    if(!confirm('Diesen Feiertag wirklich entfernen?')) return;
+    await fetch('/api/feiertage/'+btn.dataset.id,{method:'DELETE'});
+    loadFeiertage();
+  });
+
+  feiertagForm?.addEventListener('submit', async e=>{
+    e.preventDefault();
+    const datum=document.getElementById('fDatum').value;
+    const name=document.getElementById('fName').value.trim();
+    if(!datum||!name) return;
+    const res=await fetch('/api/feiertage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({datum,name})});
+    if(res.ok){ feiertagForm.reset(); loadFeiertage(); }
+  });
+
+  checkSession();
+})();
+</script>
+</body>
+</html>
