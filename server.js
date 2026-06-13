@@ -3,12 +3,21 @@ const crypto = require('crypto');
 const express = require('express');
 const store = require('./lib/store');
 const auth = require('./lib/auth');
+const rateLimit = require('./lib/rateLimit');
 
 const STAFF_USERNAME = 'bambini';
 const STAFF_PASSWORD = 'bambini2024*';
 
 const app = express();
-app.use(express.json());
+app.set('trust proxy', 1);
+app.use(express.json({ limit: '10kb' }));
+
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  next();
+});
 
 function isSecure(req) {
   return req.secure || req.headers['x-forwarded-proto'] === 'https';
@@ -24,10 +33,28 @@ function requireAuth(req, res, next) {
   res.status(401).json({ error: 'Nicht angemeldet.' });
 }
 
+// Vergleicht zwei Strings zeitkonstant (ueber Hashes, um auch
+// Laengenunterschiede nicht ueber die Laufzeit zu verraten).
+function safeEqual(a, b) {
+  const ah = crypto.createHash('sha256').update(String(a)).digest();
+  const bh = crypto.createHash('sha256').update(String(b)).digest();
+  return crypto.timingSafeEqual(ah, bh);
+}
+
 // ---------- Auth ----------
-app.post('/api/login', (req, res) => {
+app.post('/api/login', async (req, res) => {
+  const ip = rateLimit.clientIp(req);
+  const limited = await rateLimit.hit(`ratelimit:login:${ip}`, 8, 15 * 60);
+  if (limited.limited) {
+    res.setHeader('Retry-After', String(limited.retryAfter));
+    return res.status(429).json({ error: 'Zu viele Anmeldeversuche. Bitte spaeter erneut versuchen.' });
+  }
+
   const { username, password } = req.body || {};
-  if (username === STAFF_USERNAME && password === STAFF_PASSWORD) {
+  if (
+    typeof username === 'string' && typeof password === 'string' &&
+    safeEqual(username, STAFF_USERNAME) && safeEqual(password, STAFF_PASSWORD)
+  ) {
     res.setHeader('Set-Cookie', auth.cookieHeader(auth.createToken(), isSecure(req)));
     return res.json({ ok: true });
   }
@@ -45,6 +72,13 @@ app.get('/api/session', (req, res) => {
 
 // ---------- Terminanfragen ----------
 app.post('/api/termine', async (req, res) => {
+  const ip = rateLimit.clientIp(req);
+  const limited = await rateLimit.hit(`ratelimit:termine:${ip}`, 10, 60 * 60);
+  if (limited.limited) {
+    res.setHeader('Retry-After', String(limited.retryAfter));
+    return res.status(429).json({ error: 'Zu viele Anfragen. Bitte spaeter erneut versuchen.' });
+  }
+
   const { name, alter, wann, anliegen, kontakt } = req.body || {};
   if (!name || !kontakt) {
     return res.status(400).json({ error: 'Name und Kontakt sind erforderlich.' });

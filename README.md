@@ -14,6 +14,16 @@ Der Mitarbeiterbereich (`/staff.html`, verlinkt unten im Footer der Startseite) 
 Terminanfragen und erlaubt das Verwalten von Feiertagen/Schließtagen, die auf der Startseite bei den
 Öffnungszeiten angezeigt werden. Login: Benutzername `bambini`, Passwort `bambini2024*`.
 
+### Sicherheit des Mitarbeiterbereichs
+
+- Der Login (`/api/login`) ist pro IP-Adresse auf 8 Versuche innerhalb von 15 Minuten begrenzt
+  (HTTP 429 bei Überschreitung). Auch `/api/termine` ist pro IP auf 10 Anfragen pro Stunde begrenzt.
+- Das Login-Cookie ist `HttpOnly`, `SameSite=Strict` und (bei HTTPS) `Secure`, gültig für 8 Stunden,
+  und wird per HMAC-SHA256 signiert (siehe `SESSION_SECRET` unten).
+- Ohne gesetztes `SESSION_SECRET` generiert der Server beim Start ein zufälliges, nur für diesen
+  Prozess gültiges Geheimnis (mit Warnung im Log). Auf Vercel sollte `SESSION_SECRET` daher unbedingt
+  gesetzt werden, sonst werden Logins bei jedem Cold Start ungültig.
+
 ## Deployment auf Vercel
 
 Das Projekt ist Vercel-kompatibel: statische Seiten werden aus `public/` ausgeliefert, die API läuft
