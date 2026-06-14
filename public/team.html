@@ -167,6 +167,32 @@ h1 em, h2 em{font-style:italic; font-weight:480; color:var(--pine)}
 .nav-links a:hover{color:var(--pine)}
 .nav .btn{padding:.7rem 1.3rem; font-size:.92rem}
 
+/* ---------- Desktop language switcher ---------- */
+.nav-lang{position:relative}
+.nav-lang-btn{display:flex; align-items:center; gap:.4rem; font:inherit; font-size:.88rem; font-weight:600;
+  color:var(--muted); border:1.5px solid var(--line); background:var(--surface);
+  padding:.55rem .95rem; border-radius:var(--r-pill); cursor:pointer;
+  transition:color .3s var(--ease), border-color .3s var(--ease), background-color .3s var(--ease)}
+.nav-lang-btn:hover{color:var(--pine); border-color:var(--sage); background:var(--sage-tint)}
+.nav-lang-btn svg{width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round}
+.nav-lang-btn .chev{transition:transform .3s var(--ease)}
+.nav-lang.open .nav-lang-btn .chev{transform:rotate(180deg)}
+.nav-lang-menu{position:absolute; top:calc(100% + .6rem); right:0; min-width:170px;
+  background:var(--card); border:1px solid var(--line); border-radius:var(--r-md);
+  box-shadow:var(--shadow-lift); padding:.4rem; display:grid; gap:.15rem;
+  opacity:0; transform:translateY(-8px) scale(.98); pointer-events:none; visibility:hidden;
+  transition:opacity .25s var(--ease), transform .25s var(--ease); z-index:150}
+.nav-lang.open .nav-lang-menu{opacity:1; transform:none; pointer-events:auto; visibility:visible}
+.nav-lang-menu .lang-btn{display:block; width:100%; text-align:left; font:inherit;
+  border:0; background:none; border-radius:var(--r-sm); padding:.55rem .8rem;
+  font-size:.92rem; font-weight:500; color:var(--ink); cursor:pointer;
+  transition:background-color .2s var(--ease), color .2s var(--ease)}
+.nav-lang-menu .lang-btn:hover{background:var(--sage-tint); color:var(--pine)}
+.nav-lang-menu .lang-btn[aria-current="true"]{background:var(--sage-tint); color:var(--pine); font-weight:600}
+@media (max-width:860px){
+  .nav-lang{display:none}
+}
+
 /* ---------- Growth-ruler scroll indicator (signature) ---------- */
 .ruler{position:fixed; left:30px; top:50%; transform:translateY(-50%);
   height:58vh; width:2px; background:var(--line); z-index:90}
@@ -575,6 +601,7 @@ html[dir="rtl"] .overlay-lang,
 html[dir="rtl"] .lang-chips,
 html[dir="rtl"] .hub-meta{direction:rtl}
 html[dir="rtl"] .overlay-close{right:auto; left:var(--pad)}
+html[dir="rtl"] .nav-lang-menu{right:auto; left:0}
 html[dir="rtl"] .skip-link{left:auto; right:1rem}
 
 /* ---------- Playful floating toys (decorative) ---------- */
@@ -632,6 +659,22 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
         <li><a href="kontakt.html" data-i18n="nav.kontakt">Kontakt</a></li>
       </ul>
     </nav>
+    <div class="nav-lang" id="navLang">
+      <button type="button" class="nav-lang-btn" id="navLangBtn" aria-haspopup="true" aria-expanded="false" aria-controls="navLangMenu">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 4 6.1 4 9s-1.5 6.3-4 9c-2.5-2.7-4-6.1-4-9s1.5-6.3 4-9z"/></svg>
+        <span id="navLangCode">DE</span>
+        <svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
+      <div class="nav-lang-menu" id="navLangMenu" role="menu" aria-label="Sprache / Language">
+        <button type="button" class="lang-btn" data-lang="de" aria-current="true" role="menuitem">Deutsch</button>
+        <button type="button" class="lang-btn" data-lang="en" role="menuitem">English</button>
+        <button type="button" class="lang-btn" data-lang="es" role="menuitem">Español</button>
+        <button type="button" class="lang-btn" data-lang="fr" role="menuitem">Français</button>
+        <button type="button" class="lang-btn" data-lang="tr" role="menuitem">Türkçe</button>
+        <button type="button" class="lang-btn" data-lang="ru" role="menuitem">Русский</button>
+        <button type="button" class="lang-btn" data-lang="ar" role="menuitem">العربية</button>
+      </div>
+    </div>
       <button class="burger" id="burger" aria-label="Menü öffnen" aria-expanded="false" aria-controls="overlay" data-i18n-attr="aria-label:nav.menuOpen">
         <span></span><span></span><span></span>
       </button>
@@ -914,6 +957,26 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
     overlay.querySelectorAll('a').forEach(a=>a.addEventListener('click',close));
     const x=document.getElementById('overlayClose'); if(x) x.addEventListener('click',close);
     addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('menu-open'))close();});
+  })();
+
+  /* Desktop language dropdown */
+  (function(){
+    const navLang=document.getElementById('navLang');
+    const navLangBtn=document.getElementById('navLangBtn');
+    const navLangCode=document.getElementById('navLangCode');
+    if(!navLang||!navLangBtn) return;
+    const close=()=>{navLang.classList.remove('open'); navLangBtn.setAttribute('aria-expanded','false');};
+    const open=()=>{navLang.classList.add('open'); navLangBtn.setAttribute('aria-expanded','true');};
+    navLangBtn.addEventListener('click', e=>{
+      e.stopPropagation();
+      navLang.classList.contains('open') ? close() : open();
+    });
+    document.addEventListener('click', e=>{ if(!navLang.contains(e.target)) close(); });
+    addEventListener('keydown', e=>{ if(e.key==='Escape') close(); });
+    navLang.querySelectorAll('.lang-btn').forEach(btn=>btn.addEventListener('click', close));
+    const updateCode=()=>{ navLangCode.textContent=(window.i18n?window.i18n.current:'de').toUpperCase(); };
+    window.addEventListener('i18n:change', updateCode);
+    updateCode();
   })();
 
   document.getElementById('year').textContent=new Date().getFullYear();
