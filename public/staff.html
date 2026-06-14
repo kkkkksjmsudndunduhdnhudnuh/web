@@ -352,6 +352,27 @@ body.menu-open{overflow:hidden}
   border:1px solid var(--line); border-radius:var(--r-sm); padding:.7rem 1rem; font-size:.92rem}
 .feiertag-list .fdate{font-weight:600; color:var(--pine); white-space:nowrap}
 .empty-note{color:var(--muted); font-size:.92rem; margin-top:1rem}
+
+.mitarbeiter-form{display:grid; gap:.8rem; margin-top:1.5rem}
+.mitarbeiter-form .row{display:flex; gap:.6rem; flex-wrap:wrap}
+.mitarbeiter-form input[type="text"]{font:inherit; font-size:.95rem; padding:.75rem 1rem; border-radius:var(--r-sm);
+  border:1.5px solid var(--line); background:var(--surface); color:var(--ink); flex:1; min-width:140px}
+.mitarbeiter-form input:focus{outline:none; border-color:var(--terra)}
+.mitarbeiter-photo-row{display:flex; align-items:center; gap:.8rem; flex-wrap:wrap}
+.file-btn{font:inherit; font-size:.9rem; font-weight:600; color:var(--pine); cursor:pointer;
+  padding:.65rem 1.1rem; border-radius:var(--r-pill); border:1.5px solid var(--line);
+  transition:background-color .25s var(--ease), border-color .25s var(--ease)}
+.file-btn:hover{background:var(--sage-tint); border-color:var(--sage)}
+.file-name{font-size:.85rem; color:var(--muted)}
+.mitarbeiter-list{list-style:none; display:grid; gap:.7rem; margin-top:1.5rem}
+.mitarbeiter-item{display:flex; align-items:center; gap:1rem; border:1px solid var(--line);
+  border-radius:var(--r-sm); padding:.7rem 1rem}
+.mitarbeiter-photo{width:48px; height:48px; flex:none; border-radius:50%; overflow:hidden;
+  background:var(--sage-tint); display:grid; place-items:center}
+.mitarbeiter-photo img{width:100%; height:100%; object-fit:cover}
+.mitarbeiter-info{flex:1; display:grid; gap:.1rem; min-width:0}
+.mitarbeiter-info strong{font-family:var(--font-display); font-variation-settings:var(--soft); font-weight:560}
+.mitarbeiter-rolle, .mitarbeiter-sprachen{font-size:.82rem; color:var(--muted)}
 </style>
 </head>
 <body>
@@ -480,6 +501,30 @@ body.menu-open{overflow:hidden}
             <li class="empty-note" style="border:0; padding:.4rem 0">Feiertage werden geladen …</li>
           </ul>
         </section>
+
+        <!-- Mitarbeiter -->
+        <section class="panel reveal" style="--d:.16s; grid-column:1 / -1" aria-labelledby="mitarbeiterH">
+          <h2 id="mitarbeiterH">Team</h2>
+          <p class="lede">Mitarbeiter:innen, die auf der Team-Seite angezeigt werden.</p>
+          <form class="mitarbeiter-form" id="mitarbeiterForm" novalidate>
+            <div class="row">
+              <input type="text" id="mName" name="name" placeholder="Name" aria-label="Name" required>
+              <input type="text" id="mRolle" name="rolle" placeholder="Rolle (z. B. Kinderkrankenschwester)" aria-label="Rolle" required>
+            </div>
+            <div class="row">
+              <input type="text" id="mSprachen" name="sprachen" placeholder="Sprachen, durch Komma getrennt (z. B. Deutsch, Englisch)" aria-label="Sprachen">
+            </div>
+            <div class="mitarbeiter-photo-row">
+              <label class="file-btn" for="mBild">Foto auswählen</label>
+              <input type="file" id="mBild" accept="image/png,image/jpeg,image/webp" style="position:absolute; width:1px; height:1px; opacity:0">
+              <span class="file-name" id="mBildName">Kein Foto ausgewählt</span>
+            </div>
+            <button class="btn btn-primary" type="submit" style="justify-content:center">Mitarbeiter:in hinzufügen</button>
+          </form>
+          <ul class="mitarbeiter-list" id="mitarbeiterList">
+            <li class="empty-note" style="border:0; padding:.4rem 0">Team wird geladen …</li>
+          </ul>
+        </section>
       </div>
     </div>
 
@@ -570,11 +615,16 @@ body.menu-open{overflow:hidden}
   const termineList=document.getElementById('termineList');
   const feiertagForm=document.getElementById('feiertagForm');
   const feiertagList=document.getElementById('feiertagList');
+  const mitarbeiterForm=document.getElementById('mitarbeiterForm');
+  const mitarbeiterList=document.getElementById('mitarbeiterList');
+  const mBild=document.getElementById('mBild');
+  const mBildName=document.getElementById('mBildName');
+  let mitarbeiterBild='';
 
   function showDashboard(show){
     loginView.style.display = show ? 'none' : '';
     dashboardView.classList.toggle('show', show);
-    if(show){ loadTermine(); loadFeiertage(); }
+    if(show){ loadTermine(); loadFeiertage(); loadMitarbeiter(); }
   }
 
   async function checkSession(){
@@ -709,6 +759,105 @@ body.menu-open{overflow:hidden}
     if(!datum||!name) return;
     const res=await fetch('/api/feiertage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({datum,name})});
     if(res.ok){ feiertagForm.reset(); loadFeiertage(); }
+  });
+
+  mBild?.addEventListener('change', () => {
+    const file=mBild.files && mBild.files[0];
+    if(!file){ mitarbeiterBild=''; mBildName.textContent='Kein Foto ausgewählt'; return; }
+    mBildName.textContent='Wird verarbeitet …';
+    const reader=new FileReader();
+    reader.onload=() => {
+      const img=new Image();
+      img.onload=() => {
+        const maxSize=480;
+        let {width, height}=img;
+        if(width>maxSize || height>maxSize){
+          if(width>height){ height=Math.round(height*maxSize/width); width=maxSize; }
+          else{ width=Math.round(width*maxSize/height); height=maxSize; }
+        }
+        const canvas=document.createElement('canvas');
+        canvas.width=width; canvas.height=height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        mitarbeiterBild=canvas.toDataURL('image/jpeg', 0.82);
+        mBildName.textContent=file.name;
+      };
+      img.onerror=() => { mitarbeiterBild=''; mBildName.textContent='Bild konnte nicht gelesen werden.'; };
+      img.src=reader.result;
+    };
+    reader.onerror=() => { mitarbeiterBild=''; mBildName.textContent='Bild konnte nicht gelesen werden.'; };
+    reader.readAsDataURL(file);
+  });
+
+  async function loadMitarbeiter(){
+    mitarbeiterList.innerHTML='<li class="empty-note" style="border:0; padding:.4rem 0">Team wird geladen …</li>';
+    try{
+      const res=await fetch('/api/mitarbeiter');
+      if(!res.ok) throw new Error();
+      const items=await res.json();
+      if(!items.length){ mitarbeiterList.innerHTML='<li class="empty-note" style="border:0; padding:.4rem 0">Noch keine Mitarbeiter:innen hinterlegt.</li>'; return; }
+      mitarbeiterList.innerHTML='';
+      items.forEach(m=>{
+        const li=document.createElement('li');
+        li.className='mitarbeiter-item';
+
+        const photo=document.createElement('div');
+        photo.className='mitarbeiter-photo';
+        if(m.bild){
+          const img=document.createElement('img');
+          img.src=m.bild; img.alt='';
+          photo.appendChild(img);
+        }
+        li.appendChild(photo);
+
+        const info=document.createElement('div');
+        info.className='mitarbeiter-info';
+        const strong=document.createElement('strong');
+        strong.textContent=m.name;
+        const rolle=document.createElement('div');
+        rolle.className='mitarbeiter-rolle';
+        rolle.textContent=m.rolle;
+        info.appendChild(strong); info.appendChild(rolle);
+        if(Array.isArray(m.sprachen) && m.sprachen.length){
+          const sprachen=document.createElement('div');
+          sprachen.className='mitarbeiter-sprachen';
+          sprachen.textContent=m.sprachen.join(', ');
+          info.appendChild(sprachen);
+        }
+        li.appendChild(info);
+
+        const del=document.createElement('button');
+        del.className='btn-sm del'; del.type='button'; del.dataset.id=m.id;
+        del.textContent='Entfernen';
+        li.appendChild(del);
+
+        mitarbeiterList.appendChild(li);
+      });
+    }catch{
+      mitarbeiterList.innerHTML='<li class="empty-note" style="border:0; padding:.4rem 0">Team konnte nicht geladen werden.</li>';
+    }
+  }
+
+  mitarbeiterList?.addEventListener('click', async e=>{
+    const btn=e.target.closest('button[data-id]');
+    if(!btn) return;
+    if(!confirm('Diese Person wirklich von der Team-Seite entfernen?')) return;
+    await fetch('/api/mitarbeiter/'+btn.dataset.id,{method:'DELETE'});
+    loadMitarbeiter();
+  });
+
+  mitarbeiterForm?.addEventListener('submit', async e=>{
+    e.preventDefault();
+    const name=document.getElementById('mName').value.trim();
+    const rolle=document.getElementById('mRolle').value.trim();
+    const sprachen=document.getElementById('mSprachen').value.split(',').map(s=>s.trim()).filter(Boolean);
+    if(!name||!rolle) return;
+    const res=await fetch('/api/mitarbeiter',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,rolle,sprachen,bild:mitarbeiterBild})});
+    if(res.ok){
+      mitarbeiterForm.reset();
+      mitarbeiterBild='';
+      mBildName.textContent='Kein Foto ausgewählt';
+      loadMitarbeiter();
+    }
   });
 
   checkSession();

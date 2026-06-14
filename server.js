@@ -10,7 +10,7 @@ const STAFF_PASSWORD = 'bambini2024*';
 
 const app = express();
 app.set('trust proxy', 1);
-app.use(express.json({ limit: '10kb' }));
+app.use(express.json({ limit: '2mb' }));
 
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -158,6 +158,38 @@ app.delete('/api/feiertage/:id', requireAuth, async (req, res) => {
   const feiertage = await store.readFeiertage();
   const next = feiertage.filter(f => f.id !== req.params.id);
   await store.writeFeiertage(next);
+  res.json({ ok: true });
+});
+
+// ---------- Mitarbeiter (Team) ----------
+app.get('/api/mitarbeiter', async (req, res) => {
+  res.json(await store.readMitarbeiter());
+});
+
+app.post('/api/mitarbeiter', requireAuth, async (req, res) => {
+  const { name, rolle, sprachen, bild } = req.body || {};
+  if (!name || !rolle) {
+    return res.status(400).json({ error: 'Name und Rolle sind erforderlich.' });
+  }
+  if (bild && (typeof bild !== 'string' || !/^data:image\/(png|jpeg|jpg|webp);base64,/.test(bild) || bild.length > 1_500_000)) {
+    return res.status(400).json({ error: 'Ungueltiges Bild.' });
+  }
+  const mitarbeiter = await store.readMitarbeiter();
+  mitarbeiter.push({
+    id: crypto.randomUUID(),
+    name: String(name).slice(0, 100),
+    rolle: String(rolle).slice(0, 100),
+    sprachen: Array.isArray(sprachen) ? sprachen.map(s => String(s).slice(0, 30)).filter(Boolean).slice(0, 10) : [],
+    bild: bild || ''
+  });
+  await store.writeMitarbeiter(mitarbeiter);
+  res.status(201).json({ ok: true });
+});
+
+app.delete('/api/mitarbeiter/:id', requireAuth, async (req, res) => {
+  const mitarbeiter = await store.readMitarbeiter();
+  const next = mitarbeiter.filter(m => m.id !== req.params.id);
+  await store.writeMitarbeiter(next);
   res.json({ ok: true });
 });
 
