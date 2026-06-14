@@ -389,6 +389,7 @@ select.fill{appearance:none; -webkit-appearance:none; cursor:pointer; padding-ri
 .form-ok{display:none; margin-top:1.1rem; background:var(--sage-tint); color:var(--pine);
   border-radius:var(--r-sm); padding:.85rem 1.1rem; font-size:.92rem; font-weight:500}
 .form-ok.show{display:block}
+.form-ok.error{background:#FBE9EC; color:var(--terra-dk)}
 
 /* ---------- Footer ---------- */
 .footer{background:rgba(255,254,250,.6); backdrop-filter:blur(10px);
@@ -937,11 +938,12 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
             (<input class="fill" id="fAge" name="alter" type="text" size="5" inputmode="numeric"
               data-i18n-attr="placeholder:form.agePlaceholder|aria-label:form.ageLabel"
               placeholder="Alter" aria-label="Alter des Kindes">).
-            <span data-i18n="form.part3">Am liebsten</span>
-            <select class="fill" id="fWhen" name="wann" data-i18n-attr="aria-label:form.whenLabel" aria-label="Bevorzugte Zeit">
-              <option data-i18n="form.when1">so bald wie möglich</option>
-              <option data-i18n="form.when2">vormittags</option>
-              <option data-i18n="form.when3">nachmittags</option>
+            <span data-i18n="form.part3">Am liebsten am</span>
+            <input class="fill" id="fDate" name="datum" type="date" required
+              data-i18n-attr="aria-label:form.dateLabel" aria-label="Datum">
+            <span data-i18n="form.part3b">um</span>
+            <select class="fill" id="fTime" name="zeit" required data-i18n-attr="aria-label:form.timeLabel" aria-label="Uhrzeit">
+              <option value="">Bitte zuerst ein Datum wählen</option>
             </select>.
             <span data-i18n="form.part4">Es geht um</span>
             <input class="fill" id="fTopic" name="anliegen" type="text" size="18"
@@ -955,7 +957,7 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
           <div class="form-foot">
             <button class="btn btn-primary" type="submit" data-magnetic><span data-i18n="form.submit">Anfrage senden</span>
               <svg class="arr" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 3.5 13.5 8 9 12.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-            <span class="form-note" data-i18n="form.note">Öffnet Ihre E-Mail – oder rufen Sie direkt an.</span>
+            <span class="form-note" data-i18n="form.note">Wird direkt an unsere Praxis übermittelt.</span>
           </div>
           <p class="form-ok" id="formOk" role="status" aria-live="polite"></p>
         </form>
@@ -1095,14 +1097,12 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
     closedOpensOnDay:'Geschlossen · öffnet am {day} um {time} Uhr',
     currentlyClosed:'Derzeit geschlossen',
     feiertageTitle:'Feiertage &amp; Schließtage',
-    formMissing:'Bitte ergänzen Sie Ihren Namen und eine Telefonnummer oder E-Mail-Adresse.',
-    formSubject:'Terminanfrage über die Website',
-    formBodyName:'Name',
-    formBodyAge:'Alter des Kindes',
-    formBodyWhen:'Wunschzeit',
-    formBodyTopic:'Anliegen',
-    formBodyContact:'Rückmeldung an',
-    formSuccess:'Danke! Ihr E-Mail-Programm öffnet sich mit der fertigen Anfrage – alternativ erreichen Sie uns unter +43 1 346 06 71.'
+    formMissing:'Bitte ergänzen Sie Ihren Namen, eine Telefonnummer oder E-Mail-Adresse sowie Datum und Uhrzeit.',
+    timeLoading:'Bitte zuerst ein Datum wählen',
+    timeNone:'Keine freien Termine an diesem Tag',
+    formTimeUnavailable:'Dieser Termin ist leider gerade nicht mehr verfügbar. Bitte wählen Sie eine andere Uhrzeit.',
+    formError:'Leider ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut oder rufen Sie uns unter +43 1 346 06 71 an.',
+    formSuccess:'Danke! Ihre Anfrage wurde an uns übermittelt – wir melden uns bei Ihnen.'
   };
   let STR=STR_DE;
   const fill=(tpl,vals)=>tpl.replace(/\{(\w+)\}/g, (_,k)=>vals[k]??'');
@@ -1126,6 +1126,47 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
     const dt=new Date(Date.UTC(y,m-1,d));
     dt.setUTCDate(dt.getUTCDate()+days);
     return dt.toISOString().slice(0,10);
+  }
+  function timeSlots(dateStr){
+    const [y,m,d]=dateStr.split('-').map(Number);
+    const weekday=new Date(Date.UTC(y,m-1,d)).getUTCDay();
+    const slots=[];
+    for(const[s,e] of (HOURS[weekday]||[])){
+      for(let t=toMin(s); t<toMin(e); t+=15) slots.push(t);
+    }
+    return slots.map(t=>`${String(Math.floor(t/60)).padStart(2,'0')}:${String(t%60).padStart(2,'0')}`);
+  }
+  function updateTimeOptions(){
+    const dateEl=document.getElementById('fDate'), timeEl=document.getElementById('fTime');
+    if(!dateEl||!timeEl) return;
+    const dateStr=dateEl.value;
+    if(!dateStr){
+      timeEl.innerHTML=''; timeEl.disabled=true;
+      timeEl.appendChild(new Option(STR.timeLoading,''));
+      return;
+    }
+    let slots=feiertagFor(dateStr)?[]:timeSlots(dateStr);
+    if(dateStr===viennaDateStr()){
+      const {min}=viennaNow();
+      slots=slots.filter(t=>toMin(t)>min);
+    }
+    const previous=timeEl.value;
+    fetch('/api/termine/belegt?datum='+encodeURIComponent(dateStr)).then(r=>r.ok?r.json():[]).then(belegt=>{
+      const taken=new Set(Array.isArray(belegt)?belegt:[]);
+      const free=slots.filter(t=>!taken.has(t));
+      timeEl.innerHTML='';
+      if(!free.length){
+        timeEl.disabled=true;
+        timeEl.appendChild(new Option(STR.timeNone,''));
+        return;
+      }
+      timeEl.disabled=false;
+      free.forEach(t=>timeEl.appendChild(new Option(t,t)));
+      if(free.includes(previous)) timeEl.value=previous;
+    }).catch(()=>{
+      timeEl.innerHTML=''; timeEl.disabled=true;
+      timeEl.appendChild(new Option(STR.timeNone,''));
+    });
   }
   function renderHours(today){
     const tb=document.querySelector('#hoursTable tbody'); if(!tb) return;
@@ -1187,41 +1228,67 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
   }
   status(); setInterval(status,60000);
   fetch('/api/feiertage').then(r=>r.ok?r.json():[]).then(data=>{
-    FEIERTAGE=Array.isArray(data)?data:[]; status(); renderFeiertageList();
+    FEIERTAGE=Array.isArray(data)?data:[]; status(); renderFeiertageList(); updateTimeOptions();
   }).catch(()=>{});
+
+  /* Terminformular: Datum/Uhrzeit-Auswahl initialisieren */
+  const fDateEl=document.getElementById('fDate');
+  if(fDateEl){
+    const todayStr=viennaDateStr();
+    fDateEl.min=todayStr;
+    if(!fDateEl.value) fDateEl.value=todayStr;
+    fDateEl.addEventListener('change',updateTimeOptions);
+    updateTimeOptions();
+  }
 
   /* Sprachwechsel: dynamische Texte (\u00D6ffnungszeiten, Status, Formular) aktualisieren */
   addEventListener('i18n:change', e=>{
     STR = e.detail && e.detail.dyn ? {...STR_DE, ...e.detail.dyn} : STR_DE;
-    status(); renderFeiertageList();
+    status(); renderFeiertageList(); updateTimeOptions();
   });
 
-  /* Conversational form -> prefilled e-mail */
+  /* Terminformular -> Anfrage an die Praxis senden */
   const form=document.getElementById('anfrage');
   if(form) form.addEventListener('submit',e=>{
     e.preventDefault();
     const v=id=>document.getElementById(id).value.trim();
     const ok=document.getElementById('formOk');
-    const name=v('fName'), contact=v('fContact');
-    if(!name||!contact){
+    const name=v('fName'), contact=v('fContact'), datum=v('fDate'), zeit=v('fTime');
+    if(!name||!contact||!datum||!zeit){
+      ok.classList.remove('error');
       ok.textContent=STR.formMissing;
       ok.classList.add('show');
-      (name?document.getElementById('fContact'):document.getElementById('fName')).focus();
+      const missing=!name?'fName':!contact?'fContact':!datum?'fDate':'fTime';
+      document.getElementById(missing).focus();
       return;
     }
-    const body=[`${STR.formBodyName}: ${name}`,
-                `${STR.formBodyAge}: ${v('fAge')||'\u2013'}`,
-                `${STR.formBodyWhen}: ${document.getElementById('fWhen').value}`,
-                `${STR.formBodyTopic}: ${v('fTopic')||'\u2013'}`,
-                `${STR.formBodyContact}: ${contact}`].join('\n');
-    fetch('/api/termine',{method:'POST',headers:{'Content-Type':'application/json'},keepalive:true,
-      body:JSON.stringify({name, alter:v('fAge'), wann:document.getElementById('fWhen').value, anliegen:v('fTopic'), kontakt:contact})
-    }).catch(()=>{});
-    location.href='mailto:office@bambini-kinderpraxis.at'
-      +'?subject='+encodeURIComponent(STR.formSubject)
-      +'&body='+encodeURIComponent(body);
-    ok.textContent=STR.formSuccess;
-    ok.classList.add('show');
+    const btn=form.querySelector('button[type="submit"]');
+    if(btn) btn.disabled=true;
+    fetch('/api/termine',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name, alter:v('fAge'), datum, zeit, anliegen:v('fTopic'), kontakt:contact})
+    }).then(res=>{
+      if(btn) btn.disabled=false;
+      if(res.status===409){
+        ok.classList.add('error');
+        ok.textContent=STR.formTimeUnavailable;
+        ok.classList.add('show');
+        updateTimeOptions();
+        return;
+      }
+      if(!res.ok) throw new Error('request failed');
+      ok.classList.remove('error');
+      ok.textContent=STR.formSuccess;
+      ok.classList.add('show');
+      form.reset();
+      const todayStr=viennaDateStr();
+      document.getElementById('fDate').value=todayStr;
+      updateTimeOptions();
+    }).catch(()=>{
+      if(btn) btn.disabled=false;
+      ok.classList.add('error');
+      ok.textContent=STR.formError;
+      ok.classList.add('show');
+    });
   });
 
 

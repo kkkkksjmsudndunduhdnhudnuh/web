@@ -79,16 +79,23 @@ app.post('/api/termine', async (req, res) => {
     return res.status(429).json({ error: 'Zu viele Anfragen. Bitte spaeter erneut versuchen.' });
   }
 
-  const { name, alter, wann, anliegen, kontakt } = req.body || {};
+  const { name, alter, datum, zeit, anliegen, kontakt } = req.body || {};
   if (!name || !kontakt) {
     return res.status(400).json({ error: 'Name und Kontakt sind erforderlich.' });
   }
+  if (!datum || !/^\d{4}-\d{2}-\d{2}$/.test(datum) || !zeit || !/^\d{2}:\d{2}$/.test(zeit)) {
+    return res.status(400).json({ error: 'Bitte waehlen Sie ein gueltiges Datum und eine Uhrzeit.' });
+  }
   const termine = await store.readTermine();
+  if (termine.some(t => t.datum === datum && t.zeit === zeit)) {
+    return res.status(409).json({ error: 'Dieser Termin ist leider bereits vergeben.' });
+  }
   const eintrag = {
     id: crypto.randomUUID(),
     name: String(name).slice(0, 200),
     alter: String(alter || '').slice(0, 50),
-    wann: String(wann || '').slice(0, 100),
+    datum,
+    zeit,
     anliegen: String(anliegen || '').slice(0, 500),
     kontakt: String(kontakt).slice(0, 200),
     status: 'offen',
@@ -97,6 +104,15 @@ app.post('/api/termine', async (req, res) => {
   termine.unshift(eintrag);
   await store.writeTermine(termine);
   res.status(201).json({ ok: true });
+});
+
+app.get('/api/termine/belegt', async (req, res) => {
+  const datum = String(req.query.datum || '');
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(datum)) {
+    return res.status(400).json({ error: 'Ungueltiges Datum.' });
+  }
+  const termine = await store.readTermine();
+  res.json(termine.filter(t => t.datum === datum && t.zeit).map(t => t.zeit));
 });
 
 app.get('/api/termine', requireAuth, async (req, res) => {

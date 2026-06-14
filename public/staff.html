@@ -635,7 +635,7 @@ body.menu-open{overflow:hidden}
           </div>
           <div class="termin-body">
             <div><span>Alter des Kindes:</span> ${t.alter? esc(t.alter): '–'}</div>
-            <div><span>Wunschzeit:</span> ${esc(t.wann)||'–'}</div>
+            <div><span>Termin:</span> ${t.datum&&t.zeit? `${fmtDateShort(t.datum)}, ${esc(t.zeit)} Uhr` : (esc(t.wann)||'–')}</div>
             <div><span>Anliegen:</span> ${t.anliegen? esc(t.anliegen): '–'}</div>
             <div><span>Kontakt:</span> ${esc(t.kontakt)}</div>
           </div>
