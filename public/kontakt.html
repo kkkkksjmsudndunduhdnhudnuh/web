@@ -116,36 +116,20 @@ h1 em, h2 em{font-style:italic; font-weight:480; color:var(--pine)}
 .btn .arr{transition:transform .35s var(--ease-spring)}
 .btn:hover .arr{transform:translateX(4px)}
 
-/* ---------- Animated pastel wave background ---------- */
-.bgwaves{position:fixed; inset:0; z-index:-2; overflow:hidden; pointer-events:none}
-.wave-base{position:absolute; inset:0; animation:cycle 48s ease-in-out infinite}
-.wave{position:absolute; left:0; width:200%; bottom:-6vh; height:55vh; opacity:.9;
-  will-change:transform;
-  animation:drift 22s linear infinite, cycle 48s ease-in-out infinite;
-  animation-delay:0s,-12s}
-.wave.w2{bottom:auto; top:-8vh; height:44vh; opacity:.8;
-  animation:driftFlip 30s linear infinite, cycle 48s ease-in-out infinite;
-  animation-delay:0s,-24s}
-.wave.w3{bottom:16vh; height:36vh; opacity:.6;
-  animation:drift 42s linear infinite reverse, cycle 48s ease-in-out infinite;
-  animation-delay:0s,-36s}
-@keyframes cycle{
-  0%,100%{color:var(--tea);     background-color:var(--tea)}
-  25%    {color:var(--pink);    background-color:var(--pink)}
-  50%    {color:var(--lilac);   background-color:var(--lilac)}
-  75%    {color:var(--vanilla); background-color:var(--vanilla)}}
-@keyframes drift{
-  0%  {transform:translate(0,0)}
-  25% {transform:translate(-12.5%,1.6vh)}
-  50% {transform:translate(-25%,0)}
-  75% {transform:translate(-37.5%,-1.6vh)}
-  100%{transform:translate(-50%,0)}}
-@keyframes driftFlip{
-  0%  {transform:translate(0,0) scaleY(-1)}
-  25% {transform:translate(-12.5%,-1.4vh) scaleY(-1)}
-  50% {transform:translate(-25%,0) scaleY(-1)}
-  75% {transform:translate(-37.5%,1.4vh) scaleY(-1)}
-  100%{transform:translate(-50%,0) scaleY(-1)}}
+/* ---------- Animated wave background ---------- */
+.bgwaves{position:fixed; inset:0; z-index:-2; overflow:hidden; pointer-events:none; background:var(--bg)}
+.wave{position:absolute; left:0; width:max(200vw, 1800px); max-width:none; will-change:transform;
+  animation:waveFlow var(--flow) linear infinite, waveBob var(--bob) ease-in-out infinite alternate}
+.wave.w-top{top:0; height:30vh; --flow:70s; --bob:11s; --lift:-12px}
+.wave.w1{bottom:0; height:46vh; --flow:52s; --bob:9s; animation-direction:reverse, alternate}
+.wave.w2{bottom:0; height:36vh; --flow:38s; --bob:7s}
+.wave.w3{bottom:0; height:25vh; --flow:27s; --bob:6s; animation-direction:reverse, alternate}
+.wave.w-top path{fill:var(--lilac)}
+.wave.w1 path{fill:var(--vanilla)}
+.wave.w2 path{fill:var(--pink)}
+.wave.w3 path{fill:var(--tea)}
+@keyframes waveFlow{to{transform:translateX(-50%)}}
+@keyframes waveBob{to{translate:0 var(--lift, 12px)}}
 
 /* ---------- Header ---------- */
 .nav{
@@ -192,28 +176,6 @@ h1 em, h2 em{font-style:italic; font-weight:480; color:var(--pine)}
 @media (max-width:860px){
   .nav-lang{display:none}
 }
-
-/* ---------- Growth-ruler scroll indicator (signature) ---------- */
-.ruler{position:fixed; left:30px; top:50%; transform:translateY(-50%);
-  height:58vh; width:2px; background:var(--line); z-index:90}
-.ruler::before{content:""; position:absolute; inset:0;
-  background:repeating-linear-gradient(to bottom,
-    transparent 0 calc(10% - 1.5px), var(--sage) calc(10% - 1.5px) 10%);
-  width:9px; left:-3.5px}
-.ruler-marker{position:absolute; left:50%; top:0; transform:translate(-50%,-50%);
-  width:13px; height:13px; border-radius:50%;
-  background:var(--terra); border:3px solid var(--bg);
-  box-shadow:0 0 0 1.5px var(--terra);
-  transition:top .15s linear}
-.ruler-tag{position:absolute; left:22px; top:0; transform:translateY(-50%);
-  white-space:nowrap; background:var(--pine); color:var(--surface);
-  font-size:.72rem; font-weight:600; letter-spacing:.04em;
-  padding:.32rem .7rem; border-radius:var(--r-pill);
-  transition:top .15s linear}
-.ruler-cap{position:absolute; left:18px; font-size:.68rem; font-weight:600;
-  letter-spacing:.1em; text-transform:uppercase; color:var(--muted)}
-.ruler-cap.top{top:-1.6rem}
-.ruler-cap.bot{bottom:-1.6rem}
 
 /* ---------- Hero ---------- */
 .hero{position:relative; padding-block:clamp(3rem,7vw,6rem) clamp(4rem,8vw,6.5rem); overflow:clip}
@@ -442,7 +404,6 @@ select.fill{appearance:none; -webkit-appearance:none; cursor:pointer; padding-ri
 
 /* ---------- Responsive ---------- */
 @media (max-width:1100px){
-  .ruler{display:none}
   .bento{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (max-width:860px){
@@ -631,21 +592,6 @@ html[dir="rtl"] .overlay-close{right:auto; left:var(--pad)}
 html[dir="rtl"] .nav-lang-menu{right:auto; left:0}
 html[dir="rtl"] .skip-link{left:auto; right:1rem}
 
-/* ---------- Playful floating toys (decorative) ---------- */
-.toys{position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:0}
-.toy{position:absolute; opacity:.85; animation:toyBob var(--t,7s) ease-in-out infinite;
-  animation-delay:var(--dl,0s); will-change:transform}
-.toy svg{display:block; width:100%; height:100%}
-@keyframes toyBob{
-  0%,100%{transform:translateY(0) rotate(var(--r,0deg))}
-  50%    {transform:translateY(-16px) rotate(calc(var(--r,0deg) + 6deg))}}
-/* keep content above toys */
-.section > .container, .hero-grid, .journey-inner, .hub-card,
-.team-hero .container, .k-hero .container, .imp-hero .container,
-.staff-grid, .team-cta, .k-grid, .imp-wrap{position:relative; z-index:1}
-@media (max-width:860px){ .toy{transform:scale(.8)} .toy.hide-sm{display:none} }
-@media (prefers-reduced-motion:reduce){ .toy{animation:none} }
-
 </style>
 <script>
 (function(){
@@ -662,12 +608,12 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
 <body data-i18n-page="kontakt">
 <a class="skip-link" href="#main" data-i18n="a11y.skip">Zum Inhalt springen</a>
 
-<!-- Animated pastel wave background -->
+<!-- Animated wave background -->
 <div class="bgwaves" aria-hidden="true">
-  <div class="wave-base"></div>
-  <svg class="wave w1" viewBox="0 0 2880 320" preserveAspectRatio="none"><path fill="currentColor" d="M0,160 C240,250 480,70 720,160 C960,250 1200,70 1440,160 C1680,250 1920,70 2160,160 C2400,250 2640,70 2880,160 L2880,320 L0,320 Z"/></svg>
-  <svg class="wave w2" viewBox="0 0 2880 320" preserveAspectRatio="none"><path fill="currentColor" d="M0,160 C240,195 480,125 720,160 C960,195 1200,125 1440,160 C1680,195 1920,125 2160,160 C2400,195 2640,125 2880,160 L2880,320 L0,320 Z"/></svg>
-  <svg class="wave w3" viewBox="0 0 2880 320" preserveAspectRatio="none"><path fill="currentColor" d="M0,160 C240,230 480,90 720,160 C960,230 1200,90 1440,160 C1680,230 1920,90 2160,160 C2400,230 2640,90 2880,160 L2880,320 L0,320 Z"/></svg>
+  <svg class="wave w-top" viewBox="0 0 2880 320" preserveAspectRatio="none"><path d="M0,96C96,106.7,192,149.3,288,154.7C384,160,480,128,576,138.7C672,149.3,768,202.7,864,208C960,213.3,1056,170.7,1152,138.7C1248,106.7,1344,85.3,1440,96C1536,106.7,1632,149.3,1728,154.7C1824,160,1920,128,2016,138.7C2112,149.3,2208,202.7,2304,208C2400,213.3,2496,170.7,2592,138.7C2688,106.7,2784,85.3,2880,96L2880,0L0,0Z"/></svg>
+  <svg class="wave w1" viewBox="0 0 2880 320" preserveAspectRatio="none"><path d="M0,133.3C120,138.7,240,181.3,360,170.7C480,160,600,96,720,90.7C840,85.3,960,138.7,1080,149.3C1200,160,1320,128,1440,133.3C1560,138.7,1680,181.3,1800,170.7C1920,160,2040,96,2160,90.7C2280,85.3,2400,138.7,2520,149.3C2640,160,2760,128,2880,133.3L2880,320L0,320Z"/></svg>
+  <svg class="wave w2" viewBox="0 0 2880 320" preserveAspectRatio="none"><path d="M0,176C96,149.3,192,106.7,288,117.3C384,128,480,192,576,202.7C672,213.3,768,170.7,864,165.3C960,160,1056,192,1152,202.7C1248,213.3,1344,202.7,1440,176C1536,149.3,1632,106.7,1728,117.3C1824,128,1920,192,2016,202.7C2112,213.3,2208,170.7,2304,165.3C2400,160,2496,192,2592,202.7C2688,213.3,2784,202.7,2880,176L2880,320L0,320Z"/></svg>
+  <svg class="wave w3" viewBox="0 0 2880 320" preserveAspectRatio="none"><path d="M0,197.3C80,202.7,160,245.3,240,234.7C320,224,400,160,480,149.3C560,138.7,640,181.3,720,186.7C800,192,880,160,960,165.3C1040,170.7,1120,213.3,1200,218.7C1280,224,1360,192,1440,197.3C1520,202.7,1600,245.3,1680,234.7C1760,224,1840,160,1920,149.3C2000,138.7,2080,181.3,2160,186.7C2240,192,2320,160,2400,165.3C2480,170.7,2560,213.3,2640,218.7C2720,224,2800,192,2880,197.3L2880,320L0,320Z"/></svg>
 </div>
 
 <!-- ===================== NAV ===================== -->
@@ -744,13 +690,7 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
 
 <main id="main">
 <section class="k-hero">
-  <div class="toys" aria-hidden="true">
-    <span class="toy " style="top:14%;left:3%;width:70px;height:auto;--r:-12deg;--t:8.1s;--dl:1.2s"><svg viewBox="0 0 64 64"><rect x="6" y="6" width="52" height="52" rx="10" fill="#D0F0C0" stroke="#36503F" stroke-width="2.5"/><path d="M22 32h20M32 22v20" stroke="#36503F" stroke-width="2.5" stroke-linecap="round"/></svg></span>
-    <span class="toy hide-sm" style="top:27%;left:5%;width:40px;height:auto;--r:12deg;--t:8.0s;--dl:0.8s"><svg viewBox="0 0 70 90"><g><path d="M35 35 35 6c12 0 18 12 0 29z" fill="#FFE5E7" stroke="#C24B61" stroke-width="2"/><path d="M35 35 64 35c0 12-12 18-29 0z" fill="#D0F0C0" stroke="#36503F" stroke-width="2"/><path d="M35 35 35 64c-12 0-18-12 0-29z" fill="#F3E4F5" stroke="#7E5A86" stroke-width="2"/><path d="M35 35 6 35c0-12 12-18 29 0z" fill="#FCEFB4" stroke="#C9A227" stroke-width="2"/><circle cx="35" cy="35" r="4" fill="#36503F"/></g><path d="M35 39v48" stroke="#8FB58C" stroke-width="2.5" stroke-linecap="round"/></svg></span>
-    <span class="toy " style="top:60%;right:3%;width:58px;height:auto;--r:12deg;--t:9.8s;--dl:0.6s"><svg viewBox="0 0 64 64"><rect x="6" y="6" width="52" height="52" rx="10" fill="#D0F0C0" stroke="#36503F" stroke-width="2.5"/><path d="M22 32h20M32 22v20" stroke="#36503F" stroke-width="2.5" stroke-linecap="round"/></svg></span>
-    <span class="toy " style="top:87%;right:3%;width:58px;height:auto;--r:-12deg;--t:7.6s;--dl:0.0s"><svg viewBox="0 0 60 90"><ellipse cx="30" cy="30" rx="24" ry="28" fill="#FFE5E7" stroke="#C24B61" stroke-width="2.5"/><path d="M30 58l-4 8h8z" fill="#C24B61"/><path d="M30 66c4 6-4 10 0 18" stroke="#C24B61" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></span>
-  </div>
-<div class="container">
+  <div class="container">
     <span class="eyebrow hero-fade" style="--d:.05s" data-i18n="nav.kontakt">Kontakt</span>
     <h1 class="hero-fade" style="--d:.12s" data-i18n-html="kontakt.title">Wir sind <em>für Sie da.</em></h1>
     <p class="lede hero-fade" style="--d:.3s; margin-top:1.1rem" data-i18n="kontakt.lede">
@@ -761,13 +701,6 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
 </section>
 
 <section class="section" style="padding-top:0; position:relative">
-  <div class="toys" aria-hidden="true">
-    <span class="toy " style="top:13%;left:1%;width:64px;height:auto;--r:-8deg;--t:6.8s;--dl:2.1s"><svg viewBox="0 0 70 70"><path d="M35 4l9 20 22 2-16.5 14.5L59 64 35 52 11 64l6.5-23.5L1 26l22-2z" fill="#FCEFB4" stroke="#C9A227" stroke-width="2.4" stroke-linejoin="round"/></svg></span>
-    <span class="toy hide-sm" style="top:31%;left:1%;width:46px;height:auto;--r:-5deg;--t:6.7s;--dl:0.5s"><svg viewBox="0 0 60 64"><path d="M30 18c-6-8-20-6-22 6-2 14 8 32 22 32s24-18 22-32c-2-12-16-14-22-6z" fill="#D0F0C0" stroke="#36503F" stroke-width="2.5"/><path d="M30 18c0-8 6-12 12-12" stroke="#9A6B3E" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg></span>
-    <span class="toy hide-sm" style="top:57%;left:1%;width:52px;height:auto;--r:-12deg;--t:6.6s;--dl:1.8s"><svg viewBox="0 0 72 64"><path d="M8 38h56l-8 18H16z" fill="#D0F0C0" stroke="#36503F" stroke-width="2.5" stroke-linejoin="round"/><path d="M36 36V8l20 28z" fill="#FFE5E7" stroke="#C24B61" stroke-width="2.5" stroke-linejoin="round"/><path d="M36 8 16 36h20" fill="#FCEFB4" stroke="#C9A227" stroke-width="2.4" stroke-linejoin="round"/></svg></span>
-    <span class="toy " style="top:83%;left:8%;width:64px;height:auto;--r:5deg;--t:10.4s;--dl:0.7s"><svg viewBox="0 0 56 84"><path d="M28 4c12 10 14 30 8 46H20c-6-16-4-36 8-46z" fill="#F3E4F5" stroke="#7E5A86" stroke-width="2.4" stroke-linejoin="round"/><circle cx="28" cy="30" r="6" fill="#FFE5E7" stroke="#C24B61" stroke-width="2"/><path d="M20 50l-10 14 12-6M36 50l10 14-12-6" fill="#D0F0C0" stroke="#36503F" stroke-width="2.2" stroke-linejoin="round"/><path d="M24 64c0 6 8 6 8 0" stroke="#C9A227" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg></span>
-  </div>
-
   <div class="container">
     <div class="k-grid">
 
