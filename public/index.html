@@ -25,7 +25,7 @@
   --terra:     #C24B61;   /* rose CTA */
   --terra-dk:  #AC3C52;
   --blush:     #FFE5E7;
-  --line:      #E9E4D6;
+  --line:      rgba(43,48,42,.1);
   /* theme pastels */
   --tea:#D0F0C0; --pink:#FFE5E7; --lilac:#F3E4F5; --vanilla:#FCEFB4;
 
@@ -96,9 +96,9 @@ h1 em, h2 em{font-style:italic; font-weight:480; color:var(--pine)}
 .lede{color:var(--muted); max-width:56ch}
 
 /* ---------- Reveal-on-scroll system ---------- */
-.reveal{opacity:0; transform:translateY(26px);
-  transition:opacity .8s var(--ease) var(--d,0s), transform .8s var(--ease) var(--d,0s)}
-.reveal.in-view{opacity:1; transform:none}
+.reveal{opacity:0}
+.reveal.in-view{opacity:1; animation:revealUp 1.1s cubic-bezier(.16,1,.3,1) var(--d,0s) backwards}
+@keyframes revealUp{from{opacity:0; transform:translate3d(0,32px,0)}}
 
 /* ---------- Buttons (magnetic-ready) ---------- */
 .btn{
@@ -116,26 +116,23 @@ h1 em, h2 em{font-style:italic; font-weight:480; color:var(--pine)}
 .btn .arr{transition:transform .35s var(--ease-spring)}
 .btn:hover .arr{transform:translateX(4px)}
 
-/* ---------- Animated wave background ---------- */
+/* ---------- Scroll-driven wave background (see js/waves.js) ---------- */
 .bgwaves{position:fixed; inset:0; z-index:-2; overflow:hidden; pointer-events:none; background:var(--bg)}
-.wave{position:absolute; left:0; width:max(200vw, 1800px); max-width:none; will-change:transform;
-  animation:waveFlow var(--flow) linear infinite, waveBob var(--bob) ease-in-out infinite alternate}
-.wave.w-top{top:0; height:30vh; --flow:70s; --bob:11s; --lift:-12px}
-.wave.w1{bottom:0; height:46vh; --flow:52s; --bob:9s; animation-direction:reverse, alternate}
-.wave.w2{bottom:0; height:36vh; --flow:38s; --bob:7s}
-.wave.w3{bottom:0; height:25vh; --flow:27s; --bob:6s; animation-direction:reverse, alternate}
-.wave.w-top path{fill:var(--lilac)}
-.wave.w1 path{fill:var(--vanilla)}
-.wave.w2 path{fill:var(--pink)}
-.wave.w3 path{fill:var(--tea)}
+.wave-band{position:absolute; left:0; right:0; top:0; height:calc(100vh + 16rem); --wh:clamp(90px,15vh,160px);
+  transform:translate3d(0,110vh,0); will-change:transform}
+.wave-fill{position:absolute; left:0; right:0; top:calc(var(--wh) - 2px); bottom:0; background:var(--c)}
+.wave-band .wave{position:absolute; left:0; top:0; height:var(--wh); width:max(200vw,1800px); max-width:none;
+  animation:waveFlow 16s linear infinite}
+.wave-band .wave path{fill:var(--c)}
+.wave-band .wave.back{top:calc(var(--wh) * -.42); animation-duration:23s; animation-direction:reverse}
+.wave-band .wave.back path{fill:color-mix(in srgb, var(--c) 50%, #fff)}
 @keyframes waveFlow{to{transform:translateX(-50%)}}
-@keyframes waveBob{to{translate:0 var(--lift, 12px)}}
 
 /* ---------- Header ---------- */
 .nav{
   position:sticky; top:0; z-index:100;
-  background:color-mix(in srgb, var(--bg) 82%, transparent);
-  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  background:color-mix(in srgb, var(--surface) 70%, transparent);
+  backdrop-filter:blur(18px) saturate(1.4); -webkit-backdrop-filter:blur(18px) saturate(1.4);
   border-bottom:1px solid transparent;
   transition:border-color .4s var(--ease), background-color .4s var(--ease);
 }
@@ -195,30 +192,12 @@ body.loaded .hero-fade{opacity:1; transform:none}
 .hero-chips li{display:flex; align-items:center; gap:.5rem}
 .hero-chips svg{width:17px; height:17px; stroke:var(--sage); flex:none}
 
-/* Hero artwork */
-.hero-art{position:relative; aspect-ratio:1/1.04; max-width:480px; margin-inline:auto}
-.blob{position:absolute; inset:4%;
-  background:linear-gradient(150deg, var(--tea) 8%, var(--lilac) 56%, var(--pink) 110%);
-  border-radius:58% 42% 55% 45%/52% 48% 62% 38%;
-  animation:morph 16s ease-in-out infinite alternate}
-@keyframes morph{
-  0%  {border-radius:58% 42% 55% 45%/52% 48% 62% 38%; transform:rotate(0deg)}
-  50% {border-radius:45% 55% 48% 52%/58% 42% 50% 50%}
-  100%{border-radius:52% 48% 60% 40%/45% 55% 44% 56%; transform:rotate(3deg)}
-}
-.embrace{position:absolute; inset:12% 10%; }
-.embrace path, .embrace circle{stroke:var(--pine); fill:none; stroke-width:5;
-  stroke-linecap:round; stroke-linejoin:round}
-.embrace .heart{fill:var(--terra); stroke:none}
-.float{position:absolute; animation:bob 5.5s ease-in-out infinite}
-.float.f1{top:6%; right:8%; animation-delay:-1s}
-.float.f2{bottom:14%; left:0%; animation-delay:-2.6s}
-.float.f3{top:24%; left:4%; animation-delay:-4s}
-@keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-13px) rotate(5deg)}}
+/* Hero photo */
+.hero-photo{justify-self:center; width:min(100%,400px); aspect-ratio:4/5; overflow:hidden;
+  border-radius:999px 999px var(--r-lg) var(--r-lg); border:8px solid var(--surface); box-shadow:var(--shadow-lift)}
+.hero-photo img{width:100%; height:100%; object-fit:cover; object-position:50% 22%}
 
 /* ---------- Journey strip ---------- */
-.journey{border-block:1px solid var(--line); background:rgba(255,254,250,.66);
-  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px)}
 .journey-inner{display:flex; flex-wrap:wrap; justify-content:space-between; gap:1.2rem 2rem;
   padding-block:1.6rem}
 .journey-item{display:flex; align-items:center; gap:.8rem; font-size:.92rem; color:var(--muted)}
@@ -237,14 +216,12 @@ body.loaded .hero-fade{opacity:1; transform:none}
              border-color var(--dur) var(--ease);
 }
 .card:hover{transform:translateY(-7px); box-shadow:var(--shadow-lift); border-color:transparent}
-.card.t-tea{background:linear-gradient(165deg, var(--surface), var(--tea))}
-.card.t-pink{background:linear-gradient(165deg, var(--surface), var(--pink))}
-.card.t-lilac{background:linear-gradient(165deg, var(--surface), var(--lilac))}
-.card.t-vanilla{background:linear-gradient(165deg, var(--surface), var(--vanilla))}
 .card-icon{width:54px; height:54px; border-radius:16px; display:grid; place-items:center;
   background:var(--sage-tint); transition:transform .5s var(--ease-spring)}
-.card.t-tea .card-icon, .card.t-pink .card-icon,
-.card.t-lilac .card-icon, .card.t-vanilla .card-icon{background:#fff}
+.card.t-tea .card-icon{background:var(--tea)}
+.card.t-pink .card-icon{background:var(--pink)}
+.card.t-lilac .card-icon{background:var(--lilac)}
+.card.t-vanilla .card-icon{background:var(--vanilla)}
 .card:hover .card-icon{transform:scale(1.12) rotate(-4deg)}
 .card-icon svg{width:30px; height:30px}
 .card-icon path, .card-icon circle, .card-icon line{
@@ -266,13 +243,11 @@ body.loaded .hero-fade{opacity:1; transform:none}
 .card-more:hover .arr{transform:translateX(4px)}
 
 /* ---------- Doctor ---------- */
-.doctor{background:rgba(255,254,250,.66); border-block:1px solid var(--line);
-  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px)}
 .doctor-grid{display:grid; grid-template-columns:minmax(0,5fr) minmax(0,7fr);
   gap:clamp(2.5rem,6vw,5rem); align-items:start}
-.portrait{position:relative; max-width:420px}
+.portrait{position:relative; width:100%; max-width:420px}
 .portrait-arch{aspect-ratio:4/5; border-radius:999px 999px var(--r-lg) var(--r-lg);
-  background:linear-gradient(170deg, var(--tea), var(--lilac) 70%, var(--vanilla) 135%);
+  background:var(--card); box-shadow:var(--shadow-card);
   border:1px solid var(--line); overflow:hidden; position:relative}
 .portrait-arch svg{position:absolute; inset:14% 12% 10%}
 .portrait-arch path{stroke:var(--pine); fill:none; stroke-width:4.5; stroke-linecap:round}
@@ -381,8 +356,7 @@ select.fill{appearance:none; -webkit-appearance:none; cursor:pointer; padding-ri
 .form-ok.error{background:#FBE9EC; color:var(--terra-dk)}
 
 /* ---------- Footer ---------- */
-.footer{background:rgba(255,254,250,.6); backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px); padding:3.5rem 0 7rem}
+.footer{border-top:1px solid var(--line); padding:3.5rem 0 7rem}
 .footer-grid{display:grid; grid-template-columns:2fr 1fr 1fr; gap:2.5rem}
 .footer h4{font-family:var(--font-display); font-variation-settings:var(--soft);
   font-weight:560; font-size:1.05rem; color:var(--pine); margin-bottom:.8rem}
@@ -416,7 +390,7 @@ select.fill{appearance:none; -webkit-appearance:none; cursor:pointer; padding-ri
 @media (max-width:860px){
   .nav-links{display:none}
   .hero-grid{grid-template-columns:1fr}
-  .hero-art{max-width:380px; margin-top:.5rem}
+  .hero-photo{width:min(100%,300px); margin-top:.5rem}
   .doctor-grid{grid-template-columns:1fr}
   .portrait{margin-inline:auto}
   .hub-card{grid-template-columns:1fr}
@@ -542,13 +516,7 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
 <body data-i18n-page="index">
 <a class="skip-link" href="#main" data-i18n="a11y.skip">Zum Inhalt springen</a>
 
-<!-- Animated wave background -->
-<div class="bgwaves" aria-hidden="true">
-  <svg class="wave w-top" viewBox="0 0 2880 320" preserveAspectRatio="none"><path d="M0,96C96,106.7,192,149.3,288,154.7C384,160,480,128,576,138.7C672,149.3,768,202.7,864,208C960,213.3,1056,170.7,1152,138.7C1248,106.7,1344,85.3,1440,96C1536,106.7,1632,149.3,1728,154.7C1824,160,1920,128,2016,138.7C2112,149.3,2208,202.7,2304,208C2400,213.3,2496,170.7,2592,138.7C2688,106.7,2784,85.3,2880,96L2880,0L0,0Z"/></svg>
-  <svg class="wave w1" viewBox="0 0 2880 320" preserveAspectRatio="none"><path d="M0,133.3C120,138.7,240,181.3,360,170.7C480,160,600,96,720,90.7C840,85.3,960,138.7,1080,149.3C1200,160,1320,128,1440,133.3C1560,138.7,1680,181.3,1800,170.7C1920,160,2040,96,2160,90.7C2280,85.3,2400,138.7,2520,149.3C2640,160,2760,128,2880,133.3L2880,320L0,320Z"/></svg>
-  <svg class="wave w2" viewBox="0 0 2880 320" preserveAspectRatio="none"><path d="M0,176C96,149.3,192,106.7,288,117.3C384,128,480,192,576,202.7C672,213.3,768,170.7,864,165.3C960,160,1056,192,1152,202.7C1248,213.3,1344,202.7,1440,176C1536,149.3,1632,106.7,1728,117.3C1824,128,1920,192,2016,202.7C2112,213.3,2208,170.7,2304,165.3C2400,160,2496,192,2592,202.7C2688,213.3,2784,202.7,2880,176L2880,320L0,320Z"/></svg>
-  <svg class="wave w3" viewBox="0 0 2880 320" preserveAspectRatio="none"><path d="M0,197.3C80,202.7,160,245.3,240,234.7C320,224,400,160,480,149.3C560,138.7,640,181.3,720,186.7C800,192,880,160,960,165.3C1040,170.7,1120,213.3,1200,218.7C1280,224,1360,192,1440,197.3C1520,202.7,1600,245.3,1680,234.7C1760,224,1840,160,1920,149.3C2000,138.7,2080,181.3,2160,186.7C2240,192,2320,160,2400,165.3C2480,170.7,2560,213.3,2640,218.7C2720,224,2800,192,2880,197.3L2880,320L0,320Z"/></svg>
-</div>
+<div class="bgwaves" aria-hidden="true"></div>
 
 <!-- ===================== NAV ===================== -->
 <header class="nav" id="nav">
@@ -651,44 +619,24 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
       </ul>
     </div>
 
-    <div class="hero-art hero-fade" style="--d:.4s" role="img"
-         aria-label="Illustration: Ein Elternteil hält schützend ein Kind im Arm">
-      <div class="blob"></div>
-      <svg class="embrace" viewBox="0 0 400 400" aria-hidden="true">
-        <!-- adult: head + sheltering arc -->
-        <circle cx="232" cy="106" r="46"/>
-        <path d="M300 180 C 322 248 300 316 236 340 C 180 360 116 340 96 286 C 80 242 96 198 134 178"/>
-        <!-- child head, tucked in -->
-        <circle cx="172" cy="232" r="30"/>
-        <!-- embracing arm -->
-        <path d="M128 270 C 150 300 212 304 240 272"/>
-        <!-- small heart between them -->
-        <path class="heart" d="M243 196c-7-8-20-6-24 3-4-9-17-11-24-3-8 9-2 21 24 36 26-15 32-27 24-36z"/>
-      </svg>
-      <svg class="float f1" width="34" height="34" viewBox="0 0 34 34" aria-hidden="true">
-        <path d="M17 3l3.6 8.2 8.9.8-6.7 5.9 2 8.7L17 22l-7.8 4.6 2-8.7-6.7-5.9 8.9-.8z" fill="#E9C46A"/></svg>
-      <svg class="float f2" width="30" height="30" viewBox="0 0 30 30" aria-hidden="true">
-        <path d="M15 26C5 19 2 13 6 8c3-4 8-3 9 1 1-4 6-5 9-1 4 5 1 11-9 18z" fill="#C24B61" opacity=".85"/></svg>
-      <svg class="float f3" width="38" height="38" viewBox="0 0 38 38" aria-hidden="true">
-        <circle cx="19" cy="19" r="8" fill="none" stroke="#8FA88F" stroke-width="2.4"/>
-        <g stroke="#8FA88F" stroke-width="2.4" stroke-linecap="round">
-          <path d="M19 2v5M19 31v5M2 19h5M31 19h5M7 7l3.5 3.5M27.5 27.5 31 31M31 7l-3.5 3.5M10.5 27.5 7 31"/></g></svg>
+    <div class="hero-photo hero-fade" style="--d:.4s">
+      <img src="dr-alsebaie.jpeg" alt="Porträt von Dr. med. univ. Boshra Alsebaie" width="760" height="1079" data-i18n-attr="alt:hero.photoAlt">
     </div>
   </div>
 </section>
 
 <!-- ===================== JOURNEY STRIP ===================== -->
-<div class="journey reveal">
+<div class="journey">
   <div class="container journey-inner" role="list" aria-label="Wir begleiten Ihr Kind in jedem Alter">
-    <div class="journey-item" role="listitem"><span class="journey-dot"></span><span><strong data-i18n="journey.item1.title">Erste Wochen</strong><span data-i18n="journey.item1.desc">Mutter-Kind-Pass &amp; Stillberatung</span></span></div>
-    <div class="journey-item" role="listitem"><span class="journey-dot"></span><span><strong data-i18n="journey.item2.title">Babyjahre</strong><span data-i18n="journey.item2.desc">Impfungen &amp; Entwicklungschecks</span></span></div>
-    <div class="journey-item" role="listitem"><span class="journey-dot"></span><span><strong data-i18n="journey.item3.title">Kindergarten &amp; Schule</strong><span data-i18n="journey.item3.desc">Akutmedizin, Allergien, Asthma</span></span></div>
-    <div class="journey-item" role="listitem"><span class="journey-dot"></span><span><strong data-i18n="journey.item4.title">Jugend</strong><span data-i18n="journey.item4.desc">Sportmedizin, Atteste, Beratung</span></span></div>
+    <div class="journey-item reveal" style="--d:0.00s" role="listitem"><span class="journey-dot"></span><span><strong data-i18n="journey.item1.title">Erste Wochen</strong><span data-i18n="journey.item1.desc">Mutter-Kind-Pass &amp; Stillberatung</span></span></div>
+    <div class="journey-item reveal" style="--d:0.08s" role="listitem"><span class="journey-dot"></span><span><strong data-i18n="journey.item2.title">Babyjahre</strong><span data-i18n="journey.item2.desc">Impfungen &amp; Entwicklungschecks</span></span></div>
+    <div class="journey-item reveal" style="--d:0.16s" role="listitem"><span class="journey-dot"></span><span><strong data-i18n="journey.item3.title">Kindergarten &amp; Schule</strong><span data-i18n="journey.item3.desc">Akutmedizin, Allergien, Asthma</span></span></div>
+    <div class="journey-item reveal" style="--d:0.24s" role="listitem"><span class="journey-dot"></span><span><strong data-i18n="journey.item4.title">Jugend</strong><span data-i18n="journey.item4.desc">Sportmedizin, Atteste, Beratung</span></span></div>
   </div>
 </div>
 
 <!-- ===================== SERVICES ===================== -->
-<section class="section" id="leistungen">
+<section class="section" id="leistungen" data-wave="tea">
   <div class="container">
     <span class="eyebrow reveal" data-i18n="services.eyebrow">Die Leistungen</span>
     <h2 class="reveal" style="--d:.08s; font-size:clamp(2rem,4.2vw,3rem); margin-top:.9rem" data-i18n-html="services.h2">
@@ -763,7 +711,7 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
 </section>
 
 <!-- ===================== DOCTOR ===================== -->
-<section class="section doctor" id="aerztin">
+<section class="section doctor" id="aerztin" data-wave="pink">
   <div class="container doctor-grid">
     <div class="portrait reveal">
       <div class="portrait-arch">
@@ -861,7 +809,7 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
 </section>
 
 <!-- ===================== INFO HUB + BOOKING ===================== -->
-<section class="hub" id="praxis">
+<section class="hub" id="praxis" data-wave="lilac">
   <div class="container">
     <div class="hub-card reveal">
       <div>
@@ -926,12 +874,12 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
 <footer class="footer">
   <div class="container">
     <div class="footer-grid">
-      <div>
+      <div class="reveal" style="--d:0.00s">
         <h4>Bambini Kinder Praxis</h4>
         <p style="max-width:38ch" data-i18n="footer.about">Kinder- und Jugendheilkunde in 1120 Wien.
         Wir begleiten Ihr Kind von der Geburt bis zum 18.&nbsp;Geburtstag – mit Fachwissen, Empathie und Zeit.</p>
       </div>
-      <div>
+      <div class="reveal" style="--d:0.08s">
         <h4 data-i18n="nav.kontakt">Kontakt</h4>
         <ul>
           <li>Altmannsdorfer Str. 89/2/5</li>
@@ -940,7 +888,7 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
           <li><a href="mailto:office@bambini-kinderpraxis.at">office@bambini-kinderpraxis.at</a></li>
         </ul>
       </div>
-      <div>
+      <div class="reveal" style="--d:0.16s">
         <h4 data-i18n="footer.legal">Rechtliches</h4>
         <ul>
           <li><a href="impressum.html" data-i18n="footer.impressum">Impressum</a></li>
@@ -949,7 +897,7 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
         </ul>
       </div>
     </div>
-    <div class="footer-bar">
+    <div class="footer-bar reveal" style="--d:.24s">
       <span>© <span id="year"></span> Bambini Kinder Praxis · Dr. med. Boshra Alsebaie</span>
       <span><span data-i18n="footer.with">Mit</span> <span style="color:var(--terra)">♥</span> <span data-i18n="footer.inMeidling">in Meidling</span></span>
       <span><a href="staff.html" data-i18n="footer.staffArea">Mitarbeiterbereich</a></span>
@@ -971,6 +919,7 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
   </div>
 </nav>
 
+<script src="js/waves.js"></script>
 <script src="js/i18n.js"></script>
 <script>
 (function(){
@@ -987,7 +936,7 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
   /* Scroll reveals */
   const io=new IntersectionObserver(es=>es.forEach(e=>{
     if(e.isIntersecting){e.target.classList.add('in-view'); io.unobserve(e.target);}
-  }),{threshold:.18, rootMargin:'0px 0px -8% 0px'});
+  }),{threshold:0, rootMargin:'0px 0px -8% 0px'});
   document.querySelectorAll('.reveal').forEach(el=> reduce? el.classList.add('in-view') : io.observe(el));
 
   /* Magnetic buttons (pointer devices only) */
