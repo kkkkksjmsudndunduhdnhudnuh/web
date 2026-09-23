@@ -303,6 +303,8 @@ body.menu-open{overflow:hidden}
 .staff-grid{display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); gap:clamp(1.5rem,4vw,2.5rem)}
 @media (max-width:900px){ .staff-grid{grid-template-columns:1fr} }
 
+.db-warn{margin:0 0 1.4rem; background:#FBE9EC; color:var(--terra-dk); border-radius:var(--r-sm);
+  padding:.9rem 1.1rem; font-size:.92rem; font-weight:500; overflow-wrap:anywhere}
 .panel{background:var(--card); border:1px solid var(--line); border-radius:var(--r-lg);
   padding:clamp(1.4rem,3.5vw,2.2rem); box-shadow:var(--shadow-card)}
 .panel h2{font-size:1.5rem}
@@ -457,6 +459,7 @@ body.menu-open{overflow:hidden}
         </div>
         <button class="btn btn-ghost" id="logoutBtn" type="button">Abmelden</button>
       </div>
+      <p class="db-warn" id="dbWarn" role="alert" hidden></p>
 
       <div class="staff-grid">
         <!-- Terminanfragen -->
@@ -609,7 +612,20 @@ body.menu-open{overflow:hidden}
   function showDashboard(show){
     loginView.style.display = show ? 'none' : '';
     dashboardView.classList.toggle('show', show);
-    if(show){ loadTermine(); loadFeiertage(); loadMitarbeiter(); }
+    if(show){ loadTermine(); loadFeiertage(); loadMitarbeiter(); checkStorage(); }
+  }
+
+  const dbWarn=document.getElementById('dbWarn');
+  function showWarn(msg){ dbWarn.textContent=msg; dbWarn.hidden=false; }
+  async function checkStorage(){
+    try{
+      const s=await (await fetch('/api/status')).json();
+      if(s.ok){ dbWarn.hidden=true; return; }
+      showWarn(s.storage==='redis'
+        ? 'Datenbank nicht erreichbar – Änderungen werden nicht gespeichert. Fehler: '+(s.error||'unbekannt')
+        : 'Keine Datenbank verbunden – Änderungen werden nicht gespeichert. Gefundene Datenbank-Variablen: '
+          +(s.envVars&&s.envVars.length ? s.envVars.join(', ') : 'keine'));
+    }catch{}
   }
 
   async function checkSession(){
@@ -744,6 +760,10 @@ body.menu-open{overflow:hidden}
     if(!datum||!name) return;
     const res=await fetch('/api/feiertage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({datum,name})});
     if(res.ok){ feiertagForm.reset(); loadFeiertage(); }
+    else{
+      const data=await res.json().catch(()=>({}));
+      showWarn('Feiertag konnte nicht gespeichert werden: '+(data.error||'Serverfehler ('+res.status+')'));
+    }
   });
 
   mBild?.addEventListener('change', () => {

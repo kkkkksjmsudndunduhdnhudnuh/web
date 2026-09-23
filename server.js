@@ -70,6 +70,10 @@ app.get('/api/session', (req, res) => {
   res.json({ loggedIn: isLoggedIn(req) });
 });
 
+app.get('/api/status', requireAuth, async (req, res) => {
+  res.json(await store.status());
+});
+
 // ---------- Terminanfragen ----------
 app.post('/api/termine', async (req, res) => {
   const ip = rateLimit.clientIp(req);
