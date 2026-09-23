@@ -195,6 +195,12 @@ app.delete('/api/mitarbeiter/:id', requireAuth, async (req, res) => {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use((err, req, res, next) => {
+  console.error(err);
+  if (res.headersSent) return next(err);
+  res.status(500).json({ error: 'Serverfehler – die Datenbank ist eventuell nicht erreichbar. Bitte später erneut versuchen.' });
+});
+
 if (require.main === module) {
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
