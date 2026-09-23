@@ -32,7 +32,8 @@
     const band=document.createElement('div');
     band.className='wave-band';
     band.style.setProperty('--c',COLORS[name]);
-    band.innerHTML=svg(SHAPES[(i+1)%SHAPES.length],'back')+svg(SHAPES[i%SHAPES.length],'front')+'<div class="wave-fill"></div>';
+    band.innerHTML=svg(SHAPES[(i+1)%SHAPES.length],'back')+'<div class="wave-fill back"></div>'
+      +svg(SHAPES[i%SHAPES.length],'front')+'<div class="wave-fill"></div>';
     host.appendChild(band);
     return band;
   });

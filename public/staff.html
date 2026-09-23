@@ -119,14 +119,22 @@ h1 em, h2 em{font-style:italic; font-weight:480; color:var(--pine)}
 /* ---------- Scroll-driven wave background (see js/waves.js) ---------- */
 .bgwaves{position:fixed; inset:0; z-index:-2; overflow:hidden; pointer-events:none; background:var(--bg)}
 .wave-band{position:absolute; left:0; right:0; top:0; height:calc(100vh + 16rem); --wh:clamp(90px,15vh,160px);
+  --tint:color-mix(in srgb, var(--c) 50%, #fff);
   transform:translate3d(0,110vh,0); will-change:transform}
 .wave-fill{position:absolute; left:0; right:0; top:calc(var(--wh) - 2px); bottom:0; background:var(--c)}
 .wave-band .wave{position:absolute; left:0; top:0; height:var(--wh); width:max(200vw,1800px); max-width:none;
   animation:waveFlow 16s linear infinite}
 .wave-band .wave path{fill:var(--c)}
 .wave-band .wave.back{top:calc(var(--wh) * -.42); animation-duration:23s; animation-direction:reverse}
-.wave-band .wave.back path{fill:color-mix(in srgb, var(--c) 50%, #fff)}
+.wave-band .wave.back path{fill:var(--tint)}
+.wave-fill.back{top:calc(var(--wh) * .58 - 2px); bottom:auto; height:calc(var(--wh) * .42 + 4px); background:var(--tint)}
 @keyframes waveFlow{to{transform:translateX(-50%)}}
+
+/* ---------- Smooth "ice" scrolling (Lenis, see js/smooth.js) ---------- */
+html.lenis, html.lenis body{height:auto}
+.lenis:not(.lenis-autoToggle).lenis-stopped{overflow:clip}
+.lenis [data-lenis-prevent]{overscroll-behavior:contain}
+.lenis.lenis-smooth iframe{pointer-events:none}
 
 /* ---------- Header ---------- */
 .nav{
@@ -553,6 +561,8 @@ body.menu-open{overflow:hidden}
   </div>
 </nav>
 
+<script src="js/lenis.min.js"></script>
+<script src="js/smooth.js"></script>
 <script src="js/waves.js"></script>
 <script>
 (function(){
