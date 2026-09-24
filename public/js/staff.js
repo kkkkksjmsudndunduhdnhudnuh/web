@@ -31,9 +31,16 @@
     if(!show) return;
     $('whoami').textContent=user.username+(user.rolle==='admin'?' (Admin)':'');
     $('pwWarn').hidden=!user.mustChange;
-    $('userPanel').hidden=user.rolle!=='admin';
-    loadStatus(); loadTermine(); loadHours(); loadFeiertage(); loadSperrzeiten(); loadHinweis(); loadMitarbeiter();
-    if(user.rolle==='admin') loadUsers();
+    const admin=user.rolle==='admin';
+    $('userPanel').hidden=!admin;
+    ADMIN_TABS.forEach(name=>{
+      const t=$('tab-'+name);
+      t.disabled=!admin; t.classList.toggle('locked',!admin);
+      t.title=admin?'':'Nur für Administrator:innen';
+    });
+    selectTab('termine');
+    loadStatus(); loadTermine(); loadHours(); loadFeiertage();
+    if(admin){ loadSperrzeiten(); loadHinweis(); loadMitarbeiter(); loadUsers(); }
     if(user.mustChange) selectTab('konto');
   }
   api('/api/session').then(s=>showDashboard(s.loggedIn, s.user)).catch(()=>showDashboard(false));
@@ -70,6 +77,7 @@
   }
 
   /* ---------- Tabs ---------- */
+  const ADMIN_TABS=['zeiten','hinweis','team'];
   const tabs=[...document.querySelectorAll('.tabs [role="tab"]')];
   function selectTab(name, focus){
     tabs.forEach(t=>{
@@ -79,11 +87,14 @@
       if(on && focus) t.focus();
     });
   }
-  tabs.forEach((t,i)=>{
+  tabs.forEach(t=>{
     t.addEventListener('click',()=>selectTab(t.id.slice(4)));
     t.addEventListener('keydown',e=>{
       const d=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;
-      if(d){ e.preventDefault(); selectTab(tabs[(i+d+tabs.length)%tabs.length].id.slice(4), true); }
+      if(!d) return;
+      e.preventDefault();
+      const usable=tabs.filter(x=>!x.disabled), i=usable.indexOf(t);
+      selectTab(usable[(i+d+usable.length)%usable.length].id.slice(4), true);
     });
   });
 

@@ -235,7 +235,7 @@ app.get('/api/oeffnungszeiten', async (req, res) => {
   res.json(await readHours());
 });
 
-app.put('/api/oeffnungszeiten', requireAuth, async (req, res) => {
+app.put('/api/oeffnungszeiten', requireAuth, requireAdmin, async (req, res) => {
   const hours = schedule.sanitizeHours(req.body);
   if (!hours) return res.status(400).json({ error: 'Ungueltige Oeffnungszeiten (Format HH:MM, Beginn vor Ende, keine Ueberschneidungen).' });
   await store.writeOeffnungszeiten(hours);
@@ -248,7 +248,7 @@ app.get('/api/feiertage', async (req, res) => {
   res.json(feiertage);
 });
 
-app.post('/api/feiertage', requireAuth, async (req, res) => {
+app.post('/api/feiertage', requireAuth, requireAdmin, async (req, res) => {
   const { datum, bis, name } = req.body || {};
   if (!datum || !schedule.DATE_RE.test(datum) || !name) {
     return res.status(400).json({ error: 'Datum (JJJJ-MM-TT) und Bezeichnung sind erforderlich.' });
@@ -262,7 +262,7 @@ app.post('/api/feiertage', requireAuth, async (req, res) => {
   res.status(201).json({ ok: true });
 });
 
-app.delete('/api/feiertage/:id', requireAuth, async (req, res) => {
+app.delete('/api/feiertage/:id', requireAuth, requireAdmin, async (req, res) => {
   const feiertage = await store.readFeiertage();
   const next = feiertage.filter(f => f.id !== req.params.id);
   await store.writeFeiertage(next);
@@ -270,11 +270,11 @@ app.delete('/api/feiertage/:id', requireAuth, async (req, res) => {
 });
 
 // ---------- Gesperrte Zeiten ----------
-app.get('/api/sperrzeiten', requireAuth, async (req, res) => {
+app.get('/api/sperrzeiten', requireAuth, requireAdmin, async (req, res) => {
   res.json((await store.readSperrzeiten()).sort((a, b) => (a.datum + (a.von || '')).localeCompare(b.datum + (b.von || ''))));
 });
 
-app.post('/api/sperrzeiten', requireAuth, async (req, res) => {
+app.post('/api/sperrzeiten', requireAuth, requireAdmin, async (req, res) => {
   const { datum, von, bis, grund } = req.body || {};
   if (!datum || !schedule.DATE_RE.test(datum)) return res.status(400).json({ error: 'Bitte ein gueltiges Datum angeben.' });
   if ((von || bis) && !(schedule.TIME_RE.test(von) && schedule.TIME_RE.test(bis) && schedule.toMin(von) < schedule.toMin(bis))) {
@@ -286,7 +286,7 @@ app.post('/api/sperrzeiten', requireAuth, async (req, res) => {
   res.status(201).json({ ok: true });
 });
 
-app.delete('/api/sperrzeiten/:id', requireAuth, async (req, res) => {
+app.delete('/api/sperrzeiten/:id', requireAuth, requireAdmin, async (req, res) => {
   const sperrzeiten = await store.readSperrzeiten();
   await store.writeSperrzeiten(sperrzeiten.filter(s => s.id !== req.params.id));
   res.json({ ok: true });
@@ -298,11 +298,11 @@ app.get('/api/hinweis', async (req, res) => {
   res.json(hinweis && hinweis.aktiv && hinweis.text ? hinweis : { aktiv: false });
 });
 
-app.get('/api/hinweis/bearbeiten', requireAuth, async (req, res) => {
+app.get('/api/hinweis/bearbeiten', requireAuth, requireAdmin, async (req, res) => {
   res.json((await store.readHinweis()) || { text: '', aktiv: false, stil: 'info' });
 });
 
-app.put('/api/hinweis', requireAuth, async (req, res) => {
+app.put('/api/hinweis', requireAuth, requireAdmin, async (req, res) => {
   const { text, aktiv, stil } = req.body || {};
   const hinweis = { text: str(text, 240), aktiv: !!aktiv && !!str(text, 240), stil: stil === 'wichtig' ? 'wichtig' : 'info', updatedAt: new Date().toISOString() };
   await store.writeHinweis(hinweis);
@@ -319,7 +319,7 @@ app.get('/api/mitarbeiter', async (req, res) => {
   res.json(await store.readMitarbeiter());
 });
 
-app.post('/api/mitarbeiter', requireAuth, async (req, res) => {
+app.post('/api/mitarbeiter', requireAuth, requireAdmin, async (req, res) => {
   const { name, rolle, sprachen, bild } = req.body || {};
   if (!name || !rolle) {
     return res.status(400).json({ error: 'Name und Rolle sind erforderlich.' });
@@ -332,7 +332,7 @@ app.post('/api/mitarbeiter', requireAuth, async (req, res) => {
 });
 
 // bild: new data URL replaces the photo, null removes it, omitted keeps it.
-app.put('/api/mitarbeiter/:id', requireAuth, async (req, res) => {
+app.put('/api/mitarbeiter/:id', requireAuth, requireAdmin, async (req, res) => {
   const { name, rolle, sprachen, bild } = req.body || {};
   if (!name || !rolle) return res.status(400).json({ error: 'Name und Rolle sind erforderlich.' });
   if (bild && !validBild(bild)) return res.status(400).json({ error: 'Ungueltiges Bild.' });
@@ -345,7 +345,7 @@ app.put('/api/mitarbeiter/:id', requireAuth, async (req, res) => {
   res.json({ ok: true });
 });
 
-app.post('/api/mitarbeiter/reihenfolge', requireAuth, async (req, res) => {
+app.post('/api/mitarbeiter/reihenfolge', requireAuth, requireAdmin, async (req, res) => {
   const ids = Array.isArray(req.body?.ids) ? req.body.ids.map(String) : [];
   const mitarbeiter = await store.readMitarbeiter();
   if (ids.length !== mitarbeiter.length || !mitarbeiter.every(m => ids.includes(m.id))) {
@@ -355,7 +355,7 @@ app.post('/api/mitarbeiter/reihenfolge', requireAuth, async (req, res) => {
   res.json({ ok: true });
 });
 
-app.delete('/api/mitarbeiter/:id', requireAuth, async (req, res) => {
+app.delete('/api/mitarbeiter/:id', requireAuth, requireAdmin, async (req, res) => {
   const mitarbeiter = await store.readMitarbeiter();
   const next = mitarbeiter.filter(m => m.id !== req.params.id);
   await store.writeMitarbeiter(next);

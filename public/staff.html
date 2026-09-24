@@ -311,7 +311,11 @@ body.menu-open{overflow:hidden}
   background:rgba(255,255,255,.55); border:1px solid var(--line); width:fit-content; max-width:100%}
 .tabs button{padding:.6rem 1.1rem; border-radius:var(--r-pill); font-weight:600; font-size:.92rem; color:var(--muted);
   transition:background-color .25s var(--ease), color .25s var(--ease), box-shadow .25s var(--ease)}
-.tabs button:hover{color:var(--pine)}
+.tabs button:hover:not(:disabled){color:var(--pine)}
+.tabs button{display:inline-flex; align-items:center; gap:.4rem}
+.tabs .lock{display:none; width:13px; height:13px; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round}
+.tabs button.locked{opacity:.45; cursor:not-allowed}
+.tabs button.locked .lock{display:block}
 .tabs button[aria-selected="true"]{background:var(--card); color:var(--pine); box-shadow:var(--shadow-card)}
 .tabpanel{animation:tabIn .45s var(--ease) both}
 @keyframes tabIn{from{opacity:0; transform:translateY(8px)}}
@@ -530,9 +534,9 @@ body.menu-open{overflow:hidden}
 
       <div class="tabs" role="tablist" aria-label="Bereiche">
         <button type="button" role="tab" id="tab-termine" aria-controls="p-termine" aria-selected="true">Termine</button>
-        <button type="button" role="tab" id="tab-zeiten" aria-controls="p-zeiten" aria-selected="false" tabindex="-1">Zeiten &amp; Schließtage</button>
-        <button type="button" role="tab" id="tab-hinweis" aria-controls="p-hinweis" aria-selected="false" tabindex="-1">Hinweis</button>
-        <button type="button" role="tab" id="tab-team" aria-controls="p-team" aria-selected="false" tabindex="-1">Team</button>
+        <button type="button" role="tab" id="tab-zeiten" aria-controls="p-zeiten" aria-selected="false" tabindex="-1"><svg class="lock" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="2"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>Zeiten &amp; Schließtage</button>
+        <button type="button" role="tab" id="tab-hinweis" aria-controls="p-hinweis" aria-selected="false" tabindex="-1"><svg class="lock" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="2"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>Hinweis</button>
+        <button type="button" role="tab" id="tab-team" aria-controls="p-team" aria-selected="false" tabindex="-1"><svg class="lock" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="2"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>Team</button>
         <button type="button" role="tab" id="tab-konto" aria-controls="p-konto" aria-selected="false" tabindex="-1">Konto</button>
       </div>
 
