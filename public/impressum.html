@@ -7,7 +7,7 @@
 <meta name="description" content="Impressum der Bambini Kinder Praxis – Dr. med. Boshra Alsebaie, Fachärztin für Kinder- und Jugendheilkunde, 1120 Wien.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,340..640,0..100,0;1,9..144,340..640,0..100,0&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,340..640,0..100,0;1,9..144,340..640,0..100,0&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
    BAMBINI KINDER PRAXIS — Design Tokens
@@ -504,6 +504,62 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
 .imp-wrap{max-width:760px; margin-top:2.4rem;
   background:var(--card); border:1px solid var(--line); border-radius:var(--r-lg);
   padding:clamp(1.6rem,4vw,2.8rem); box-shadow:var(--shadow-card)}
+/* Topic explorer: pick a topic, the answer types itself out */
+.imp-explorer{max-width:760px; margin-top:2.4rem; background:var(--card); border:1px solid var(--line);
+  border-radius:var(--r-lg); box-shadow:var(--shadow-card); padding:clamp(1.4rem,3.5vw,2.4rem)}
+.imp-pick{position:relative}
+.imp-pick-btn{position:relative; overflow:hidden; width:100%; display:flex; align-items:center; gap:1rem; text-align:start; padding:.95rem 1.2rem;
+  border:1.5px solid var(--line); border-radius:var(--r-md); background:var(--surface);
+  transition:border-color .3s var(--ease), box-shadow .3s var(--ease)}
+.imp-pick-btn:hover, .imp-pick.open .imp-pick-btn{border-color:var(--sage); box-shadow:0 0 0 4px var(--sage-tint)}
+.imp-pick-text{flex:1; display:grid; gap:.15rem; min-width:0}
+.imp-pick-label{font-size:.7rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--muted)}
+.imp-pick-current{font-size:1.08rem; font-weight:600; color:var(--ink)}
+.imp-pick-btn .chev{width:18px; height:18px; flex:none; stroke:var(--pine); fill:none; stroke-width:1.8;
+  stroke-linecap:round; stroke-linejoin:round; transition:transform .35s var(--ease)}
+.imp-pick.open .chev{transform:rotate(180deg)}
+.imp-pick-btn .chev{transition:transform .55s cubic-bezier(.34,1.56,.64,1)}
+.imp-pick-menu{list-style:none; position:absolute; left:0; right:0; top:calc(100% + .5rem); z-index:20;
+  background:var(--card); border:1px solid var(--line); border-radius:var(--r-md); box-shadow:var(--shadow-lift);
+  padding:.4rem; max-height:min(22rem,60vh); overflow:auto; outline:none;
+  opacity:0; visibility:hidden; transform:translateY(-8px) scale(.98);
+  transition:opacity .25s var(--ease), transform .25s var(--ease), visibility .25s}
+.imp-pick.open .imp-pick-menu{opacity:1; visibility:visible; transform:none}
+.imp-pick-menu li{padding:.65rem .85rem; border-radius:var(--r-sm); cursor:pointer; font-weight:500; color:var(--ink);
+  transition:background-color .2s var(--ease), color .2s var(--ease)}
+.imp-pick-menu li:hover, .imp-pick-menu li.active{background:var(--sage-tint); color:var(--pine)}
+.imp-pick-menu li[aria-selected="true"]{font-weight:600; color:var(--pine)}
+.imp-pick.open .imp-pick-menu li{animation:impOptIn .55s cubic-bezier(.34,1.56,.64,1) calc(var(--i) * 40ms) both}
+@keyframes impOptIn{from{opacity:0; transform:translateX(-18px) scale(.94); filter:blur(5px)}}
+.imp-pick-btn::after{content:""; position:absolute; left:0; bottom:0; width:45%; height:3px; border-radius:3px;
+  background:linear-gradient(90deg, transparent, var(--terra), var(--sage), #B58CC0, transparent);
+  transform:translateX(-110%); opacity:0; pointer-events:none}
+.imp-pick.loading .imp-pick-btn::after{opacity:1; animation:impSweep .75s cubic-bezier(.65,0,.35,1) infinite}
+@keyframes impSweep{to{transform:translateX(240%)}}
+.imp-pick.loading .imp-pick-current, .imp-screen-topic{font-variant-numeric:tabular-nums}
+.imp-loader{display:none; align-items:flex-end; gap:.28em; height:1.05em; vertical-align:-.16em}
+.imp-typed.loading .imp-loader{display:inline-flex}
+.imp-typed.loading .imp-caret{display:none}
+.imp-loader i{width:.3em; height:.3em; border-radius:50%; background:var(--terra);
+  animation:impBounce .5s cubic-bezier(.3,0,.4,1) infinite alternate}
+.imp-loader i:nth-child(2){background:var(--sage); animation-delay:.12s}
+.imp-loader i:nth-child(3){background:#B58CC0; animation-delay:.24s}
+@keyframes impBounce{from{transform:translateY(0) scale(1.15,.85)} to{transform:translateY(-.6em) scale(.9,1.1)}}
+.imp-screen{margin-top:1.8rem; min-height:8.5rem}
+.imp-screen-topic{font-size:.72rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--sage)}
+.imp-typed{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace; font-weight:500;
+  font-size:clamp(1.45rem,3.8vw,2.3rem); line-height:1.35; color:var(--ink); margin-top:.5rem; overflow-wrap:anywhere}
+.imp-typed a{color:var(--pine); text-underline-offset:5px; text-decoration-thickness:2px}
+.imp-typed small{display:block; font-family:var(--font-body); font-size:.95rem; font-weight:400; color:var(--muted);
+  margin-top:.8rem; animation:impFade .6s var(--ease) both}
+.imp-typed small a{text-decoration-thickness:1px}
+.imp-caret{display:inline-block; width:3px; height:1.05em; margin-inline-start:.12em; vertical-align:-.16em;
+  border-radius:2px; background:var(--terra); animation:impBlink 1.05s steps(1) infinite}
+.imp-typed.typing .imp-caret{animation:none}
+@keyframes impBlink{50%{opacity:0}}
+@keyframes impFade{from{opacity:0; transform:translateY(6px)}}
+.imp-all{display:block; margin-bottom:1rem}
+.sr-only{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
 .imp-list{display:grid; gap:0}
 .imp-row{display:grid; grid-template-columns:minmax(0,2fr) minmax(0,3fr); gap:1rem 2rem;
   padding:1.05rem 0; border-bottom:1px solid var(--line)}
@@ -620,7 +676,26 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
 
 <section class="section" style="padding-top:0" data-wave="vanilla">
   <div class="container">
+    <div class="imp-explorer reveal">
+      <div class="imp-pick" id="impPick">
+        <button type="button" class="imp-pick-btn" id="impPickBtn" aria-haspopup="listbox" aria-expanded="false" aria-controls="impPickMenu">
+          <span class="imp-pick-text">
+            <span class="imp-pick-label" data-i18n="imp.pick">Thema wählen</span>
+            <span class="imp-pick-current" id="impPickCurrent"></span>
+          </span>
+          <svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>
+        </button>
+        <ul class="imp-pick-menu" id="impPickMenu" role="listbox" data-lenis-prevent aria-labelledby="impPickBtn"></ul>
+      </div>
+      <div class="imp-screen">
+        <p class="imp-screen-topic" id="impTopic" aria-hidden="true"></p>
+        <p class="imp-typed" id="impTypedWrap" aria-hidden="true"><span id="impTyped"></span><span class="imp-loader"><i></i><i></i><i></i></span><span class="imp-caret"></span></p>
+        <p class="sr-only" id="impLive" aria-live="polite"></p>
+      </div>
+    </div>
+
     <div class="imp-wrap reveal">
+      <span class="eyebrow imp-all" data-i18n="imp.all">Alle Angaben auf einen Blick</span>
       <dl class="imp-list">
         <div class="imp-row"><dt data-i18n="imp.companyName">Vollständiger Firmenname</dt><dd data-i18n="imp.companyNameVal">Fachärztin für Kinder- und Jugendheilkunde</dd></div>
         <div class="imp-row"><dt data-i18n="imp.address">Adresse</dt><dd>Altmannsdorfer Straße 89/2/5</dd></div>
@@ -692,6 +767,7 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
 <script src="js/smooth.js"></script>
 <script src="js/waves.js"></script>
 <script src="js/magnetic.js"></script>
+<script src="js/imp-explorer.js"></script>
 <script src="js/i18n.js"></script>
 <script>
 (function(){
