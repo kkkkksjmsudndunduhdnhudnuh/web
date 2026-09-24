@@ -436,14 +436,17 @@ select.fill{appearance:none; -webkit-appearance:none; cursor:pointer; padding-ri
 .staff-card h2{font-size:clamp(1.7rem,3.2vw,2.3rem); margin-top:.7rem}
 .staff-card h3{font-size:1.35rem}
 .staff-sub{color:var(--muted); font-weight:500; margin-top:.25rem}
-.cv{list-style:none; margin-top:1.3rem; display:grid; gap:.65rem;
-  border-left:2px solid var(--sage); padding-left:1.2rem}
+.cv{list-style:none; margin-top:1.3rem; display:grid; gap:.65rem; padding-left:1.2rem}
 .cv li{position:relative; font-size:.93rem; color:var(--muted)}
 .cv li::before{content:""; position:absolute; left:-1.48rem; top:.5em;
   width:8px; height:8px; border-radius:50%; background:var(--sage);
   box-shadow:0 0 0 4px var(--sage-tint)}
 .cv li strong{color:var(--ink); font-weight:600}
-.cv li.now::before{background:var(--terra); box-shadow:0 0 0 4px var(--pink)}
+.cv li:not(:last-child)::after{content:""; position:absolute; left:calc(-1.48rem + 3px); width:2px;
+  top:calc(.5em + 4px); bottom:calc(-.65rem - .5em - 4px); background:var(--sage)}
+.cv li.chief::before{left:calc(-1.48rem - 5px); top:.2em; width:18px; height:18px; border-radius:0;
+  background:var(--terra); box-shadow:none; z-index:1;
+  clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
 .team-cta{margin-top:clamp(2.5rem,5vw,4rem); text-align:center;
   background:var(--card); box-shadow:var(--shadow-card);
   border:1px solid var(--line); border-radius:var(--r-lg);
@@ -666,7 +669,8 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
           <h2>Dr. med. univ. Boshra Alsebaie</h2>
           <p class="staff-sub" data-i18n="team.doctorSub">Fachärztin für Kinder- und Jugendheilkunde</p>
           <ul class="cv">
-            <li class="now" data-i18n-html="team.cv1"><strong>Oberärztin</strong> – Landesklinikum Mödling &amp; Kinderambulatorium Margareten, Wien</li>
+            <li class="chief" data-i18n-html="team.cv0"><strong>Chefin</strong> – Bambini Kinder Praxis</li>
+            <li data-i18n-html="team.cv1"><strong>Oberärztin</strong> – Landesklinikum Mödling &amp; Kinderambulatorium Margareten, Wien</li>
             <li data-i18n-html="team.cv2"><strong>Facharzt-Urkunde</strong> für Kinder- und Jugendmedizin – Österreichische Ärztekammer, Wien</li>
             <li data-i18n-html="team.cv3"><strong>Assistenzärztin</strong> – Landesklinikum Mödling</li>
             <li data-i18n-html="team.cv4"><strong>Nostrifizierung</strong> – Medizinische Universität Wien</li>
