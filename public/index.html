@@ -931,6 +931,7 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
 <script src="js/lenis.min.js"></script>
 <script src="js/smooth.js"></script>
 <script src="js/waves.js"></script>
+<script src="js/notice.js"></script>
 <script src="js/magnetic.js"></script>
 <script src="js/i18n.js"></script>
 <script>
@@ -965,7 +966,7 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
   });
 
   /* Opening hours + live "open/closed" in Europe/Vienna  (edit here ↓) */
-  const HOURS={1:[['08:00','13:00']],
+  let HOURS={1:[['08:00','13:00']],
                2:[['08:00','13:00'],['14:00','17:00']],
                3:[['08:00','13:00']],
                4:[['13:00','18:00']],
@@ -996,7 +997,7 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
   const fill=(tpl,vals)=>tpl.replace(/\{(\w+)\}/g, (_,k)=>vals[k]??'');
   const toMin=t=>{const[h,m]=t.split(':').map(Number);return h*60+m;};
   let FEIERTAGE=[];
-  const feiertagFor=dateStr=>FEIERTAGE.find(f=>f.datum===dateStr);
+  const feiertagFor=dateStr=>FEIERTAGE.find(f=>f.datum<=dateStr && dateStr<=(f.bis||f.datum));
   const fmtFeiertagDate=iso=>{const[y,m,d]=iso.split('-'); return `${d}.${m}.${y}`;};
   const escHtml=str=>{const d=document.createElement('div'); d.textContent=str??''; return d.innerHTML;};
   function viennaNow(){
@@ -1075,10 +1076,10 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
   function renderFeiertageList(){
     const el=document.getElementById('feiertageNote'); if(!el) return;
     const today=viennaDateStr();
-    const upcoming=FEIERTAGE.filter(f=>f.datum>=today).sort((a,b)=>a.datum.localeCompare(b.datum)).slice(0,5);
+    const upcoming=FEIERTAGE.filter(f=>(f.bis||f.datum)>=today).sort((a,b)=>a.datum.localeCompare(b.datum)).slice(0,5);
     if(!upcoming.length){ el.innerHTML=''; return; }
     el.innerHTML=`<strong>${STR.feiertageTitle}</strong><ul>`+
-      upcoming.map(f=>`<li><span class="fdate">${fmtFeiertagDate(f.datum)}</span><span>${escHtml(f.name)}</span></li>`).join('')+
+      upcoming.map(f=>`<li><span class="fdate">${fmtFeiertagDate(f.datum)}${f.bis?' – '+fmtFeiertagDate(f.bis):''}</span><span>${escHtml(f.name)}</span></li>`).join('')+
       '</ul>';
   }
   function status(){
@@ -1115,6 +1116,9 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
     }
   }
   status(); setInterval(status,60000);
+  fetch('/api/oeffnungszeiten').then(r=>r.ok?r.json():null).then(data=>{
+    if(data && typeof data==='object'){ HOURS=data; status(); updateTimeOptions(); }
+  }).catch(()=>{});
   fetch('/api/feiertage').then(r=>r.ok?r.json():[]).then(data=>{
     FEIERTAGE=Array.isArray(data)?data:[]; status(); renderFeiertageList(); updateTimeOptions();
   }).catch(()=>{});

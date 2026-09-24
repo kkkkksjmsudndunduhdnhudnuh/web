@@ -305,6 +305,69 @@ body.menu-open{overflow:hidden}
 
 .db-warn{margin:0 0 1.4rem; background:#FBE9EC; color:var(--terra-dk); border-radius:var(--r-sm);
   padding:.9rem 1.1rem; font-size:.92rem; font-weight:500; overflow-wrap:anywhere}
+[hidden]{display:none !important}
+.sr-only{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+.tabs{display:flex; gap:.4rem; flex-wrap:wrap; margin-bottom:1.6rem; padding:.35rem; border-radius:var(--r-pill);
+  background:rgba(255,255,255,.55); border:1px solid var(--line); width:fit-content; max-width:100%}
+.tabs button{padding:.6rem 1.1rem; border-radius:var(--r-pill); font-weight:600; font-size:.92rem; color:var(--muted);
+  transition:background-color .25s var(--ease), color .25s var(--ease), box-shadow .25s var(--ease)}
+.tabs button:hover{color:var(--pine)}
+.tabs button[aria-selected="true"]{background:var(--card); color:var(--pine); box-shadow:var(--shadow-card)}
+.tabpanel{animation:tabIn .45s var(--ease) both}
+@keyframes tabIn{from{opacity:0; transform:translateY(8px)}}
+.panel-head{display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; flex-wrap:wrap}
+.segmented{display:flex; padding:.25rem; border-radius:var(--r-pill); background:var(--surface); border:1px solid var(--line)}
+.segmented button{padding:.45rem 1rem; border-radius:var(--r-pill); font-size:.88rem; font-weight:600; color:var(--muted)}
+.segmented button[aria-pressed="true"]{background:var(--pine); color:var(--surface)}
+.toolbar{display:flex; gap:.6rem; flex-wrap:wrap; margin-top:1.4rem}
+.toolbar input, .toolbar select, .feiertag-form select, .feiertag-form textarea{font:inherit; font-size:.95rem; padding:.7rem 1rem;
+  border-radius:var(--r-sm); border:1.5px solid var(--line); background:var(--surface); color:var(--ink)}
+.toolbar input{flex:1; min-width:200px}
+.toolbar input:focus, .toolbar select:focus, .feiertag-form select:focus, .feiertag-form textarea:focus{outline:none; border-color:var(--terra)}
+.feiertag-form textarea{resize:vertical; min-height:5rem}
+.staff-msg{font-size:.88rem; font-weight:500; color:var(--pine); min-height:0}
+.staff-msg:empty{display:none}
+.staff-msg.error{color:var(--terra-dk)}
+.mini{display:grid; gap:.3rem; flex:1; min-width:130px; font-size:.78rem; font-weight:600; color:var(--pine)}
+.check{display:inline-flex; align-items:center; gap:.5rem; font-size:.9rem; color:var(--ink); cursor:pointer}
+.check input{width:18px; height:18px; accent-color:var(--pine)}
+.week-nav{display:flex; align-items:center; gap:.6rem; margin-top:1.4rem; flex-wrap:wrap}
+.week-nav strong{min-width:12rem; text-align:center; font-family:var(--font-display); font-variation-settings:var(--soft); font-weight:560}
+.week-grid{display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:.6rem; margin-top:1rem}
+.week-day{border:1px solid var(--line); border-radius:var(--r-sm); padding:.6rem; min-height:9rem; background:var(--surface)}
+.week-day.today{border-color:var(--sage); box-shadow:0 0 0 3px var(--sage-tint)}
+.week-day h3{font-family:var(--font-body); font-size:.78rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); margin-bottom:.5rem}
+.week-day.closed{background:repeating-linear-gradient(135deg, var(--surface) 0 8px, rgba(43,48,42,.03) 8px 16px)}
+.week-item{display:block; width:100%; text-align:left; font-size:.82rem; padding:.4rem .55rem; border-radius:10px; margin-top:.35rem;
+  border-left:3px solid var(--sage); background:var(--sage-tint); color:var(--ink); transition:transform .2s var(--ease)}
+.week-item:hover{transform:translateX(2px)}
+.week-item b{font-variant-numeric:tabular-nums}
+.week-item.bestaetigt{border-color:var(--pine)}
+.week-item.abgelehnt{border-color:var(--terra); background:var(--blush); opacity:.7}
+.week-item.erledigt{border-color:var(--muted); background:var(--line); opacity:.7}
+.week-note{font-size:.78rem; color:var(--muted)}
+@media (max-width:900px){ .week-grid{grid-template-columns:repeat(2,minmax(0,1fr))} }
+.termin-card.flash{animation:flash 1.6s var(--ease)}
+@keyframes flash{0%,40%{box-shadow:0 0 0 4px var(--terra)}}
+.termin-actions .notify{margin-left:auto}
+.btn-sm.ok{color:var(--pine)}
+.btn-sm.ok:hover{background:var(--sage-tint); border-color:var(--sage)}
+.status-pill.bestaetigt{background:var(--pine); color:var(--surface)}
+.status-pill.abgelehnt{background:var(--blush); color:var(--terra-dk)}
+.hours-editor{display:grid; gap:.5rem; margin:1.4rem 0}
+.hours-row{display:grid; grid-template-columns:7rem repeat(2, minmax(0,1fr)); gap:.6rem; align-items:center}
+.hours-row > span{font-weight:600; color:var(--pine)}
+.hours-range{display:flex; align-items:center; gap:.4rem}
+.hours-range input{font:inherit; font-size:.92rem; padding:.55rem .7rem; border-radius:var(--r-sm); border:1.5px solid var(--line);
+  background:var(--surface); color:var(--ink); flex:1; min-width:0}
+.hours-range input:focus{outline:none; border-color:var(--terra)}
+@media (max-width:620px){ .hours-row{grid-template-columns:1fr} }
+.notice-preview{border-radius:var(--r-sm); padding:.75rem 1rem; background:var(--pine); color:#F4F3E8; font-size:.92rem}
+.notice-preview.wichtig{background:var(--terra)}
+.notice-preview:has(span:empty){display:none}
+.item-actions{display:flex; gap:.4rem; flex-wrap:wrap; justify-content:flex-end}
+.btn-sm:disabled{opacity:.35; cursor:default}
+.role-pill{font-size:.7rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); margin-left:.4rem}
 .panel{background:var(--card); border:1px solid var(--line); border-radius:var(--r-lg);
   padding:clamp(1.4rem,3.5vw,2.2rem); box-shadow:var(--shadow-card)}
 .panel h2{font-size:1.5rem}
@@ -331,12 +394,15 @@ body.menu-open{overflow:hidden}
   padding:.3rem .7rem; border-radius:var(--r-pill); flex:none}
 .status-pill.offen{background:var(--sage-tint); color:var(--pine)}
 .status-pill.erledigt{background:var(--line); color:var(--muted)}
+.termin-card.abgelehnt{opacity:.55}
 
 .feiertag-form{display:grid; gap:.8rem; margin-top:1.5rem}
 .feiertag-form .row{display:flex; gap:.6rem; flex-wrap:wrap}
 .feiertag-form input{font:inherit; font-size:.95rem; padding:.75rem 1rem; border-radius:var(--r-sm);
   border:1.5px solid var(--line); background:var(--surface); color:var(--ink); flex:1; min-width:140px}
 .feiertag-form input:focus{outline:none; border-color:var(--terra)}
+.feiertag-form .check input{flex:none; min-width:0; padding:0}
+.feiertag-form .mini input{min-width:0}
 .feiertag-list{list-style:none; display:grid; gap:.6rem; margin-top:1.5rem}
 .feiertag-list li{display:flex; align-items:center; justify-content:space-between; gap:1rem;
   border:1px solid var(--line); border-radius:var(--r-sm); padding:.7rem 1rem; font-size:.92rem}
@@ -422,7 +488,7 @@ body.menu-open{overflow:hidden}
     <span class="eyebrow hero-fade" style="--d:.05s">Intern</span>
     <h1 class="hero-fade" style="--d:.12s">Mitarbeiter&shy;bereich</h1>
     <p class="lede hero-fade" style="--d:.3s; margin-top:1rem">
-      Terminanfragen einsehen und die Praxis-Feiertage verwalten.
+      Terminanfragen, Öffnungszeiten, Hinweise, Team und Zugänge verwalten.
     </p>
   </div>
 </section>
@@ -452,65 +518,191 @@ body.menu-open{overflow:hidden}
 
     <!-- ===================== DASHBOARD ===================== -->
     <div id="dashboardView">
-      <div class="staff-topbar reveal">
+      <div class="staff-topbar">
         <div>
           <span class="eyebrow">Mitarbeiterbereich</span>
-          <p>Angemeldet als <strong>bambini</strong></p>
+          <p>Angemeldet als <strong id="whoami"></strong></p>
         </div>
         <button class="btn btn-ghost" id="logoutBtn" type="button">Abmelden</button>
       </div>
       <p class="db-warn" id="dbWarn" role="alert" hidden></p>
+      <p class="db-warn" id="pwWarn" hidden>Sie verwenden noch ein vorläufiges Passwort. Bitte legen Sie im Tab „Konto“ ein eigenes fest.</p>
 
-      <div class="staff-grid">
-        <!-- Terminanfragen -->
-        <section class="panel reveal" aria-labelledby="termineH">
-          <h2 id="termineH">Terminanfragen</h2>
-          <p class="lede">Alle über das Formular „Termin anfragen“ eingegangenen Anfragen.</p>
-          <div class="panel-list" id="termineList">
-            <p class="empty-note">Anfragen werden geladen …</p>
-          </div>
-        </section>
+      <div class="tabs" role="tablist" aria-label="Bereiche">
+        <button type="button" role="tab" id="tab-termine" aria-controls="p-termine" aria-selected="true">Termine</button>
+        <button type="button" role="tab" id="tab-zeiten" aria-controls="p-zeiten" aria-selected="false" tabindex="-1">Zeiten &amp; Schließtage</button>
+        <button type="button" role="tab" id="tab-hinweis" aria-controls="p-hinweis" aria-selected="false" tabindex="-1">Hinweis</button>
+        <button type="button" role="tab" id="tab-team" aria-controls="p-team" aria-selected="false" tabindex="-1">Team</button>
+        <button type="button" role="tab" id="tab-konto" aria-controls="p-konto" aria-selected="false" tabindex="-1">Konto</button>
+      </div>
 
-        <!-- Feiertage -->
-        <section class="panel reveal" style="--d:.08s" aria-labelledby="feiertageH">
-          <h2 id="feiertageH">Feiertage &amp; Schließtage</h2>
-          <p class="lede">Diese Termine werden auf der Startseite bei den Öffnungszeiten angezeigt.</p>
-          <form class="feiertag-form" id="feiertagForm" novalidate>
-            <div class="row">
-              <input type="date" id="fDatum" name="datum" aria-label="Datum" required>
-              <input type="text" id="fName" name="name" placeholder="Bezeichnung (z. B. Weihnachten)" aria-label="Bezeichnung" required>
+      <!-- Termine -->
+      <section class="tabpanel" id="p-termine" role="tabpanel" aria-labelledby="tab-termine">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Terminanfragen</h2>
+              <p class="lede" id="retentionNote">Alle über das Formular eingegangenen Anfragen.</p>
             </div>
-            <button class="btn btn-primary" type="submit" style="justify-content:center">Feiertag hinzufügen</button>
-          </form>
-          <ul class="feiertag-list" id="feiertagList">
-            <li class="empty-note" style="border:0; padding:.4rem 0">Feiertage werden geladen …</li>
-          </ul>
-        </section>
+            <div class="segmented" role="group" aria-label="Ansicht">
+              <button type="button" data-view="liste" aria-pressed="true">Liste</button>
+              <button type="button" data-view="woche" aria-pressed="false">Woche</button>
+            </div>
+          </div>
+          <div class="toolbar">
+            <input type="search" id="tSuche" placeholder="Suchen: Name, Kontakt, Anliegen …" aria-label="Terminanfragen durchsuchen">
+            <select id="tFilter" aria-label="Nach Status filtern">
+              <option value="">Alle Status</option>
+              <option value="offen">Offen</option>
+              <option value="bestaetigt">Bestätigt</option>
+              <option value="abgelehnt">Abgelehnt</option>
+              <option value="erledigt">Erledigt</option>
+            </select>
+            <button type="button" class="btn-sm" id="csvBtn">CSV exportieren</button>
+          </div>
+          <p class="staff-msg" id="terminMsg" role="status"></p>
+          <div id="weekView" hidden>
+            <div class="week-nav">
+              <button type="button" class="btn-sm" id="wPrev" aria-label="Vorige Woche">‹</button>
+              <strong id="wLabel"></strong>
+              <button type="button" class="btn-sm" id="wNext" aria-label="Nächste Woche">›</button>
+              <button type="button" class="btn-sm" id="wToday">Diese Woche</button>
+            </div>
+            <div class="week-grid" id="weekGrid"></div>
+          </div>
+          <div class="panel-list" id="termineList"><p class="empty-note">Anfragen werden geladen …</p></div>
+        </div>
+      </section>
 
-        <!-- Mitarbeiter -->
-        <section class="panel reveal" style="--d:.16s; grid-column:1 / -1" aria-labelledby="mitarbeiterH">
+      <!-- Zeiten -->
+      <section class="tabpanel" id="p-zeiten" role="tabpanel" aria-labelledby="tab-zeiten" hidden>
+        <div class="staff-grid">
+          <div class="panel" style="grid-column:1 / -1">
+            <h2>Öffnungszeiten</h2>
+            <p class="lede">Werden auf der Startseite angezeigt und bestimmen die buchbaren Termine (im 15-Minuten-Takt). Leere Felder = geschlossen.</p>
+            <form id="hoursForm" novalidate>
+              <div class="hours-editor" id="hoursEditor"></div>
+              <button class="btn btn-primary" type="submit">Öffnungszeiten speichern</button>
+              <p class="staff-msg" id="hoursMsg" role="status"></p>
+            </form>
+          </div>
+          <div class="panel">
+            <h2>Schließtage &amp; Urlaub</h2>
+            <p class="lede">Einzelne Tage oder ganze Zeiträume, an denen die Praxis geschlossen ist.</p>
+            <form class="feiertag-form" id="feiertagForm" novalidate>
+              <div class="row">
+                <label class="mini">Von<input type="date" id="fDatum" required></label>
+                <label class="mini">Bis (optional)<input type="date" id="fBis"></label>
+              </div>
+              <input type="text" id="fName" placeholder="Bezeichnung (z. B. Sommerurlaub)" aria-label="Bezeichnung" required>
+              <button class="btn btn-primary" type="submit">Schließzeit hinzufügen</button>
+              <p class="staff-msg" id="feiertagMsg" role="status"></p>
+            </form>
+            <ul class="feiertag-list" id="feiertagList"></ul>
+          </div>
+          <div class="panel">
+            <h2>Gesperrte Zeiten</h2>
+            <p class="lede">Einzelne Zeitfenster für Online-Buchungen sperren. Ohne Uhrzeit wird der ganze Tag gesperrt.</p>
+            <form class="feiertag-form" id="sperrForm" novalidate>
+              <div class="row">
+                <label class="mini">Datum<input type="date" id="sDatum" required></label>
+                <label class="mini">Von<input type="time" id="sVon" step="900"></label>
+                <label class="mini">Bis<input type="time" id="sBis" step="900"></label>
+              </div>
+              <input type="text" id="sGrund" placeholder="Grund (intern, z. B. Fortbildung)" aria-label="Grund">
+              <button class="btn btn-primary" type="submit">Zeit sperren</button>
+              <p class="staff-msg" id="sperrMsg" role="status"></p>
+            </form>
+            <ul class="feiertag-list" id="sperrList"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Hinweis -->
+      <section class="tabpanel" id="p-hinweis" role="tabpanel" aria-labelledby="tab-hinweis" hidden>
+        <div class="panel">
+          <h2>Hinweis auf der Website</h2>
+          <p class="lede">Erscheint oben auf allen Seiten, bis er ausgeschaltet wird – z. B. „Grippeimpfung ab sofort verfügbar“.</p>
+          <form class="feiertag-form" id="hinweisForm" novalidate>
+            <textarea id="hText" maxlength="240" rows="3" placeholder="Hinweistext …" aria-label="Hinweistext"></textarea>
+            <div class="row">
+              <select id="hStil" aria-label="Darstellung">
+                <option value="info">Info (grün)</option>
+                <option value="wichtig">Wichtig (rot)</option>
+              </select>
+              <label class="check"><input type="checkbox" id="hAktiv"> Auf der Website anzeigen</label>
+            </div>
+            <div class="notice-preview" id="hPreview" aria-hidden="true"><span></span></div>
+            <button class="btn btn-primary" type="submit">Hinweis speichern</button>
+            <p class="staff-msg" id="hinweisMsg" role="status"></p>
+          </form>
+        </div>
+      </section>
+
+      <!-- Team -->
+      <section class="tabpanel" id="p-team" role="tabpanel" aria-labelledby="tab-team" hidden>
+        <div class="panel">
           <h2 id="mitarbeiterH">Team</h2>
-          <p class="lede">Mitarbeiter:innen, die auf der Team-Seite angezeigt werden.</p>
+          <p class="lede">Mitarbeiter:innen auf der Team-Seite – in dieser Reihenfolge.</p>
           <form class="mitarbeiter-form" id="mitarbeiterForm" novalidate>
             <div class="row">
-              <input type="text" id="mName" name="name" placeholder="Name" aria-label="Name" required>
-              <input type="text" id="mRolle" name="rolle" placeholder="Rolle (z. B. Kinderkrankenschwester)" aria-label="Rolle" required>
+              <input type="text" id="mName" placeholder="Name" aria-label="Name" required>
+              <input type="text" id="mRolle" placeholder="Rolle (z. B. Kinderkrankenschwester)" aria-label="Rolle" required>
             </div>
             <div class="row">
-              <input type="text" id="mSprachen" name="sprachen" placeholder="Sprachen, durch Komma getrennt (z. B. Deutsch, Englisch)" aria-label="Sprachen">
+              <input type="text" id="mSprachen" placeholder="Sprachen, durch Komma getrennt (z. B. Deutsch, Englisch)" aria-label="Sprachen">
             </div>
             <div class="mitarbeiter-photo-row">
               <label class="file-btn" for="mBild">Foto auswählen</label>
-              <input type="file" id="mBild" accept="image/png,image/jpeg,image/webp" style="position:absolute; width:1px; height:1px; opacity:0">
+              <input type="file" id="mBild" accept="image/png,image/jpeg,image/webp" class="sr-only">
               <span class="file-name" id="mBildName">Kein Foto ausgewählt</span>
+              <label class="check" id="mBildRemoveWrap" hidden><input type="checkbox" id="mBildRemove"> Foto entfernen</label>
             </div>
-            <button class="btn btn-primary" type="submit" style="justify-content:center">Mitarbeiter:in hinzufügen</button>
+            <div class="row">
+              <button class="btn btn-primary" type="submit" id="mSubmit">Mitarbeiter:in hinzufügen</button>
+              <button class="btn btn-ghost" type="button" id="mCancel" hidden>Abbrechen</button>
+            </div>
+            <p class="staff-msg" id="mitarbeiterMsg" role="status"></p>
           </form>
-          <ul class="mitarbeiter-list" id="mitarbeiterList">
-            <li class="empty-note" style="border:0; padding:.4rem 0">Team wird geladen …</li>
-          </ul>
-        </section>
-      </div>
+          <ul class="mitarbeiter-list" id="mitarbeiterList"></ul>
+        </div>
+      </section>
+
+      <!-- Konto -->
+      <section class="tabpanel" id="p-konto" role="tabpanel" aria-labelledby="tab-konto" hidden>
+        <div class="staff-grid">
+          <div class="panel">
+            <h2>Passwort ändern</h2>
+            <p class="lede">Mindestens 10 Zeichen. Andere angemeldete Geräte werden dabei abgemeldet.</p>
+            <form class="feiertag-form" id="pwForm" novalidate>
+              <input type="password" id="pwAlt" autocomplete="current-password" placeholder="Aktuelles Passwort" aria-label="Aktuelles Passwort" required>
+              <input type="password" id="pwNeu" autocomplete="new-password" placeholder="Neues Passwort" aria-label="Neues Passwort" required>
+              <input type="password" id="pwNeu2" autocomplete="new-password" placeholder="Neues Passwort wiederholen" aria-label="Neues Passwort wiederholen" required>
+              <button class="btn btn-primary" type="submit">Passwort ändern</button>
+              <p class="staff-msg" id="pwMsg" role="status"></p>
+            </form>
+          </div>
+          <div class="panel" id="userPanel" hidden>
+            <h2>Benutzer:innen</h2>
+            <p class="lede">Eigene Zugänge für jede:n Mitarbeiter:in. Neue Konten müssen beim ersten Login ihr Passwort ändern.</p>
+            <ul class="feiertag-list" id="userList"></ul>
+            <form class="feiertag-form" id="userForm" novalidate>
+              <div class="row">
+                <input type="text" id="uName" placeholder="Benutzername" aria-label="Benutzername" autocomplete="off" required>
+                <input type="text" id="uPass" placeholder="Vorläufiges Passwort" aria-label="Vorläufiges Passwort" autocomplete="off" required>
+              </div>
+              <div class="row">
+                <select id="uRolle" aria-label="Rolle">
+                  <option value="mitarbeiter">Mitarbeiter:in</option>
+                  <option value="admin">Administrator:in (verwaltet Konten)</option>
+                </select>
+                <button class="btn btn-primary" type="submit">Konto anlegen</button>
+              </div>
+              <p class="staff-msg" id="userMsg" role="status"></p>
+            </form>
+          </div>
+        </div>
+      </section>
     </div>
 
   </div>
@@ -567,6 +759,7 @@ body.menu-open{overflow:hidden}
 <script src="js/lenis.min.js"></script>
 <script src="js/smooth.js"></script>
 <script src="js/waves.js"></script>
+<script src="js/staff.js" defer></script>
 <script>
 (function(){
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -594,278 +787,6 @@ body.menu-open{overflow:hidden}
   })();
   document.getElementById('year').textContent=new Date().getFullYear();
 
-  /* ---------- Staff dashboard ---------- */
-  const loginView=document.getElementById('loginView');
-  const dashboardView=document.getElementById('dashboardView');
-  const loginForm=document.getElementById('loginForm');
-  const loginMsg=document.getElementById('loginMsg');
-  const logoutBtn=document.getElementById('logoutBtn');
-  const termineList=document.getElementById('termineList');
-  const feiertagForm=document.getElementById('feiertagForm');
-  const feiertagList=document.getElementById('feiertagList');
-  const mitarbeiterForm=document.getElementById('mitarbeiterForm');
-  const mitarbeiterList=document.getElementById('mitarbeiterList');
-  const mBild=document.getElementById('mBild');
-  const mBildName=document.getElementById('mBildName');
-  let mitarbeiterBild='';
-
-  function showDashboard(show){
-    loginView.style.display = show ? 'none' : '';
-    dashboardView.classList.toggle('show', show);
-    if(show){ loadTermine(); loadFeiertage(); loadMitarbeiter(); checkStorage(); }
-  }
-
-  const dbWarn=document.getElementById('dbWarn');
-  function showWarn(msg){ dbWarn.textContent=msg; dbWarn.hidden=false; }
-  async function checkStorage(){
-    try{
-      const s=await (await fetch('/api/status')).json();
-      if(s.ok){ dbWarn.hidden=true; return; }
-      showWarn(s.storage==='redis'
-        ? 'Datenbank nicht erreichbar – Änderungen werden nicht gespeichert. Fehler: '+(s.error||'unbekannt')
-        : 'Keine Datenbank verbunden – Änderungen werden nicht gespeichert. Gefundene Datenbank-Variablen: '
-          +(s.envVars&&s.envVars.length ? s.envVars.join(', ') : 'keine'));
-    }catch{}
-  }
-
-  async function checkSession(){
-    try{
-      const res=await fetch('/api/session');
-      const data=await res.json();
-      showDashboard(!!data.loggedIn);
-    }catch{ showDashboard(false); }
-  }
-
-  loginForm?.addEventListener('submit', async e=>{
-    e.preventDefault();
-    loginMsg.classList.remove('show');
-    const username=document.getElementById('lUser').value.trim();
-    const password=document.getElementById('lPass').value;
-    try{
-      const res=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,password})});
-      if(res.ok){ loginForm.reset(); showDashboard(true); }
-      else{
-        const data=await res.json().catch(()=>({}));
-        loginMsg.textContent = data.error || 'Anmeldung fehlgeschlagen.';
-        loginMsg.classList.add('show');
-      }
-    }catch{
-      loginMsg.textContent='Verbindung zum Server fehlgeschlagen.';
-      loginMsg.classList.add('show');
-    }
-  });
-
-  logoutBtn?.addEventListener('click', async ()=>{
-    try{ await fetch('/api/logout',{method:'POST'}); } catch{}
-    showDashboard(false);
-  });
-
-  const fmtDate=iso=>{
-    try{ return new Date(iso).toLocaleString('de-AT',{dateStyle:'medium',timeStyle:'short'}); }
-    catch{ return iso; }
-  };
-
-  async function loadTermine(){
-    termineList.innerHTML='<p class="empty-note">Anfragen werden geladen …</p>';
-    try{
-      const res=await fetch('/api/termine');
-      if(!res.ok) throw new Error();
-      const items=await res.json();
-      if(!items.length){ termineList.innerHTML='<p class="empty-note">Noch keine Terminanfragen.</p>'; return; }
-      termineList.innerHTML='';
-      items.forEach(t=>{
-        const card=document.createElement('div');
-        card.className='termin-card'+(t.status==='erledigt'?' erledigt':'');
-        card.innerHTML=`
-          <div class="termin-head">
-            <div>
-              <strong></strong>
-              <div class="termin-meta"></div>
-            </div>
-            <span class="status-pill ${t.status==='erledigt'?'erledigt':'offen'}">${t.status==='erledigt'?'Erledigt':'Offen'}</span>
-          </div>
-          <div class="termin-body">
-            <div><span>Alter des Kindes:</span> ${t.alter? esc(t.alter): '–'}</div>
-            <div><span>Termin:</span> ${t.datum&&t.zeit? `${fmtDateShort(t.datum)}, ${esc(t.zeit)} Uhr` : (esc(t.wann)||'–')}</div>
-            <div><span>Anliegen:</span> ${t.anliegen? esc(t.anliegen): '–'}</div>
-            <div><span>Kontakt:</span> ${esc(t.kontakt)}</div>
-          </div>
-          <div class="termin-actions">
-            <button class="btn-sm done" type="button" data-id="${t.id}" data-action="toggle">${t.status==='erledigt'?'Als offen markieren':'Als erledigt markieren'}</button>
-            <button class="btn-sm del" type="button" data-id="${t.id}" data-action="delete">Löschen</button>
-          </div>`;
-        card.querySelector('strong').textContent=t.name;
-        card.querySelector('.termin-meta').textContent='Eingegangen am '+fmtDate(t.createdAt);
-        termineList.appendChild(card);
-      });
-    }catch{
-      termineList.innerHTML='<p class="empty-note">Anfragen konnten nicht geladen werden.</p>';
-    }
-  }
-
-  function esc(str){
-    const d=document.createElement('div'); d.textContent=str ?? ''; return d.innerHTML;
-  }
-
-  termineList?.addEventListener('click', async e=>{
-    const btn=e.target.closest('button[data-action]');
-    if(!btn) return;
-    const id=btn.dataset.id, action=btn.dataset.action;
-    if(action==='delete'){
-      if(!confirm('Diese Terminanfrage wirklich löschen?')) return;
-      await fetch('/api/termine/'+id,{method:'DELETE'});
-    }else if(action==='toggle'){
-      const erledigt=btn.textContent.trim().startsWith('Als erledigt');
-      await fetch('/api/termine/'+id,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status: erledigt?'erledigt':'offen'})});
-    }
-    loadTermine();
-  });
-
-  const fmtDateShort=iso=>{
-    const [y,m,d]=iso.split('-');
-    return `${d}.${m}.${y}`;
-  };
-
-  async function loadFeiertage(){
-    feiertagList.innerHTML='<li class="empty-note" style="border:0; padding:.4rem 0">Feiertage werden geladen …</li>';
-    try{
-      const res=await fetch('/api/feiertage');
-      if(!res.ok) throw new Error();
-      const items=await res.json();
-      if(!items.length){ feiertagList.innerHTML='<li class="empty-note" style="border:0; padding:.4rem 0">Noch keine Feiertage hinterlegt.</li>'; return; }
-      feiertagList.innerHTML='';
-      items.forEach(f=>{
-        const li=document.createElement('li');
-        li.innerHTML=`<span><span class="fdate">${fmtDateShort(f.datum)}</span> &nbsp; ${esc(f.name)}</span>
-          <button class="btn-sm del" type="button" data-id="${f.id}">Entfernen</button>`;
-        feiertagList.appendChild(li);
-      });
-    }catch{
-      feiertagList.innerHTML='<li class="empty-note" style="border:0; padding:.4rem 0">Feiertage konnten nicht geladen werden.</li>';
-    }
-  }
-
-  feiertagList?.addEventListener('click', async e=>{
-    const btn=e.target.closest('button[data-id]');
-    if(!btn) return;
-    if(!confirm('Diesen Feiertag wirklich entfernen?')) return;
-    await fetch('/api/feiertage/'+btn.dataset.id,{method:'DELETE'});
-    loadFeiertage();
-  });
-
-  feiertagForm?.addEventListener('submit', async e=>{
-    e.preventDefault();
-    const datum=document.getElementById('fDatum').value;
-    const name=document.getElementById('fName').value.trim();
-    if(!datum||!name) return;
-    const res=await fetch('/api/feiertage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({datum,name})});
-    if(res.ok){ feiertagForm.reset(); loadFeiertage(); }
-    else{
-      const data=await res.json().catch(()=>({}));
-      showWarn('Feiertag konnte nicht gespeichert werden: '+(data.error||'Serverfehler ('+res.status+')'));
-    }
-  });
-
-  mBild?.addEventListener('change', () => {
-    const file=mBild.files && mBild.files[0];
-    if(!file){ mitarbeiterBild=''; mBildName.textContent='Kein Foto ausgewählt'; return; }
-    mBildName.textContent='Wird verarbeitet …';
-    const reader=new FileReader();
-    reader.onload=() => {
-      const img=new Image();
-      img.onload=() => {
-        const maxSize=480;
-        let {width, height}=img;
-        if(width>maxSize || height>maxSize){
-          if(width>height){ height=Math.round(height*maxSize/width); width=maxSize; }
-          else{ width=Math.round(width*maxSize/height); height=maxSize; }
-        }
-        const canvas=document.createElement('canvas');
-        canvas.width=width; canvas.height=height;
-        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
-        mitarbeiterBild=canvas.toDataURL('image/jpeg', 0.82);
-        mBildName.textContent=file.name;
-      };
-      img.onerror=() => { mitarbeiterBild=''; mBildName.textContent='Bild konnte nicht gelesen werden.'; };
-      img.src=reader.result;
-    };
-    reader.onerror=() => { mitarbeiterBild=''; mBildName.textContent='Bild konnte nicht gelesen werden.'; };
-    reader.readAsDataURL(file);
-  });
-
-  async function loadMitarbeiter(){
-    mitarbeiterList.innerHTML='<li class="empty-note" style="border:0; padding:.4rem 0">Team wird geladen …</li>';
-    try{
-      const res=await fetch('/api/mitarbeiter');
-      if(!res.ok) throw new Error();
-      const items=await res.json();
-      if(!items.length){ mitarbeiterList.innerHTML='<li class="empty-note" style="border:0; padding:.4rem 0">Noch keine Mitarbeiter:innen hinterlegt.</li>'; return; }
-      mitarbeiterList.innerHTML='';
-      items.forEach(m=>{
-        const li=document.createElement('li');
-        li.className='mitarbeiter-item';
-
-        const photo=document.createElement('div');
-        photo.className='mitarbeiter-photo';
-        if(m.bild){
-          const img=document.createElement('img');
-          img.src=m.bild; img.alt='';
-          photo.appendChild(img);
-        }
-        li.appendChild(photo);
-
-        const info=document.createElement('div');
-        info.className='mitarbeiter-info';
-        const strong=document.createElement('strong');
-        strong.textContent=m.name;
-        const rolle=document.createElement('div');
-        rolle.className='mitarbeiter-rolle';
-        rolle.textContent=m.rolle;
-        info.appendChild(strong); info.appendChild(rolle);
-        if(Array.isArray(m.sprachen) && m.sprachen.length){
-          const sprachen=document.createElement('div');
-          sprachen.className='mitarbeiter-sprachen';
-          sprachen.textContent=m.sprachen.join(', ');
-          info.appendChild(sprachen);
-        }
-        li.appendChild(info);
-
-        const del=document.createElement('button');
-        del.className='btn-sm del'; del.type='button'; del.dataset.id=m.id;
-        del.textContent='Entfernen';
-        li.appendChild(del);
-
-        mitarbeiterList.appendChild(li);
-      });
-    }catch{
-      mitarbeiterList.innerHTML='<li class="empty-note" style="border:0; padding:.4rem 0">Team konnte nicht geladen werden.</li>';
-    }
-  }
-
-  mitarbeiterList?.addEventListener('click', async e=>{
-    const btn=e.target.closest('button[data-id]');
-    if(!btn) return;
-    if(!confirm('Diese Person wirklich von der Team-Seite entfernen?')) return;
-    await fetch('/api/mitarbeiter/'+btn.dataset.id,{method:'DELETE'});
-    loadMitarbeiter();
-  });
-
-  mitarbeiterForm?.addEventListener('submit', async e=>{
-    e.preventDefault();
-    const name=document.getElementById('mName').value.trim();
-    const rolle=document.getElementById('mRolle').value.trim();
-    const sprachen=document.getElementById('mSprachen').value.split(',').map(s=>s.trim()).filter(Boolean);
-    if(!name||!rolle) return;
-    const res=await fetch('/api/mitarbeiter',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,rolle,sprachen,bild:mitarbeiterBild})});
-    if(res.ok){
-      mitarbeiterForm.reset();
-      mitarbeiterBild='';
-      mBildName.textContent='Kein Foto ausgewählt';
-      loadMitarbeiter();
-    }
-  });
-
-  checkSession();
 })();
 </script>
 </body>
