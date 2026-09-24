@@ -115,6 +115,7 @@ h1 em, h2 em{font-style:italic; font-weight:480; color:var(--pine)}
 .btn-ghost:hover{background:var(--pine); color:var(--surface); border-color:var(--pine)}
 .btn .arr{transition:transform .35s var(--ease-spring)}
 .btn:hover .arr{transform:translateX(4px)}
+.btn[data-magnetic]{transition-property:box-shadow, background-color, color}
 
 /* ---------- Scroll-driven wave background (see js/waves.js) ---------- */
 .bgwaves{position:fixed; inset:0; z-index:-2; overflow:hidden; pointer-events:none; background:var(--bg)}
@@ -930,6 +931,7 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
 <script src="js/lenis.min.js"></script>
 <script src="js/smooth.js"></script>
 <script src="js/waves.js"></script>
+<script src="js/magnetic.js"></script>
 <script src="js/i18n.js"></script>
 <script>
 (function(){
@@ -949,17 +951,6 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
   }),{threshold:0, rootMargin:'0px 0px -8% 0px'});
   document.querySelectorAll('.reveal').forEach(el=> reduce? el.classList.add('in-view') : io.observe(el));
 
-  /* Magnetic buttons (pointer devices only) */
-  if(!reduce && matchMedia('(hover:hover) and (pointer:fine)').matches){
-    document.querySelectorAll('[data-magnetic]').forEach(btn=>{
-      btn.addEventListener('pointermove',e=>{
-        const r=btn.getBoundingClientRect();
-        const x=(e.clientX-r.left-r.width/2)*.28, y=(e.clientY-r.top-r.height/2)*.28;
-        btn.style.transform=`translate(${x.toFixed(1)}px,${y.toFixed(1)}px)`;
-      });
-      btn.addEventListener('pointerleave',()=>{btn.style.transform='';});
-    });
-  }
 
   /* Values accordion */
   document.querySelectorAll('.acc-btn').forEach(btn=>{
