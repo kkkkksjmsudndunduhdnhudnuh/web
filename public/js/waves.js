@@ -11,7 +11,7 @@
   const COLORS={tea:'var(--tea)', pink:'var(--pink)', lilac:'var(--lilac)', vanilla:'var(--vanilla)'};
   const ORDER=['tea','pink','lilac','vanilla'];
   const SHAPES=[[160,288,96,224,128,256],[192,64,256,128,224],[96,224,32,192],[224,96,256,160,288,64]];
-  const REST=.68;   // first wave's top edge while the hero is in view (fraction of viewport)
+  const REST=+(document.body.dataset.waveRest||.68);   // first wave's resting top edge (fraction of viewport)
   const TOP=.1;     // "almost full" position once its section has scrolled in
 
   const n1=v=>+v.toFixed(1);

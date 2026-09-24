@@ -1,36 +1,40 @@
-/* Impressum explorer: a topic dropdown built from the .imp-list rows. Picking a topic
-   backspaces the previous answer, plays a short loading sequence (sweeping bar, bouncing
-   dots, scrambled label) and then types the new answer with a moving caret. */
+/* Impressum: Liquid Glass topic picker. The options come from the (visually hidden)
+   .imp-list rows, so translations apply automatically. Picking a topic fades the old
+   answer out, sweeps a sheen across the glass and types the new answer. */
 (function(){
   const root=document.getElementById('impPick');
   if(!root) return;
   const btn=document.getElementById('impPickBtn');
-  const menu=document.getElementById('impPickMenu');
+  const list=document.getElementById('impPickMenu');
+  const menu=list.parentElement;
+  const pill=menu.querySelector('.lg-menu-pill');
   const current=document.getElementById('impPickCurrent');
+  const answer=document.getElementById('impAnswer');
+  const inner=answer.querySelector('.lg-answer-inner');
   const topicEl=document.getElementById('impTopic');
   const wrap=document.getElementById('impTypedWrap');
   const typed=document.getElementById('impTyped');
+  const note=document.getElementById('impNote');
   const live=document.getElementById('impLive');
   const rows=[...document.querySelectorAll('.imp-list .imp-row')];
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-  const GLYPHS='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&*+=<>/?';
 
-  let index=0, active=0, run=0, started=false, keyPickAt=0;
+  let index=0, active=-1, run=0, started=false, keyPickAt=0;
 
   const clean=s=>s.replace(/\s+/g,' ').trim();
   const topic=i=>{
-    const dd=rows[i].querySelector('dd'), main=dd.cloneNode(true), note=dd.querySelector('small');
+    const dd=rows[i].querySelector('dd'), main=dd.cloneNode(true), small=dd.querySelector('small');
     main.querySelectorAll('small').forEach(el=>el.remove());
     const text=clean(main.textContent);
-    return {label:clean(rows[i].querySelector('dt').textContent), text, html:dd.innerHTML,
-            full: note ? `${text} – ${clean(note.textContent)}` : text};
+    return {label:clean(rows[i].querySelector('dt').textContent), text, html:main.innerHTML.trim(),
+            note: small ? small.innerHTML : '', full: small ? `${text} – ${clean(small.textContent)}` : text};
   };
-
   const isOpen=()=>root.classList.contains('open');
 
+  /* ---------- Dropdown ---------- */
   function buildMenu(){
-    menu.innerHTML='';
+    list.innerHTML='';
     rows.forEach((_,i)=>{
       const li=document.createElement('li');
       li.id='impOpt'+i;
@@ -39,70 +43,126 @@
       li.setAttribute('aria-selected', String(i===index));
       li.textContent=topic(i).label;
       li.addEventListener('click',()=>{ select(i); close(); btn.focus(); });
-      li.addEventListener('pointermove',()=>{ if(active!==i){ active=i; highlight(); } });
-      menu.appendChild(li);
+      li.addEventListener('pointerenter',()=>{ active=i; highlight(); });
+      list.appendChild(li);
     });
     current.textContent=topic(index).label;
   }
-
   function highlight(){
-    [...menu.children].forEach((li,i)=>li.classList.toggle('active', i===active));
-    btn.setAttribute('aria-activedescendant','impOpt'+active);
-    menu.children[active]?.scrollIntoView({block:'nearest'});
+    const li=list.children[active];
+    if(!li){ pill.classList.remove('on'); btn.removeAttribute('aria-activedescendant'); return; }
+    li.scrollIntoView({block:'nearest'});
+    const m=menu.getBoundingClientRect(), r=li.getBoundingClientRect();
+    pill.style.width=r.width+'px'; pill.style.height=r.height+'px';
+    pill.style.transform=`translate(${r.left-m.left}px,${r.top-m.top}px)`;
+    pill.classList.add('on');
+    btn.setAttribute('aria-activedescendant', li.id);
   }
-  function open(){ root.classList.add('open'); btn.setAttribute('aria-expanded','true'); active=index; highlight(); }
-  function close(){ root.classList.remove('open'); btn.setAttribute('aria-expanded','false'); btn.removeAttribute('aria-activedescendant'); }
+  function open(){
+    root.classList.add('open'); btn.setAttribute('aria-expanded','true');
+    active=index;
+    pill.style.transition='none'; highlight(); pill.offsetWidth; pill.style.transition='';
+  }
+  function close(){
+    root.classList.remove('open'); btn.setAttribute('aria-expanded','false');
+    btn.removeAttribute('aria-activedescendant'); pill.classList.remove('on');
+  }
+  list.addEventListener('pointerleave',()=>{ active=index; highlight(); });
 
+  async function setLabel(text){
+    if(reduce){ current.textContent=text; return; }
+    current.classList.add('swap'); await sleep(200);
+    current.textContent=text; current.classList.remove('swap');
+  }
   function select(i){
     index=i;
-    [...menu.children].forEach((li,k)=>li.setAttribute('aria-selected', String(k===i)));
+    [...list.children].forEach((li,k)=>li.setAttribute('aria-selected', String(k===i)));
+    setLabel(topic(i).label);
     type(i);
   }
 
-  async function scramble(els, target, duration, me){
-    const chars=Array.from(target), start=performance.now();
-    for(;;){
-      if(me!==run) return;
-      const p=Math.min(1,(performance.now()-start)/duration), shown=Math.floor(p*p*chars.length);
-      const text=chars.map((c,k)=> k<shown||c===' ' ? c : GLYPHS[Math.random()*GLYPHS.length|0]).join('');
-      els.forEach(el=>el.textContent=text);
-      if(p>=1) return;
-      await sleep(45);
-    }
-  }
-
+  /* ---------- Answer ---------- */
   async function type(i){
     const me=++run, t=topic(i);
     live.textContent=`${t.label}: ${t.full}`;
-    if(reduce){ current.textContent=topicEl.textContent=t.label; typed.innerHTML=t.html; return; }
+    if(reduce){ topicEl.textContent=t.label; typed.innerHTML=t.html; note.innerHTML=t.note; return; }
 
-    wrap.classList.add('typing');
-    let text=typed.textContent;
-    typed.textContent=text;
-    while(text.length){
-      if(me!==run) return;
-      text=text.slice(0,-Math.max(1,Math.ceil(text.length/14)));
-      typed.textContent=text;
-      await sleep(16);
-    }
-
-    root.classList.add('loading'); wrap.classList.add('loading');
-    await scramble([current, topicEl], t.label, 850, me);
+    topicEl.classList.add('out'); wrap.classList.add('out'); note.classList.add('out');
+    await sleep(260);
     if(me!==run) return;
-    root.classList.remove('loading'); wrap.classList.remove('loading');
-    await sleep(120);
+    topicEl.textContent=t.label; typed.textContent=''; note.innerHTML=''; note.classList.remove('out','show');
+    topicEl.classList.remove('out'); wrap.classList.remove('out'); wrap.classList.add('typing');
+    answer.classList.remove('sheen'); answer.offsetWidth; answer.classList.add('sheen');
+    await sleep(240);
 
     const chars=Array.from(t.text);
     for(let k=1;k<=chars.length;k++){
       if(me!==run) return;
       typed.textContent=chars.slice(0,k).join('');
-      await sleep(/[ ,.·&/–-]/.test(chars[k-1]) ? 70+Math.random()*60 : 32+Math.random()*38);
+      await sleep(/[ ,.·&/–-]/.test(chars[k-1]) ? 60+Math.random()*50 : 28+Math.random()*32);
     }
     if(me!==run) return;
     typed.innerHTML=t.html;
     wrap.classList.remove('typing');
+    if(t.note){ note.innerHTML=t.note; note.classList.add('show'); }
   }
 
+  // Animate the glass box height as the answer grows or shrinks.
+  new ResizeObserver(()=>{ answer.style.height=inner.offsetHeight+'px'; }).observe(inner);
+
+  /* ---------- Refraction (Chromium renders SVG filters in backdrop-filter) ---------- */
+  if(window.chrome && CSS.supports('backdrop-filter','blur(1px)')){
+    const NS='http://www.w3.org/2000/svg';
+    const defs=document.createElementNS(NS,'svg');
+    defs.setAttribute('width','0'); defs.setAttribute('height','0'); defs.setAttribute('aria-hidden','true');
+    defs.style.position='absolute';
+    document.body.appendChild(defs);
+
+    // Displacement map: pixels near the rounded edge are pushed along the edge normal,
+    // strongest at the rim, like light bending through the lip of a glass lens.
+    function lensMap(w,h,radius,depth){
+      const c=document.createElement('canvas'); c.width=w; c.height=h;
+      const ctx=c.getContext('2d'), img=ctx.createImageData(w,h), d=img.data;
+      const hw=w/2, hh=h/2, r=Math.min(radius,hw,hh);
+      const sdf=(x,y)=>{
+        const qx=Math.abs(x-hw)-(hw-r), qy=Math.abs(y-hh)-(hh-r);
+        return Math.hypot(Math.max(qx,0),Math.max(qy,0))+Math.min(Math.max(qx,qy),0)-r;
+      };
+      for(let y=0;y<h;y++) for(let x=0;x<w;x++){
+        const s=sdf(x+.5,y+.5), t=1+s/depth, i=(y*w+x)*4;
+        let dx=0, dy=0;
+        if(t>0 && s<=0){
+          const gx=sdf(x+1.5,y+.5)-sdf(x-.5,y+.5), gy=sdf(x+.5,y+1.5)-sdf(x+.5,y-.5), len=Math.hypot(gx,gy)||1, m=t*t;
+          dx=gx/len*m; dy=gy/len*m;
+        }
+        d[i]=128+dx*127; d[i+1]=128+dy*127; d[i+2]=128; d[i+3]=255;
+      }
+      ctx.putImageData(img,0,0);
+      return c.toDataURL();
+    }
+
+    document.querySelectorAll('.lg-glass').forEach((el,n)=>{
+      const id='lg-lens-'+n, blur=el.dataset.lgBlur||8;
+      const filter=document.createElementNS(NS,'filter');
+      filter.id=id; filter.setAttribute('color-interpolation-filters','sRGB');
+      filter.innerHTML='<feImage result="map" x="0" y="0" preserveAspectRatio="none"/>'
+        +'<feDisplacementMap in="SourceGraphic" in2="map" scale="-46" xChannelSelector="R" yChannelSelector="G"/>';
+      defs.appendChild(filter);
+      const image=filter.querySelector('feImage');
+      let timer=0;
+      const rebuild=()=>{
+        const w=Math.round(el.offsetWidth), h=Math.round(el.offsetHeight);
+        if(!w||!h) return;
+        const radius=parseFloat(getComputedStyle(el).borderTopLeftRadius)||0;
+        image.setAttribute('width',w); image.setAttribute('height',h);
+        image.setAttribute('href', lensMap(w,h,radius,Math.min(28,h/2)));
+        el.style.backdropFilter=`url(#${id}) blur(${blur}px) saturate(150%) brightness(1.03)`;
+      };
+      new ResizeObserver(()=>{ clearTimeout(timer); timer=setTimeout(rebuild,120); }).observe(el);
+    });
+  }
+
+  /* ---------- Wiring ---------- */
   btn.addEventListener('click',()=>{
     if(performance.now()-keyPickAt<400) return;
     isOpen() ? close() : open();
@@ -126,7 +186,7 @@
   buildMenu();
   new IntersectionObserver((entries,obs)=>{
     if(entries.some(e=>e.isIntersecting)){ started=true; obs.disconnect(); type(index); }
-  },{threshold:.4}).observe(wrap);
+  },{threshold:.3}).observe(answer);
 
-  addEventListener('i18n:change',()=>{ buildMenu(); if(started){ typed.textContent=''; type(index); } });
+  addEventListener('i18n:change',()=>{ buildMenu(); if(started) type(index); });
 })();
