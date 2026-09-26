@@ -54,7 +54,22 @@
       "formBodyRecallNo": "no",
       "formBodyMsg": "Message",
       "formSuccess": "Thank you! Your email program will open with the finished message – or call us at 01 / 346 06 71."
-    }
+    },
+    "brand.sub": "Children's Practice · Vienna",
+    "practice.name": "Bambini Children's Practice",
+    "doctor.name": "Dr. med. Boshra Alsebaie",
+    "doctor.nameFull": "Dr. med. univ. Boshra Alsebaie",
+    "city.name": "Vienna",
+    "address.city": "1120 Vienna",
+    "address.full": "Altmannsdorfer Straße 89/2/5, 1120 Vienna",
+    "address.fullDot": "Altmannsdorfer Straße 89/2/5 · 1120 Vienna",
+    "footer.copy": "Bambini Children's Practice · Dr. med. Boshra Alsebaie",
+    "a11y.home": "Bambini Children's Practice – home",
+    "a11y.mainNav": "Main navigation",
+    "a11y.menu": "Menu",
+    "a11y.mobileNav": "Mobile navigation",
+    "meta.title": "Contact · Bambini Children's Practice Vienna",
+    "meta.description": "Bambini Children's Practice Vienna – Altmannsdorfer Straße 89/2/5, 1120 Vienna · 01 346 06 71 · office@bambinikinderpraxis.at"
   },
   "es": {
     "nav.language": "Idioma",
@@ -111,7 +126,22 @@
       "formBodyRecallNo": "no",
       "formBodyMsg": "Mensaje",
       "formSuccess": "¡Gracias! Su programa de correo se abrirá con el mensaje listo; también puede llamarnos al 01 / 346 06 71."
-    }
+    },
+    "brand.sub": "Consulta pediátrica · Viena",
+    "practice.name": "Consulta pediátrica Bambini",
+    "doctor.name": "Dra. med. Boshra Alsebaie",
+    "doctor.nameFull": "Dra. med. univ. Boshra Alsebaie",
+    "city.name": "Viena",
+    "address.city": "1120 Viena",
+    "address.full": "Altmannsdorfer Straße 89/2/5, 1120 Viena",
+    "address.fullDot": "Altmannsdorfer Straße 89/2/5 · 1120 Viena",
+    "footer.copy": "Consulta pediátrica Bambini · Dra. med. Boshra Alsebaie",
+    "a11y.home": "Consulta pediátrica Bambini – inicio",
+    "a11y.mainNav": "Navegación principal",
+    "a11y.menu": "Menú",
+    "a11y.mobileNav": "Navegación móvil",
+    "meta.title": "Contacto · Consulta pediátrica Bambini Viena",
+    "meta.description": "Consulta pediátrica Bambini Viena – Altmannsdorfer Straße 89/2/5, 1120 Viena · 01 346 06 71 · office@bambinikinderpraxis.at"
   },
   "fr": {
     "nav.language": "Langue",
@@ -168,7 +198,22 @@
       "formBodyRecallNo": "non",
       "formBodyMsg": "Message",
       "formSuccess": "Merci ! Votre logiciel de messagerie va s'ouvrir avec le message prêt – vous pouvez aussi nous appeler au 01 / 346 06 71."
-    }
+    },
+    "brand.sub": "Cabinet pédiatrique · Vienne",
+    "practice.name": "Cabinet pédiatrique Bambini",
+    "doctor.name": "Dre méd. Boshra Alsebaie",
+    "doctor.nameFull": "Dre méd. univ. Boshra Alsebaie",
+    "city.name": "Vienne",
+    "address.city": "1120 Vienne",
+    "address.full": "Altmannsdorfer Straße 89/2/5, 1120 Vienne",
+    "address.fullDot": "Altmannsdorfer Straße 89/2/5 · 1120 Vienne",
+    "footer.copy": "Cabinet pédiatrique Bambini · Dre méd. Boshra Alsebaie",
+    "a11y.home": "Cabinet pédiatrique Bambini – accueil",
+    "a11y.mainNav": "Navigation principale",
+    "a11y.menu": "Menu",
+    "a11y.mobileNav": "Navigation mobile",
+    "meta.title": "Contact · Cabinet pédiatrique Bambini Vienne",
+    "meta.description": "Cabinet pédiatrique Bambini Vienne – Altmannsdorfer Straße 89/2/5, 1120 Vienne · 01 346 06 71 · office@bambinikinderpraxis.at"
   },
   "tr": {
     "nav.language": "Dil",
@@ -225,7 +270,22 @@
       "formBodyRecallNo": "hayır",
       "formBodyMsg": "Mesaj",
       "formSuccess": "Teşekkürler! E-posta programınız hazır mesajla açılacak – alternatif olarak bizi 01 / 346 06 71 numarasından arayabilirsiniz."
-    }
+    },
+    "brand.sub": "Çocuk Muayenehanesi · Viyana",
+    "practice.name": "Bambini Çocuk Muayenehanesi",
+    "doctor.name": "Dr. med. Boshra Alsebaie",
+    "doctor.nameFull": "Dr. med. univ. Boshra Alsebaie",
+    "city.name": "Viyana",
+    "address.city": "1120 Viyana",
+    "address.full": "Altmannsdorfer Straße 89/2/5, 1120 Viyana",
+    "address.fullDot": "Altmannsdorfer Straße 89/2/5 · 1120 Viyana",
+    "footer.copy": "Bambini Çocuk Muayenehanesi · Dr. med. Boshra Alsebaie",
+    "a11y.home": "Bambini Çocuk Muayenehanesi – ana sayfa",
+    "a11y.mainNav": "Ana gezinme",
+    "a11y.menu": "Menü",
+    "a11y.mobileNav": "Mobil gezinme",
+    "meta.title": "İletişim · Bambini Çocuk Muayenehanesi Viyana",
+    "meta.description": "Bambini Çocuk Muayenehanesi Viyana – Altmannsdorfer Straße 89/2/5, 1120 Viyana · 01 346 06 71 · office@bambinikinderpraxis.at"
   },
   "ru": {
     "nav.language": "Язык",
@@ -282,7 +342,22 @@
       "formBodyRecallNo": "нет",
       "formBodyMsg": "Сообщение",
       "formSuccess": "Спасибо! Откроется почтовая программа с готовым сообщением – также вы можете позвонить нам по номеру 01 / 346 06 71."
-    }
+    },
+    "brand.sub": "Детская практика · Вена",
+    "practice.name": "Детская практика «Бамбини»",
+    "doctor.name": "Д-р мед. Бошра Альсебайе",
+    "doctor.nameFull": "Д-р мед. унив. Бошра Альсебайе",
+    "city.name": "Вена",
+    "address.city": "1120 Вена",
+    "address.full": "Altmannsdorfer Straße 89/2/5, 1120 Вена",
+    "address.fullDot": "Altmannsdorfer Straße 89/2/5 · 1120 Вена",
+    "footer.copy": "Детская практика «Бамбини» · Д-р мед. Бошра Альсебайе",
+    "a11y.home": "Детская практика «Бамбини» – на главную",
+    "a11y.mainNav": "Основная навигация",
+    "a11y.menu": "Меню",
+    "a11y.mobileNav": "Мобильная навигация",
+    "meta.title": "Контакты · Детская практика «Бамбини», Вена",
+    "meta.description": "Детская практика «Бамбини», Вена – Altmannsdorfer Straße 89/2/5, 1120 Вена · 01 346 06 71 · office@bambinikinderpraxis.at"
   },
   "ar": {
     "nav.language": "اللغة",
@@ -339,6 +414,21 @@
       "formBodyRecallNo": "لا",
       "formBodyMsg": "الرسالة",
       "formSuccess": "شكرًا لكم! سيُفتح برنامج البريد الإلكتروني برسالة جاهزة – أو يمكنكم الاتصال بنا على 01 / 346 06 71."
-    }
+    },
+    "brand.sub": "عيادة أطفال · فيينا",
+    "practice.name": "عيادة بامبيني للأطفال",
+    "doctor.name": "الدكتورة بشرى السبيعي",
+    "doctor.nameFull": "الدكتورة بشرى السبيعي",
+    "city.name": "فيينا",
+    "address.city": "1120 فيينا",
+    "address.full": "Altmannsdorfer Straße 89/2/5, 1120 فيينا",
+    "address.fullDot": "Altmannsdorfer Straße 89/2/5 · 1120 فيينا",
+    "footer.copy": "عيادة بامبيني للأطفال · الدكتورة بشرى السبيعي",
+    "a11y.home": "عيادة بامبيني للأطفال – الصفحة الرئيسية",
+    "a11y.mainNav": "التنقل الرئيسي",
+    "a11y.menu": "القائمة",
+    "a11y.mobileNav": "التنقل على الجوال",
+    "meta.title": "اتصل بنا · عيادة بامبيني للأطفال، فيينا",
+    "meta.description": "عيادة بامبيني للأطفال، فيينا – Altmannsdorfer Straße 89/2/5, 1120 فيينا · 01 346 06 71 · office@bambinikinderpraxis.at"
   }
 }

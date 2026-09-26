@@ -314,32 +314,38 @@ const BILD_RE = /^data:image\/(png|jpeg|jpg|webp);base64,/;
 const validBild = bild => typeof bild === 'string' && BILD_RE.test(bild) && bild.length <= 1_500_000;
 const cleanSprachen = sprachen => (Array.isArray(sprachen)
   ? sprachen.map(s => str(s, 30)).filter(Boolean).slice(0, 10) : []);
+// Optional spellings of the name in non-Latin scripts, shown when the site is in that language.
+const cleanNamen = namen => {
+  const out = {};
+  for (const lang of ['ru', 'ar']) if (namen && str(namen[lang], 100)) out[lang] = str(namen[lang], 100);
+  return out;
+};
 
 app.get('/api/mitarbeiter', async (req, res) => {
   res.json(await store.readMitarbeiter());
 });
 
 app.post('/api/mitarbeiter', requireAuth, requireAdmin, async (req, res) => {
-  const { name, rolle, sprachen, bild } = req.body || {};
+  const { name, rolle, sprachen, bild, namen } = req.body || {};
   if (!name || !rolle) {
     return res.status(400).json({ error: 'Name und Rolle sind erforderlich.' });
   }
   if (bild && !validBild(bild)) return res.status(400).json({ error: 'Ungueltiges Bild.' });
   const mitarbeiter = await store.readMitarbeiter();
-  mitarbeiter.push({ id: crypto.randomUUID(), name: str(name, 100), rolle: str(rolle, 100), sprachen: cleanSprachen(sprachen), bild: bild || '' });
+  mitarbeiter.push({ id: crypto.randomUUID(), name: str(name, 100), namen: cleanNamen(namen), rolle: str(rolle, 100), sprachen: cleanSprachen(sprachen), bild: bild || '' });
   await store.writeMitarbeiter(mitarbeiter);
   res.status(201).json({ ok: true });
 });
 
 // bild: new data URL replaces the photo, null removes it, omitted keeps it.
 app.put('/api/mitarbeiter/:id', requireAuth, requireAdmin, async (req, res) => {
-  const { name, rolle, sprachen, bild } = req.body || {};
+  const { name, rolle, sprachen, bild, namen } = req.body || {};
   if (!name || !rolle) return res.status(400).json({ error: 'Name und Rolle sind erforderlich.' });
   if (bild && !validBild(bild)) return res.status(400).json({ error: 'Ungueltiges Bild.' });
   const mitarbeiter = await store.readMitarbeiter();
   const person = mitarbeiter.find(m => m.id === req.params.id);
   if (!person) return res.status(404).json({ error: 'Nicht gefunden.' });
-  Object.assign(person, { name: str(name, 100), rolle: str(rolle, 100), sprachen: cleanSprachen(sprachen) });
+  Object.assign(person, { name: str(name, 100), namen: cleanNamen(namen), rolle: str(rolle, 100), sprachen: cleanSprachen(sprachen) });
   if (bild !== undefined) person.bild = bild || '';
   await store.writeMitarbeiter(mitarbeiter);
   res.json({ ok: true });

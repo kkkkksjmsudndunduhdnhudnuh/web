@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Impressum · Bambini Kinder Praxis Wien</title>
-<meta name="description" content="Impressum der Bambini Kinder Praxis – Dr. med. Boshra Alsebaie, Fachärztin für Kinder- und Jugendheilkunde, 1120 Wien.">
+<title data-i18n="meta.title">Impressum · Bambini Kinder Praxis Wien</title>
+<meta name="description" data-i18n-attr="content:meta.description" content="Impressum der Bambini Kinder Praxis – Dr. med. Boshra Alsebaie, Fachärztin für Kinder- und Jugendheilkunde, 1120 Wien.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,340..640,0..100,0;1,9..144,340..640,0..100,0&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -610,11 +610,11 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
 <!-- ===================== NAV ===================== -->
 <header class="nav" id="nav">
   <div class="container nav-inner">
-    <a class="brand" href="index.html" aria-label="Bambini Kinder Praxis – zur Startseite">
+    <a class="brand" href="index.html" data-i18n-attr="aria-label:a11y.home" aria-label="Bambini Kinder Praxis – zur Startseite">
       <span class="brand-mark">Bambini</span>
-      <span class="brand-sub">Kinder&nbsp;Praxis · Wien</span>
+      <span class="brand-sub" data-i18n="brand.sub">Kinder&nbsp;Praxis · Wien</span>
     </a>
-    <nav aria-label="Hauptnavigation">
+    <nav aria-label="Hauptnavigation" data-i18n-attr="aria-label:a11y.mainNav">
       <ul class="nav-links">
         <li><a href="index.html#leistungen" data-i18n="nav.leistungen">Leistungen</a></li>
         <li><a href="index.html#aerztin" data-i18n="nav.aerztin">Ihre Ärztin</a></li>
@@ -647,9 +647,9 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
 </header>
 
 <!-- Fullscreen overlay menu -->
-<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-label="Menü" inert>
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-label="Menü" data-i18n-attr="aria-label:a11y.menu" inert>
   <button class="overlay-close" id="overlayClose" aria-label="Menü schließen" data-i18n-attr="aria-label:nav.menuClose"></button>
-  <nav aria-label="Mobile Navigation">
+  <nav aria-label="Mobile Navigation" data-i18n-attr="aria-label:a11y.mobileNav">
     <ul class="overlay-nav">
         <li><a href="index.html" aria-current="page" style="--d:0.08s"><span class="idx">01</span><span data-i18n="overlay.start">Start</span></a></li>
         <li><a href="index.html#leistungen" aria-current="page" style="--d:0.15s"><span class="idx">02</span><span data-i18n="nav.leistungen">Leistungen</span></a></li>
@@ -684,7 +684,7 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
   <div class="overlay-foot">
     <a href="tel:+4313460671">01 / 346 06 71</a>
     <a href="mailto:office@bambinikinderpraxis.at">office@bambinikinderpraxis.at</a>
-    <span>Altmannsdorfer Straße 89/2/5, 1120 Wien</span>
+    <span data-i18n="address.full">Altmannsdorfer Straße 89/2/5, 1120 Wien</span>
   </div>
 </div>
 
@@ -721,7 +721,7 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
         <div class="imp-row"><dt data-i18n="imp.companyName">Vollständiger Firmenname</dt><dd data-i18n="imp.companyNameVal">Fachärztin für Kinder- und Jugendheilkunde</dd></div>
         <div class="imp-row"><dt data-i18n="imp.address">Adresse</dt><dd>Altmannsdorfer Straße 89/2/5</dd></div>
         <div class="imp-row"><dt data-i18n="imp.zip">PLZ</dt><dd>1120</dd></div>
-        <div class="imp-row"><dt data-i18n="imp.city">Stadt</dt><dd>Wien</dd></div>
+        <div class="imp-row"><dt data-i18n="imp.city">Stadt</dt><dd data-i18n="city.name">Wien</dd></div>
         <div class="imp-row"><dt data-i18n="imp.country">Land</dt><dd data-i18n="imp.countryVal">Österreich</dd></div>
         <div class="imp-row"><dt data-i18n="kontakt.emailLabel">E-Mail</dt><dd><a href="mailto:office@bambinikinderpraxis.at">office@bambinikinderpraxis.at</a></dd></div>
         <div class="imp-row"><dt data-i18n="imp.phoneNumber">Telefonnummer</dt><dd><a href="tel:+4313460671">01 / 346 06 71</a></dd></div>
@@ -729,7 +729,7 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
         <div class="imp-row"><dt data-i18n="imp.chamber">Zugehörige Kammer</dt><dd data-i18n="imp.chamberVal">Ärztekammer Wien</dd></div>
         <div class="imp-row"><dt data-i18n="imp.profession">Berufsbezeichnung &amp; verleihender Staat</dt>
           <dd><span data-i18n="imp.professionVal">Fachärztin für Kinder- und Jugendmedizin</span><small data-i18n-html="imp.professionNote">verliehen in Österreich · siehe <a href="https://www.ris.bka.gv.at/" target="_blank" rel="noopener">ris.bka.gv.at</a></small></dd></div>
-        <div class="imp-row"><dt data-i18n="imp.owner">Inhaberin</dt><dd>Dr. med. Boshra Alsebaie</dd></div>
+        <div class="imp-row"><dt data-i18n="imp.owner">Inhaberin</dt><dd data-i18n="doctor.name">Dr. med. Boshra Alsebaie</dd></div>
       </dl>
   </div>
 </section>
@@ -739,7 +739,7 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
   <div class="container">
     <div class="footer-grid">
       <div class="reveal" style="--d:0.00s">
-        <h4>Bambini Kinder Praxis</h4>
+        <h4 data-i18n="practice.name">Bambini Kinder Praxis</h4>
         <p style="max-width:38ch" data-i18n="footer.about">Kinder- und Jugendheilkunde in 1120 Wien.
         Wir begleiten Ihr Kind von der Geburt bis zum 18.&nbsp;Geburtstag – mit Fachwissen, Empathie und Zeit.</p>
       </div>
@@ -747,7 +747,7 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
         <h4 data-i18n="nav.kontakt">Kontakt</h4>
         <ul>
           <li>Altmannsdorfer Str. 89/2/5</li>
-          <li>1120 Wien</li>
+          <li data-i18n="address.city">1120 Wien</li>
           <li><a href="tel:+4313460671">+43 1 346 06 71</a></li>
           <li><a href="mailto:office@bambinikinderpraxis.at">office@bambinikinderpraxis.at</a></li>
         </ul>
@@ -762,7 +762,7 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
       </div>
     </div>
     <div class="footer-bar reveal" style="--d:.24s">
-      <span>© <span id="year"></span> Bambini Kinder Praxis · Dr. med. Boshra Alsebaie</span>
+      <span>© <span id="year"></span> <span data-i18n="footer.copy">Bambini Kinder Praxis · Dr. med. Boshra Alsebaie</span></span>
       <span><span data-i18n="footer.with">Mit</span> <span style="color:var(--terra)">♥</span> <span data-i18n="footer.inMeidling">in Meidling</span></span>
     </div>
   </div>

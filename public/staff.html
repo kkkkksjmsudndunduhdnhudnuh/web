@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Mitarbeiterbereich · Bambini Kinder Praxis Wien</title>
+<title data-i18n="meta.title">Mitarbeiterbereich · Bambini Kinder Praxis Wien</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -150,11 +150,48 @@ html.lenis, html.lenis body{height:auto}
 .brand-mark{font-family:var(--font-display); font-variation-settings:var(--soft);
   font-weight:600; font-size:1.55rem; color:var(--pine); letter-spacing:-.01em}
 .brand-sub{font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
-.nav-links{display:flex; gap:2rem; list-style:none}
+.nav-links{display:flex; gap:clamp(1rem,1.8vw,2rem); list-style:none}
 .nav-links a{text-decoration:none; font-weight:500; font-size:.95rem; color:var(--muted);
   transition:color .3s var(--ease)}
 .nav-links a:hover{color:var(--pine)}
-.nav .btn{padding:.7rem 1.3rem; font-size:.92rem}
+.nav .btn{padding:.7rem 1.3rem; font-size:.92rem; white-space:nowrap}
+.nav-lang-btn{white-space:nowrap}
+@media (max-width:1180px){ .nav-inner{gap:1rem} }
+body.nav-compact .nav .nav-links{display:none}
+body.nav-compact .nav .burger{display:flex}
+body.nav-compact .nav .nav-lang{margin-inline-start:auto}
+.nav-links a, .brand-sub{white-space:nowrap}
+.nav-lang, .nav .btn, .nav .burger{flex:none}
+
+/* ---------- Desktop language switcher ---------- */
+.nav-lang{position:relative}
+.nav-lang-btn{display:flex; align-items:center; gap:.4rem; font:inherit; font-size:.88rem; font-weight:600;
+  color:var(--muted); border:1.5px solid var(--line); background:var(--surface);
+  padding:.55rem .95rem; border-radius:var(--r-pill); cursor:pointer;
+  transition:color .3s var(--ease), border-color .3s var(--ease), background-color .3s var(--ease)}
+.nav-lang-btn:hover{color:var(--pine); border-color:var(--sage); background:var(--sage-tint)}
+.nav-lang-btn svg{width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round}
+.nav-lang-btn .chev{transition:transform .3s var(--ease)}
+.nav-lang.open .nav-lang-btn .chev{transform:rotate(180deg)}
+.nav-lang-menu{position:absolute; top:calc(100% + .6rem); right:0; min-width:170px;
+  background:var(--card); border:1px solid var(--line); border-radius:var(--r-md);
+  box-shadow:var(--shadow-lift); padding:.4rem; display:grid; gap:.15rem;
+  opacity:0; transform:translateY(-8px) scale(.98); pointer-events:none; visibility:hidden;
+  transition:opacity .25s var(--ease), transform .25s var(--ease); z-index:150}
+.nav-lang.open .nav-lang-menu{opacity:1; transform:none; pointer-events:auto; visibility:visible}
+.nav-lang-menu .lang-btn{display:block; width:100%; text-align:left; font:inherit;
+  border:0; background:none; border-radius:var(--r-sm); padding:.55rem .8rem;
+  font-size:.92rem; font-weight:500; color:var(--ink); cursor:pointer;
+  transition:background-color .2s var(--ease), color .2s var(--ease)}
+.nav-lang-menu .lang-btn:hover{background:var(--sage-tint); color:var(--pine)}
+.nav-lang-menu .lang-btn[aria-current="true"]{background:var(--sage-tint); color:var(--pine); font-weight:600}
+.nav-lang-menu .lang-btn[dir="rtl"]{text-align:right}
+.overlay .nav-lang-btn{font-size:1rem; padding:.7rem 1.15rem; color:var(--pine); background:var(--card)}
+.overlay .nav-lang-menu{top:auto; bottom:calc(100% + .6rem); left:0; right:auto; min-width:220px; transform:translateY(8px) scale(.98)}
+.overlay .nav-lang.open .nav-lang-menu{transform:none}
+@media (max-width:860px){
+  .nav .nav-lang{display:none}
+}
 
 /* ---------- Hero ---------- */
 .hero{position:relative; padding-block:clamp(3rem,7vw,6rem) clamp(4rem,8vw,6.5rem); overflow:clip}
@@ -257,6 +294,18 @@ body.menu-open .overlay-nav a{transform:translateY(0)}
 .overlay-cta{margin-top:2.2rem; opacity:0; transform:translateY(16px);
   transition:opacity .5s var(--ease) .35s, transform .5s var(--ease) .35s}
 body.menu-open .overlay-cta{opacity:1; transform:none}
+.overlay-lang{margin-top:1.6rem; display:grid; justify-items:start; gap:.55rem;
+  opacity:0; transform:translateY(16px);
+  transition:opacity .5s var(--ease) .4s, transform .5s var(--ease) .4s}
+body.menu-open .overlay-lang{opacity:1; transform:none}
+.overlay-lang-label{width:100%; font-size:.78rem; font-weight:600; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--muted)}
+.lang-btn{font:inherit; font-size:.82rem; font-weight:600; color:var(--pine);
+  border:1.5px solid var(--line); background:var(--card);
+  padding:.4rem .9rem; border-radius:var(--r-pill); cursor:pointer;
+  transition:background-color .25s var(--ease), border-color .25s var(--ease), color .25s var(--ease)}
+.lang-btn:hover{background:var(--sage-tint); border-color:var(--sage)}
+.lang-btn[aria-current="true"]{background:var(--pine); color:var(--surface); border-color:var(--pine)}
 .overlay-foot{position:absolute; left:var(--pad); right:var(--pad); bottom:calc(var(--pad) + env(safe-area-inset-bottom));
   display:flex; flex-wrap:wrap; gap:.4rem 1.4rem; font-size:.86rem; color:var(--muted);
   opacity:0; transition:opacity .5s var(--ease) .45s}
@@ -272,6 +321,20 @@ body.menu-open{overflow:hidden}
   .overlay{transition:none}
   .overlay-nav a,.overlay-cta,.overlay-foot{transition:none; transform:none; opacity:1}
 }
+
+/* ---------- RTL (Arabic) ---------- */
+html[dir="rtl"] .hero-cta,
+html[dir="rtl"] .footer-bar,
+html[dir="rtl"] .overlay-foot,
+html[dir="rtl"] .overlay-lang,
+html[dir="rtl"] .lang-chips,
+html[dir="rtl"] .hub-meta{direction:rtl}
+html[dir="rtl"] .overlay-close{right:auto; left:var(--pad)}
+html[dir="rtl"] .nav-lang-menu{right:auto; left:0}
+html[dir="rtl"] .overlay .nav-lang-menu{left:auto; right:0}
+html[dir="rtl"] a[href^="tel:"]{direction:ltr; unicode-bidi:isolate}
+html[dir="rtl"] .skip-link{left:auto; right:1rem}
+html[dir="rtl"] .week-item{text-align:right}
 
 /* ---------- Staff hero ---------- */
 .staff-hero{padding-block:clamp(3rem,7vw,5rem) clamp(1rem,3vw,1.5rem)}
@@ -353,7 +416,7 @@ body.menu-open{overflow:hidden}
 @media (max-width:900px){ .week-grid{grid-template-columns:repeat(2,minmax(0,1fr))} }
 .termin-card.flash{animation:flash 1.6s var(--ease)}
 @keyframes flash{0%,40%{box-shadow:0 0 0 4px var(--terra)}}
-.termin-actions .notify{margin-left:auto}
+.termin-actions .notify{margin-inline-start:auto}
 .btn-sm.ok{color:var(--pine)}
 .btn-sm.ok:hover{background:var(--sage-tint); border-color:var(--sage)}
 .status-pill.bestaetigt{background:var(--pine); color:var(--surface)}
@@ -434,64 +497,110 @@ body.menu-open{overflow:hidden}
 .mitarbeiter-info strong{font-family:var(--font-display); font-variation-settings:var(--soft); font-weight:560}
 .mitarbeiter-rolle, .mitarbeiter-sprachen{font-size:.82rem; color:var(--muted)}
 </style>
+<script>
+(function(){
+  try{
+    var l=localStorage.getItem('bambini-lang');
+    if(l && l!=='de'){
+      document.documentElement.setAttribute('lang', l);
+      if(l==='ar') document.documentElement.setAttribute('dir','rtl');
+    }
+  }catch(e){}
+})();
+</script>
 </head>
-<body>
-<a class="skip-link" href="#main">Zum Inhalt springen</a>
+<body data-i18n-page="staff">
+<a class="skip-link" href="#main" data-i18n="a11y.skip">Zum Inhalt springen</a>
 
 <div class="bgwaves" aria-hidden="true"></div>
 
 <!-- ===================== NAV ===================== -->
 <header class="nav" id="nav">
   <div class="container nav-inner">
-    <a class="brand" href="index.html" aria-label="Bambini Kinder Praxis – zur Startseite">
+    <a class="brand" href="index.html" data-i18n-attr="aria-label:a11y.home" aria-label="Bambini Kinder Praxis – zur Startseite">
       <span class="brand-mark">Bambini</span>
-      <span class="brand-sub">Kinder&nbsp;Praxis · Wien</span>
+      <span class="brand-sub" data-i18n="brand.sub">Kinder&nbsp;Praxis · Wien</span>
     </a>
-    <nav aria-label="Hauptnavigation">
+    <nav aria-label="Hauptnavigation" data-i18n-attr="aria-label:a11y.mainNav">
       <ul class="nav-links">
-        <li><a href="index.html#leistungen">Leistungen</a></li>
-        <li><a href="index.html#aerztin">Ihre Ärztin</a></li>
-        <li><a href="index.html#praxis">Praxis &amp; Zeiten</a></li>
-        <li><a href="team.html">Team</a></li>
-        <li><a href="kontakt.html">Kontakt</a></li>
+        <li><a href="index.html#leistungen" data-i18n="nav.leistungen">Leistungen</a></li>
+        <li><a href="index.html#aerztin" data-i18n="nav.aerztin">Ihre Ärztin</a></li>
+        <li><a href="index.html#praxis" data-i18n="nav.praxis">Praxis &amp; Zeiten</a></li>
+        <li><a href="team.html" style="color:var(--pine); font-weight:600" data-i18n="nav.team">Team</a></li>
+        <li><a href="kontakt.html" data-i18n="nav.kontakt">Kontakt</a></li>
       </ul>
     </nav>
-      <button class="burger" id="burger" aria-label="Menü öffnen" aria-expanded="false" aria-controls="overlay">
+    <div class="nav-lang" id="navLang" data-lang-menu>
+      <button type="button" class="nav-lang-btn" aria-haspopup="true" aria-expanded="false" aria-controls="navLangMenu" data-i18n-attr="aria-label:nav.language" aria-label="Sprache">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 4 6.1 4 9s-1.5 6.3-4 9c-2.5-2.7-4-6.1-4-9s1.5-6.3 4-9z"/></svg>
+        <span class="lang-current">Deutsch</span>
+        <svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
+      <div class="nav-lang-menu" id="navLangMenu" role="menu">
+        <button type="button" class="lang-btn" data-lang="de" lang="de" role="menuitem">Deutsch</button>
+        <button type="button" class="lang-btn" data-lang="en" lang="en" role="menuitem">English</button>
+        <button type="button" class="lang-btn" data-lang="es" lang="es" role="menuitem">Español</button>
+        <button type="button" class="lang-btn" data-lang="fr" lang="fr" role="menuitem">Français</button>
+        <button type="button" class="lang-btn" data-lang="tr" lang="tr" role="menuitem">Türkçe</button>
+        <button type="button" class="lang-btn" data-lang="ru" lang="ru" role="menuitem">Русский</button>
+        <button type="button" class="lang-btn" data-lang="ar" lang="ar" dir="rtl" role="menuitem">العربية</button>
+      </div>
+    </div>
+      <button class="burger" id="burger" aria-label="Menü öffnen" aria-expanded="false" aria-controls="overlay" data-i18n-attr="aria-label:nav.menuOpen">
         <span></span><span></span><span></span>
       </button>
-    <a class="btn btn-primary" href="index.html#termin" data-magnetic>Termin vereinbaren</a>
+    <a class="btn btn-primary" href="index.html#termin" data-magnetic data-i18n="nav.cta">Termin vereinbaren</a>
   </div>
 </header>
 
 <!-- Fullscreen overlay menu -->
-<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-label="Menü" inert>
-  <button class="overlay-close" id="overlayClose" aria-label="Menü schließen"></button>
-  <nav aria-label="Mobile Navigation">
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-label="Menü" data-i18n-attr="aria-label:a11y.menu" inert>
+  <button class="overlay-close" id="overlayClose" aria-label="Menü schließen" data-i18n-attr="aria-label:nav.menuClose"></button>
+  <nav aria-label="Mobile Navigation" data-i18n-attr="aria-label:a11y.mobileNav">
     <ul class="overlay-nav">
-        <li><a href="index.html" style="--d:0.08s"><span class="idx">01</span>Start</a></li>
-        <li><a href="index.html#leistungen" style="--d:0.15s"><span class="idx">02</span>Leistungen</a></li>
-        <li><a href="team.html" style="--d:0.22s"><span class="idx">03</span>Team</a></li>
-        <li><a href="index.html#praxis" style="--d:0.29s"><span class="idx">04</span>Praxis & Zeiten</a></li>
-        <li><a href="kontakt.html" style="--d:0.36s"><span class="idx">05</span>Kontakt</a></li>
+        <li><a href="index.html" style="--d:0.08s"><span class="idx">01</span><span data-i18n="overlay.start">Start</span></a></li>
+        <li><a href="index.html#leistungen" style="--d:0.15s"><span class="idx">02</span><span data-i18n="nav.leistungen">Leistungen</span></a></li>
+        <li><a href="team.html" style="--d:0.22s"><span class="idx">03</span><span data-i18n="nav.team">Team</span></a></li>
+        <li><a href="index.html#praxis" style="--d:0.29s"><span class="idx">04</span><span data-i18n="nav.praxis">Praxis &amp; Zeiten</span></a></li>
+        <li><a href="kontakt.html" style="--d:0.36s"><span class="idx">05</span><span data-i18n="nav.kontakt">Kontakt</span></a></li>
     </ul>
   </nav>
   <div class="overlay-cta">
-    <a class="btn btn-primary" href="index.html#termin">Termin vereinbaren
+    <a class="btn btn-primary" href="index.html#termin"><span data-i18n="nav.cta">Termin vereinbaren</span>
       <svg class="arr" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 3.5 13.5 8 9 12.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  </div>
+  <div class="overlay-lang">
+    <span class="overlay-lang-label" data-i18n="nav.language">Sprache</span>
+    <div class="nav-lang" data-lang-menu>
+      <button type="button" class="nav-lang-btn" aria-haspopup="true" aria-expanded="false" aria-controls="overlayLangMenu" data-i18n-attr="aria-label:nav.language" aria-label="Sprache">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 4 6.1 4 9s-1.5 6.3-4 9c-2.5-2.7-4-6.1-4-9s1.5-6.3 4-9z"/></svg>
+        <span class="lang-current">Deutsch</span>
+        <svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
+      <div class="nav-lang-menu" id="overlayLangMenu" role="menu">
+        <button type="button" class="lang-btn" data-lang="de" lang="de" role="menuitem">Deutsch</button>
+        <button type="button" class="lang-btn" data-lang="en" lang="en" role="menuitem">English</button>
+        <button type="button" class="lang-btn" data-lang="es" lang="es" role="menuitem">Español</button>
+        <button type="button" class="lang-btn" data-lang="fr" lang="fr" role="menuitem">Français</button>
+        <button type="button" class="lang-btn" data-lang="tr" lang="tr" role="menuitem">Türkçe</button>
+        <button type="button" class="lang-btn" data-lang="ru" lang="ru" role="menuitem">Русский</button>
+        <button type="button" class="lang-btn" data-lang="ar" lang="ar" dir="rtl" role="menuitem">العربية</button>
+      </div>
+    </div>
   </div>
   <div class="overlay-foot">
     <a href="tel:+4313460671">01 / 346 06 71</a>
     <a href="mailto:office@bambinikinderpraxis.at">office@bambinikinderpraxis.at</a>
-    <span>Altmannsdorfer Straße 89/2/5, 1120 Wien</span>
+    <span data-i18n="address.full">Altmannsdorfer Straße 89/2/5, 1120 Wien</span>
   </div>
 </div>
 
 <main id="main">
 <section class="staff-hero">
   <div class="container">
-    <span class="eyebrow hero-fade" style="--d:.05s">Intern</span>
-    <h1 class="hero-fade" style="--d:.12s">Mitarbeiter&shy;bereich</h1>
-    <p class="lede hero-fade" style="--d:.3s; margin-top:1rem">
+    <span class="eyebrow hero-fade" style="--d:.05s" data-i18n="s.eyebrow">Intern</span>
+    <h1 class="hero-fade" style="--d:.12s" data-i18n-html="s.title">Mitarbeiter&shy;bereich</h1>
+    <p class="lede hero-fade" style="--d:.3s; margin-top:1rem" data-i18n="s.lede">
       Terminanfragen, Öffnungszeiten, Hinweise, Team und Zugänge verwalten.
     </p>
   </div>
@@ -503,19 +612,19 @@ body.menu-open{overflow:hidden}
     <!-- ===================== LOGIN ===================== -->
     <div class="login-wrap reveal" id="loginView">
       <div class="login-card">
-        <h2>Anmelden</h2>
-        <p class="lede" style="margin-top:.4rem; font-size:.92rem">Bitte melden Sie sich mit Ihren Mitarbeiter-Zugangsdaten an.</p>
+        <h2 data-i18n="s.login.title">Anmelden</h2>
+        <p class="lede" style="margin-top:.4rem; font-size:.92rem" data-i18n="s.login.lede">Bitte melden Sie sich mit Ihren Mitarbeiter-Zugangsdaten an.</p>
         <form id="loginForm" novalidate>
           <div class="field">
-            <label for="lUser">Benutzername</label>
+            <label for="lUser" data-i18n="s.login.user">Benutzername</label>
             <input id="lUser" name="username" type="text" autocomplete="username" required>
           </div>
           <div class="field">
-            <label for="lPass">Passwort</label>
+            <label for="lPass" data-i18n="s.login.pass">Passwort</label>
             <input id="lPass" name="password" type="password" autocomplete="current-password" required>
           </div>
           <p class="login-msg error" id="loginMsg" role="alert"></p>
-          <button class="btn btn-primary" type="submit">Anmelden</button>
+          <button class="btn btn-primary" type="submit" data-i18n="s.login.title">Anmelden</button>
         </form>
       </div>
     </div>
@@ -524,20 +633,20 @@ body.menu-open{overflow:hidden}
     <div id="dashboardView">
       <div class="staff-topbar">
         <div>
-          <span class="eyebrow">Mitarbeiterbereich</span>
-          <p>Angemeldet als <strong id="whoami"></strong></p>
+          <span class="eyebrow" data-i18n="s.area">Mitarbeiterbereich</span>
+          <p><span data-i18n="s.loggedInAs">Angemeldet als</span> <strong id="whoami"></strong></p>
         </div>
-        <button class="btn btn-ghost" id="logoutBtn" type="button">Abmelden</button>
+        <button class="btn btn-ghost" id="logoutBtn" type="button" data-i18n="s.logout">Abmelden</button>
       </div>
       <p class="db-warn" id="dbWarn" role="alert" hidden></p>
-      <p class="db-warn" id="pwWarn" hidden>Sie verwenden noch ein vorläufiges Passwort. Bitte legen Sie im Tab „Konto“ ein eigenes fest.</p>
+      <p class="db-warn" id="pwWarn" hidden data-i18n="s.pwWarn">Sie verwenden noch ein vorläufiges Passwort. Bitte legen Sie im Tab „Konto“ ein eigenes fest.</p>
 
-      <div class="tabs" role="tablist" aria-label="Bereiche">
-        <button type="button" role="tab" id="tab-termine" aria-controls="p-termine" aria-selected="true">Termine</button>
-        <button type="button" role="tab" id="tab-zeiten" aria-controls="p-zeiten" aria-selected="false" tabindex="-1"><svg class="lock" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="2"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>Zeiten &amp; Schließtage</button>
-        <button type="button" role="tab" id="tab-hinweis" aria-controls="p-hinweis" aria-selected="false" tabindex="-1"><svg class="lock" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="2"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>Hinweis</button>
-        <button type="button" role="tab" id="tab-team" aria-controls="p-team" aria-selected="false" tabindex="-1"><svg class="lock" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="2"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>Team</button>
-        <button type="button" role="tab" id="tab-konto" aria-controls="p-konto" aria-selected="false" tabindex="-1">Konto</button>
+      <div class="tabs" role="tablist" aria-label="Bereiche" data-i18n-attr="aria-label:s.tabs">
+        <button type="button" role="tab" id="tab-termine" aria-controls="p-termine" aria-selected="true"><span data-i18n="s.tab.termine">Termine</span></button>
+        <button type="button" role="tab" id="tab-zeiten" aria-controls="p-zeiten" aria-selected="false" tabindex="-1"><svg class="lock" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="2"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg><span data-i18n-html="s.tab.zeiten">Zeiten &amp; Schließtage</span></button>
+        <button type="button" role="tab" id="tab-hinweis" aria-controls="p-hinweis" aria-selected="false" tabindex="-1"><svg class="lock" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="2"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg><span data-i18n="s.tab.hinweis">Hinweis</span></button>
+        <button type="button" role="tab" id="tab-team" aria-controls="p-team" aria-selected="false" tabindex="-1"><svg class="lock" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="2"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg><span data-i18n="s.tab.team">Team</span></button>
+        <button type="button" role="tab" id="tab-konto" aria-controls="p-konto" aria-selected="false" tabindex="-1"><span data-i18n="s.tab.konto">Konto</span></button>
       </div>
 
       <!-- Termine -->
@@ -545,36 +654,36 @@ body.menu-open{overflow:hidden}
         <div class="panel">
           <div class="panel-head">
             <div>
-              <h2>Terminanfragen</h2>
-              <p class="lede" id="retentionNote">Alle über das Formular eingegangenen Anfragen.</p>
+              <h2 data-i18n="s.req.title">Terminanfragen</h2>
+              <p class="lede" id="retentionNote" data-i18n="s.req.lede">Alle über das Formular eingegangenen Anfragen.</p>
             </div>
-            <div class="segmented" role="group" aria-label="Ansicht">
-              <button type="button" data-view="liste" aria-pressed="true">Liste</button>
-              <button type="button" data-view="woche" aria-pressed="false">Woche</button>
+            <div class="segmented" role="group" aria-label="Ansicht" data-i18n-attr="aria-label:s.view">
+              <button type="button" data-view="liste" aria-pressed="true" data-i18n="s.view.list">Liste</button>
+              <button type="button" data-view="woche" aria-pressed="false" data-i18n="s.view.week">Woche</button>
             </div>
           </div>
           <div class="toolbar">
-            <input type="search" id="tSuche" placeholder="Suchen: Name, Kontakt, Anliegen …" aria-label="Terminanfragen durchsuchen">
-            <select id="tFilter" aria-label="Nach Status filtern">
-              <option value="">Alle Status</option>
-              <option value="offen">Offen</option>
-              <option value="bestaetigt">Bestätigt</option>
-              <option value="abgelehnt">Abgelehnt</option>
-              <option value="erledigt">Erledigt</option>
+            <input type="search" id="tSuche" placeholder="Suchen: Name, Kontakt, Anliegen …" aria-label="Terminanfragen durchsuchen" data-i18n-attr="placeholder:s.search.ph|aria-label:s.search.aria">
+            <select id="tFilter" aria-label="Nach Status filtern" data-i18n-attr="aria-label:s.filter.aria">
+              <option value="" data-i18n="s.filter.all">Alle Status</option>
+              <option value="offen" data-i18n="s.st.offen">Offen</option>
+              <option value="bestaetigt" data-i18n="s.st.bestaetigt">Bestätigt</option>
+              <option value="abgelehnt" data-i18n="s.st.abgelehnt">Abgelehnt</option>
+              <option value="erledigt" data-i18n="s.st.erledigt">Erledigt</option>
             </select>
-            <button type="button" class="btn-sm" id="csvBtn">CSV exportieren</button>
+            <button type="button" class="btn-sm" id="csvBtn" data-i18n="s.csv">CSV exportieren</button>
           </div>
           <p class="staff-msg" id="terminMsg" role="status"></p>
           <div id="weekView" hidden>
             <div class="week-nav">
-              <button type="button" class="btn-sm" id="wPrev" aria-label="Vorige Woche">‹</button>
+              <button type="button" class="btn-sm" id="wPrev" aria-label="Vorige Woche" data-i18n-attr="aria-label:s.week.prev">‹</button>
               <strong id="wLabel"></strong>
-              <button type="button" class="btn-sm" id="wNext" aria-label="Nächste Woche">›</button>
-              <button type="button" class="btn-sm" id="wToday">Diese Woche</button>
+              <button type="button" class="btn-sm" id="wNext" aria-label="Nächste Woche" data-i18n-attr="aria-label:s.week.next">›</button>
+              <button type="button" class="btn-sm" id="wToday" data-i18n="s.week.today">Diese Woche</button>
             </div>
             <div class="week-grid" id="weekGrid"></div>
           </div>
-          <div class="panel-list" id="termineList"><p class="empty-note">Anfragen werden geladen …</p></div>
+          <div class="panel-list" id="termineList"><p class="empty-note" data-i18n="s.loading">Anfragen werden geladen …</p></div>
         </div>
       </section>
 
@@ -582,39 +691,39 @@ body.menu-open{overflow:hidden}
       <section class="tabpanel" id="p-zeiten" role="tabpanel" aria-labelledby="tab-zeiten" hidden>
         <div class="staff-grid">
           <div class="panel" style="grid-column:1 / -1">
-            <h2>Öffnungszeiten</h2>
-            <p class="lede">Werden auf der Startseite angezeigt und bestimmen die buchbaren Termine (im 15-Minuten-Takt). Leere Felder = geschlossen.</p>
+            <h2 data-i18n="s.hours.title">Öffnungszeiten</h2>
+            <p class="lede" data-i18n="s.hours.lede">Werden auf der Startseite angezeigt und bestimmen die buchbaren Termine (im 15-Minuten-Takt). Leere Felder = geschlossen.</p>
             <form id="hoursForm" novalidate>
               <div class="hours-editor" id="hoursEditor"></div>
-              <button class="btn btn-primary" type="submit">Öffnungszeiten speichern</button>
+              <button class="btn btn-primary" type="submit" data-i18n="s.hours.save">Öffnungszeiten speichern</button>
               <p class="staff-msg" id="hoursMsg" role="status"></p>
             </form>
           </div>
           <div class="panel">
-            <h2>Schließtage &amp; Urlaub</h2>
-            <p class="lede">Einzelne Tage oder ganze Zeiträume, an denen die Praxis geschlossen ist.</p>
+            <h2 data-i18n-html="s.cl.title">Schließtage &amp; Urlaub</h2>
+            <p class="lede" data-i18n="s.cl.lede">Einzelne Tage oder ganze Zeiträume, an denen die Praxis geschlossen ist.</p>
             <form class="feiertag-form" id="feiertagForm" novalidate>
               <div class="row">
-                <label class="mini">Von<input type="date" id="fDatum" required></label>
-                <label class="mini">Bis (optional)<input type="date" id="fBis"></label>
+                <label class="mini"><span data-i18n="s.from">Von</span><input type="date" id="fDatum" required></label>
+                <label class="mini"><span data-i18n="s.untilOpt">Bis (optional)</span><input type="date" id="fBis"></label>
               </div>
-              <input type="text" id="fName" placeholder="Bezeichnung (z. B. Sommerurlaub)" aria-label="Bezeichnung" required>
-              <button class="btn btn-primary" type="submit">Schließzeit hinzufügen</button>
+              <input type="text" id="fName" placeholder="Bezeichnung (z. B. Sommerurlaub)" aria-label="Bezeichnung" data-i18n-attr="placeholder:s.cl.name.ph|aria-label:s.cl.name" required>
+              <button class="btn btn-primary" type="submit" data-i18n="s.cl.add">Schließzeit hinzufügen</button>
               <p class="staff-msg" id="feiertagMsg" role="status"></p>
             </form>
             <ul class="feiertag-list" id="feiertagList"></ul>
           </div>
           <div class="panel">
-            <h2>Gesperrte Zeiten</h2>
-            <p class="lede">Einzelne Zeitfenster für Online-Buchungen sperren. Ohne Uhrzeit wird der ganze Tag gesperrt.</p>
+            <h2 data-i18n="s.bl.title">Gesperrte Zeiten</h2>
+            <p class="lede" data-i18n="s.bl.lede">Einzelne Zeitfenster für Online-Buchungen sperren. Ohne Uhrzeit wird der ganze Tag gesperrt.</p>
             <form class="feiertag-form" id="sperrForm" novalidate>
               <div class="row">
-                <label class="mini">Datum<input type="date" id="sDatum" required></label>
-                <label class="mini">Von<input type="time" id="sVon" step="900"></label>
-                <label class="mini">Bis<input type="time" id="sBis" step="900"></label>
+                <label class="mini"><span data-i18n="s.date">Datum</span><input type="date" id="sDatum" required></label>
+                <label class="mini"><span data-i18n="s.from">Von</span><input type="time" id="sVon" step="900"></label>
+                <label class="mini"><span data-i18n="s.until">Bis</span><input type="time" id="sBis" step="900"></label>
               </div>
-              <input type="text" id="sGrund" placeholder="Grund (intern, z. B. Fortbildung)" aria-label="Grund">
-              <button class="btn btn-primary" type="submit">Zeit sperren</button>
+              <input type="text" id="sGrund" placeholder="Grund (intern, z. B. Fortbildung)" aria-label="Grund" data-i18n-attr="placeholder:s.bl.reason.ph|aria-label:s.bl.reason">
+              <button class="btn btn-primary" type="submit" data-i18n="s.bl.add">Zeit sperren</button>
               <p class="staff-msg" id="sperrMsg" role="status"></p>
             </form>
             <ul class="feiertag-list" id="sperrList"></ul>
@@ -625,19 +734,19 @@ body.menu-open{overflow:hidden}
       <!-- Hinweis -->
       <section class="tabpanel" id="p-hinweis" role="tabpanel" aria-labelledby="tab-hinweis" hidden>
         <div class="panel">
-          <h2>Hinweis auf der Website</h2>
-          <p class="lede">Erscheint oben auf allen Seiten, bis er ausgeschaltet wird – z. B. „Grippeimpfung ab sofort verfügbar“.</p>
+          <h2 data-i18n="s.no.title">Hinweis auf der Website</h2>
+          <p class="lede" data-i18n="s.no.lede">Erscheint oben auf allen Seiten, bis er ausgeschaltet wird – z. B. „Grippeimpfung ab sofort verfügbar“.</p>
           <form class="feiertag-form" id="hinweisForm" novalidate>
-            <textarea id="hText" maxlength="240" rows="3" placeholder="Hinweistext …" aria-label="Hinweistext"></textarea>
+            <textarea id="hText" maxlength="240" rows="3" placeholder="Hinweistext …" aria-label="Hinweistext" data-i18n-attr="placeholder:s.no.text.ph|aria-label:s.no.text"></textarea>
             <div class="row">
-              <select id="hStil" aria-label="Darstellung">
-                <option value="info">Info (grün)</option>
-                <option value="wichtig">Wichtig (rot)</option>
+              <select id="hStil" aria-label="Darstellung" data-i18n-attr="aria-label:s.no.style">
+                <option value="info" data-i18n="s.no.info">Info (grün)</option>
+                <option value="wichtig" data-i18n="s.no.important">Wichtig (rot)</option>
               </select>
-              <label class="check"><input type="checkbox" id="hAktiv"> Auf der Website anzeigen</label>
+              <label class="check"><input type="checkbox" id="hAktiv"> <span data-i18n="s.no.show">Auf der Website anzeigen</span></label>
             </div>
             <div class="notice-preview" id="hPreview" aria-hidden="true"><span></span></div>
-            <button class="btn btn-primary" type="submit">Hinweis speichern</button>
+            <button class="btn btn-primary" type="submit" data-i18n="s.no.save">Hinweis speichern</button>
             <p class="staff-msg" id="hinweisMsg" role="status"></p>
           </form>
         </div>
@@ -646,25 +755,29 @@ body.menu-open{overflow:hidden}
       <!-- Team -->
       <section class="tabpanel" id="p-team" role="tabpanel" aria-labelledby="tab-team" hidden>
         <div class="panel">
-          <h2 id="mitarbeiterH">Team</h2>
-          <p class="lede">Mitarbeiter:innen auf der Team-Seite – in dieser Reihenfolge.</p>
+          <h2 id="mitarbeiterH" data-i18n="s.tab.team">Team</h2>
+          <p class="lede" data-i18n="s.tm.lede">Mitarbeiter:innen auf der Team-Seite – in dieser Reihenfolge.</p>
           <form class="mitarbeiter-form" id="mitarbeiterForm" novalidate>
             <div class="row">
-              <input type="text" id="mName" placeholder="Name" aria-label="Name" required>
-              <input type="text" id="mRolle" placeholder="Rolle (z. B. Kinderkrankenschwester)" aria-label="Rolle" required>
+              <input type="text" id="mName" placeholder="Name" aria-label="Name" data-i18n-attr="placeholder:s.tm.name|aria-label:s.tm.name" required>
+              <input type="text" id="mRolle" placeholder="Rolle (z. B. Kinderkrankenschwester)" aria-label="Rolle" data-i18n-attr="placeholder:s.tm.role.ph|aria-label:s.tm.role" required>
             </div>
             <div class="row">
-              <input type="text" id="mSprachen" placeholder="Sprachen, durch Komma getrennt (z. B. Deutsch, Englisch)" aria-label="Sprachen">
+              <input type="text" id="mSprachen" placeholder="Sprachen, durch Komma getrennt (z. B. Deutsch, Englisch)" aria-label="Sprachen" data-i18n-attr="placeholder:s.tm.langs.ph|aria-label:s.tm.langs">
+            </div>
+            <div class="row">
+              <input type="text" id="mNameRu" lang="ru" placeholder="Name auf Russisch (optional, z. B. Мона Абдалла)" aria-label="Name in kyrillischer Schrift (optional)" data-i18n-attr="placeholder:s.tm.ru.ph|aria-label:s.tm.ru">
+              <input type="text" id="mNameAr" lang="ar" dir="auto" placeholder="Name auf Arabisch (optional, z. B. منى عبد الله)" aria-label="Name in arabischer Schrift (optional)" data-i18n-attr="placeholder:s.tm.ar.ph|aria-label:s.tm.ar">
             </div>
             <div class="mitarbeiter-photo-row">
-              <label class="file-btn" for="mBild">Foto auswählen</label>
+              <label class="file-btn" for="mBild" data-i18n="s.tm.photo">Foto auswählen</label>
               <input type="file" id="mBild" accept="image/png,image/jpeg,image/webp" class="sr-only">
               <span class="file-name" id="mBildName">Kein Foto ausgewählt</span>
-              <label class="check" id="mBildRemoveWrap" hidden><input type="checkbox" id="mBildRemove"> Foto entfernen</label>
+              <label class="check" id="mBildRemoveWrap" hidden><input type="checkbox" id="mBildRemove"> <span data-i18n="s.tm.removePhoto">Foto entfernen</span></label>
             </div>
             <div class="row">
               <button class="btn btn-primary" type="submit" id="mSubmit">Mitarbeiter:in hinzufügen</button>
-              <button class="btn btn-ghost" type="button" id="mCancel" hidden>Abbrechen</button>
+              <button class="btn btn-ghost" type="button" id="mCancel" hidden data-i18n="s.tm.cancel">Abbrechen</button>
             </div>
             <p class="staff-msg" id="mitarbeiterMsg" role="status"></p>
           </form>
@@ -676,31 +789,31 @@ body.menu-open{overflow:hidden}
       <section class="tabpanel" id="p-konto" role="tabpanel" aria-labelledby="tab-konto" hidden>
         <div class="staff-grid">
           <div class="panel">
-            <h2>Passwort ändern</h2>
-            <p class="lede">Mindestens 10 Zeichen. Andere angemeldete Geräte werden dabei abgemeldet.</p>
+            <h2 data-i18n="s.ac.pwTitle">Passwort ändern</h2>
+            <p class="lede" data-i18n="s.ac.pwLede">Mindestens 10 Zeichen. Andere angemeldete Geräte werden dabei abgemeldet.</p>
             <form class="feiertag-form" id="pwForm" novalidate>
-              <input type="password" id="pwAlt" autocomplete="current-password" placeholder="Aktuelles Passwort" aria-label="Aktuelles Passwort" required>
-              <input type="password" id="pwNeu" autocomplete="new-password" placeholder="Neues Passwort" aria-label="Neues Passwort" required>
-              <input type="password" id="pwNeu2" autocomplete="new-password" placeholder="Neues Passwort wiederholen" aria-label="Neues Passwort wiederholen" required>
-              <button class="btn btn-primary" type="submit">Passwort ändern</button>
+              <input type="password" id="pwAlt" autocomplete="current-password" placeholder="Aktuelles Passwort" aria-label="Aktuelles Passwort" data-i18n-attr="placeholder:s.ac.old|aria-label:s.ac.old" required>
+              <input type="password" id="pwNeu" autocomplete="new-password" placeholder="Neues Passwort" aria-label="Neues Passwort" data-i18n-attr="placeholder:s.ac.new|aria-label:s.ac.new" required>
+              <input type="password" id="pwNeu2" autocomplete="new-password" placeholder="Neues Passwort wiederholen" aria-label="Neues Passwort wiederholen" data-i18n-attr="placeholder:s.ac.new2|aria-label:s.ac.new2" required>
+              <button class="btn btn-primary" type="submit" data-i18n="s.ac.pwTitle">Passwort ändern</button>
               <p class="staff-msg" id="pwMsg" role="status"></p>
             </form>
           </div>
           <div class="panel" id="userPanel" hidden>
-            <h2>Benutzer:innen</h2>
-            <p class="lede">Eigene Zugänge für jede:n Mitarbeiter:in. Neue Konten müssen beim ersten Login ihr Passwort ändern.</p>
+            <h2 data-i18n="s.ac.usersTitle">Benutzer:innen</h2>
+            <p class="lede" data-i18n="s.ac.usersLede">Eigene Zugänge für jede:n Mitarbeiter:in. Neue Konten müssen beim ersten Login ihr Passwort ändern.</p>
             <ul class="feiertag-list" id="userList"></ul>
             <form class="feiertag-form" id="userForm" novalidate>
               <div class="row">
-                <input type="text" id="uName" placeholder="Benutzername" aria-label="Benutzername" autocomplete="off" required>
-                <input type="text" id="uPass" placeholder="Vorläufiges Passwort" aria-label="Vorläufiges Passwort" autocomplete="off" required>
+                <input type="text" id="uName" placeholder="Benutzername" aria-label="Benutzername" data-i18n-attr="placeholder:s.login.user|aria-label:s.login.user" autocomplete="off" required>
+                <input type="text" id="uPass" placeholder="Vorläufiges Passwort" aria-label="Vorläufiges Passwort" data-i18n-attr="placeholder:s.ac.tempPw|aria-label:s.ac.tempPw" autocomplete="off" required>
               </div>
               <div class="row">
-                <select id="uRolle" aria-label="Rolle">
-                  <option value="mitarbeiter">Mitarbeiter:in</option>
-                  <option value="admin">Administrator:in (verwaltet Konten)</option>
+                <select id="uRolle" aria-label="Rolle" data-i18n-attr="aria-label:s.tm.role">
+                  <option value="mitarbeiter" data-i18n="s.ac.roleStaff">Mitarbeiter:in</option>
+                  <option value="admin" data-i18n="s.ac.roleAdmin">Administrator:in (verwaltet Konten)</option>
                 </select>
-                <button class="btn btn-primary" type="submit">Konto anlegen</button>
+                <button class="btn btn-primary" type="submit" data-i18n="s.ac.create">Konto anlegen</button>
               </div>
               <p class="staff-msg" id="userMsg" role="status"></p>
             </form>
@@ -717,46 +830,46 @@ body.menu-open{overflow:hidden}
   <div class="container">
     <div class="footer-grid">
       <div class="reveal" style="--d:0.00s">
-        <h4>Bambini Kinder Praxis</h4>
-        <p style="max-width:38ch">Kinder- und Jugendheilkunde in 1120 Wien.
+        <h4 data-i18n="practice.name">Bambini Kinder Praxis</h4>
+        <p style="max-width:38ch" data-i18n="footer.about">Kinder- und Jugendheilkunde in 1120 Wien.
         Wir begleiten Ihr Kind von der Geburt bis zum 18.&nbsp;Geburtstag – mit Fachwissen, Empathie und Zeit.</p>
       </div>
       <div class="reveal" style="--d:0.08s">
-        <h4>Kontakt</h4>
+        <h4 data-i18n="nav.kontakt">Kontakt</h4>
         <ul>
           <li>Altmannsdorfer Str. 89/2/5</li>
-          <li>1120 Wien</li>
+          <li data-i18n="address.city">1120 Wien</li>
           <li><a href="tel:+4313460671">+43 1 346 06 71</a></li>
           <li><a href="mailto:office@bambinikinderpraxis.at">office@bambinikinderpraxis.at</a></li>
         </ul>
       </div>
       <div class="reveal" style="--d:0.16s">
-        <h4>Rechtliches</h4>
+        <h4 data-i18n="footer.legal">Rechtliches</h4>
         <ul>
-          <li><a href="impressum.html">Impressum</a></li>
-          <li><a href="datenschutz.html">Datenschutz</a></li>
-          <li><a href="#">Barrierefreiheit</a></li>
+          <li><a href="impressum.html" data-i18n="footer.impressum">Impressum</a></li>
+          <li><a href="datenschutz.html" data-i18n="footer.datenschutz">Datenschutz</a></li>
+          <li><a href="#" data-i18n="footer.accessibility">Barrierefreiheit</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bar reveal" style="--d:.24s">
-      <span>© <span id="year"></span> Bambini Kinder Praxis · Dr. med. Boshra Alsebaie</span>
-      <span>Mit <span style="color:var(--terra)">♥</span> in Meidling</span>
+      <span>© <span id="year"></span> <span data-i18n="footer.copy">Bambini Kinder Praxis · Dr. med. Boshra Alsebaie</span></span>
+      <span><span data-i18n="footer.with">Mit</span> <span style="color:var(--terra)">♥</span> <span data-i18n="footer.inMeidling">in Meidling</span></span>
     </div>
   </div>
 </footer>
 
 <!-- ===================== MOBILE TAB BAR ===================== -->
-<nav class="tabbar" aria-label="Schnellzugriff">
+<nav class="tabbar" data-i18n-attr="aria-label:tabbar.aria" aria-label="Schnellzugriff">
   <div class="tabbar-inner">
     <a class="tab tab-cta" href="index.html#termin">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 9.5h17M8 3v4M16 3v4M12 12.5v5M9.5 15h5"/></svg>Termin</a>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 9.5h17M8 3v4M16 3v4M12 12.5v5M9.5 15h5"/></svg><span data-i18n="tabbar.termin">Termin</span></a>
     <a class="tab" href="tel:+4313460671">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l1.5 4.5L8 10c1 2.5 3.5 5 6 6l1.5-2.5L20 15v4a1.5 1.5 0 0 1-1.7 1.5C10.5 19.6 4.4 13.5 3.5 5.7A1.5 1.5 0 0 1 5 4z"/></svg>Anrufen</a>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l1.5 4.5L8 10c1 2.5 3.5 5 6 6l1.5-2.5L20 15v4a1.5 1.5 0 0 1-1.7 1.5C10.5 19.6 4.4 13.5 3.5 5.7A1.5 1.5 0 0 1 5 4z"/></svg><span data-i18n="tabbar.anrufen">Anrufen</span></a>
     <a class="tab" href="index.html#leistungen">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg>Leistungen</a>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg><span data-i18n="nav.leistungen">Leistungen</span></a>
     <a class="tab" href="index.html#praxis">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>Zeiten</a>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span data-i18n="tabbar.zeiten">Zeiten</span></a>
   </div>
 </nav>
 
@@ -764,6 +877,9 @@ body.menu-open{overflow:hidden}
 <script src="js/smooth.js"></script>
 <script src="js/waves.js"></script>
 <script src="js/staff.js" defer></script>
+<script src="js/i18n.js"></script>
+<script src="js/lang-menu.js"></script>
+<script src="js/nav-fit.js"></script>
 <script>
 (function(){
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
