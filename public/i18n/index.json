@@ -1,5 +1,6 @@
 {
   "en": {
+    "nav.language": "Language",
     "a11y.skip": "Skip to content",
     "nav.leistungen": "Services",
     "nav.aerztin": "Your Doctor",
@@ -144,6 +145,7 @@
     "form.timeLabel": "Time"
   },
   "es": {
+    "nav.language": "Idioma",
     "a11y.skip": "Saltar al contenido",
     "nav.leistungen": "Servicios",
     "nav.aerztin": "Su médica",
@@ -288,6 +290,7 @@
     "form.timeLabel": "Hora"
   },
   "fr": {
+    "nav.language": "Langue",
     "a11y.skip": "Aller au contenu",
     "nav.leistungen": "Prestations",
     "nav.aerztin": "Votre médecin",
@@ -432,6 +435,7 @@
     "form.timeLabel": "Heure"
   },
   "tr": {
+    "nav.language": "Dil",
     "a11y.skip": "İçeriğe geç",
     "nav.leistungen": "Hizmetler",
     "nav.aerztin": "Doktorunuz",
@@ -576,6 +580,7 @@
     "form.timeLabel": "Saat"
   },
   "ru": {
+    "nav.language": "Язык",
     "a11y.skip": "Перейти к содержимому",
     "nav.leistungen": "Услуги",
     "nav.aerztin": "Ваш врач",
@@ -720,6 +725,7 @@
     "form.timeLabel": "Время"
   },
   "ar": {
+    "nav.language": "اللغة",
     "a11y.skip": "تخطّي إلى المحتوى",
     "nav.leistungen": "الخدمات",
     "nav.aerztin": "طبيبتكم",

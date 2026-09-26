@@ -1,5 +1,6 @@
 {
   "en": {
+    "nav.language": "Language",
     "nav.leistungen": "Services",
     "nav.aerztin": "Your Doctor",
     "nav.praxis": "Practice & Hours",
@@ -56,6 +57,7 @@
     }
   },
   "es": {
+    "nav.language": "Idioma",
     "nav.leistungen": "Servicios",
     "nav.aerztin": "Su médica",
     "nav.praxis": "Consulta y horarios",
@@ -112,6 +114,7 @@
     }
   },
   "fr": {
+    "nav.language": "Langue",
     "nav.leistungen": "Prestations",
     "nav.aerztin": "Votre médecin",
     "nav.praxis": "Cabinet & horaires",
@@ -168,6 +171,7 @@
     }
   },
   "tr": {
+    "nav.language": "Dil",
     "nav.leistungen": "Hizmetler",
     "nav.aerztin": "Doktorunuz",
     "nav.praxis": "Muayenehane & Saatler",
@@ -224,6 +228,7 @@
     }
   },
   "ru": {
+    "nav.language": "Язык",
     "nav.leistungen": "Услуги",
     "nav.aerztin": "Ваш врач",
     "nav.praxis": "Часы приёма",
@@ -280,6 +285,7 @@
     }
   },
   "ar": {
+    "nav.language": "اللغة",
     "nav.leistungen": "الخدمات",
     "nav.aerztin": "طبيبتكم",
     "nav.praxis": "العيادة وساعات العمل",

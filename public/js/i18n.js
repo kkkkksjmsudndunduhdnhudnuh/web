@@ -80,19 +80,24 @@
     });
   }
 
+  // The page's translations are fetched once (prefetched at start) and reused, so
+  // switching language afterwards applies immediately without another request.
+  let allPromise=null;
+  function loadAll(){
+    if(!allPromise){
+      allPromise=fetch(`/i18n/${pageName()}.json`)
+        .then(res=>res.ok?res.json():{})
+        .catch(()=>{ allPromise=null; return {}; });
+    }
+    return allPromise;
+  }
+
   async function loadDict(lang){
     if(lang==='de') return {dict:null, dyn:null};
-    try{
-      const res=await fetch(`/i18n/${pageName()}.json`);
-      if(!res.ok) return {dict:{}, dyn:null};
-      const all=await res.json();
-      const d=all[lang]||{};
-      const rest={...d};
-      delete rest._dyn;
-      return {dict:rest, dyn:d._dyn||null};
-    }catch(e){
-      return {dict:{}, dyn:null};
-    }
+    const d=(await loadAll())[lang]||{};
+    const rest={...d};
+    delete rest._dyn;
+    return {dict:rest, dyn:d._dyn||null};
   }
 
   async function setLang(lang){
@@ -100,6 +105,7 @@
     current=lang;
     try{ localStorage.setItem(STORAGE_KEY, lang); }catch(e){}
     setHtmlLangDir(lang);
+    updateSwitcher();
     const loaded=await loadDict(lang);
     dict=loaded.dict; dyn=loaded.dyn;
     applyDom();
@@ -109,6 +115,7 @@
 
   function init(){
     captureOriginals();
+    loadAll();
     current=getSavedLang();
     setHtmlLangDir(current);
     document.body.addEventListener('click', e=>{

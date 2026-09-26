@@ -151,11 +151,18 @@ html.lenis, html.lenis body{height:auto}
 .brand-mark{font-family:var(--font-display); font-variation-settings:var(--soft);
   font-weight:600; font-size:1.55rem; color:var(--pine); letter-spacing:-.01em}
 .brand-sub{font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
-.nav-links{display:flex; gap:2rem; list-style:none}
+.nav-links{display:flex; gap:clamp(1rem,1.8vw,2rem); list-style:none}
 .nav-links a{text-decoration:none; font-weight:500; font-size:.95rem; color:var(--muted);
   transition:color .3s var(--ease)}
 .nav-links a:hover{color:var(--pine)}
-.nav .btn{padding:.7rem 1.3rem; font-size:.92rem}
+.nav .btn{padding:.7rem 1.3rem; font-size:.92rem; white-space:nowrap}
+.nav-lang-btn{white-space:nowrap}
+@media (max-width:1180px){ .nav-inner{gap:1rem} }
+body.nav-compact .nav .nav-links{display:none}
+body.nav-compact .nav .burger{display:flex}
+body.nav-compact .nav .nav-lang{margin-inline-start:auto}
+.nav-links a, .brand-sub{white-space:nowrap}
+.nav-lang, .nav .btn, .nav .burger{flex:none}
 
 /* ---------- Desktop language switcher ---------- */
 .nav-lang{position:relative}
@@ -179,8 +186,12 @@ html.lenis, html.lenis body{height:auto}
   transition:background-color .2s var(--ease), color .2s var(--ease)}
 .nav-lang-menu .lang-btn:hover{background:var(--sage-tint); color:var(--pine)}
 .nav-lang-menu .lang-btn[aria-current="true"]{background:var(--sage-tint); color:var(--pine); font-weight:600}
+.nav-lang-menu .lang-btn[dir="rtl"]{text-align:right}
+.overlay .nav-lang-btn{font-size:1rem; padding:.7rem 1.15rem; color:var(--pine); background:var(--card)}
+.overlay .nav-lang-menu{top:auto; bottom:calc(100% + .6rem); left:0; right:auto; min-width:220px; transform:translateY(8px) scale(.98)}
+.overlay .nav-lang.open .nav-lang-menu{transform:none}
 @media (max-width:860px){
-  .nav-lang{display:none}
+  .nav .nav-lang{display:none}
 }
 
 /* ---------- Hero ---------- */
@@ -348,6 +359,8 @@ body.loaded .hero-fade{opacity:1; transform:none}
   padding:clamp(1.5rem,3.5vw,2.4rem); box-shadow:var(--shadow-card)}
 .form-card h3{font-size:1.5rem; margin-bottom:1.2rem}
 .madlib{font-size:1.13rem; line-height:2.5; color:var(--ink)}
+.madlib .fill{max-width:100%}
+.form-card{min-width:0}
 .fill{font:inherit; color:var(--pine); font-weight:600;
   background:transparent; border:0; border-bottom:2px solid var(--sage);
   border-radius:0; padding:.05rem .35rem; min-width:2ch;
@@ -402,7 +415,7 @@ select.fill{appearance:none; -webkit-appearance:none; cursor:pointer; padding-ri
   .hero-photo{width:min(100%,300px); margin-top:.5rem}
   .doctor-grid{grid-template-columns:1fr}
   .portrait{margin-inline:auto}
-  .hub-card{grid-template-columns:1fr}
+  .hub-card{grid-template-columns:minmax(0,1fr)}
   .footer-grid{grid-template-columns:1fr 1fr}
   .tabbar{display:block}
   body{padding-bottom:0}
@@ -470,7 +483,7 @@ body.menu-open .overlay-nav a{transform:translateY(0)}
 .overlay-cta{margin-top:2.2rem; opacity:0; transform:translateY(16px);
   transition:opacity .5s var(--ease) .35s, transform .5s var(--ease) .35s}
 body.menu-open .overlay-cta{opacity:1; transform:none}
-.overlay-lang{margin-top:1.6rem; display:flex; flex-wrap:wrap; align-items:center; gap:.5rem;
+.overlay-lang{margin-top:1.6rem; display:grid; justify-items:start; gap:.55rem;
   opacity:0; transform:translateY(16px);
   transition:opacity .5s var(--ease) .4s, transform .5s var(--ease) .4s}
 body.menu-open .overlay-lang{opacity:1; transform:none}
@@ -507,6 +520,8 @@ html[dir="rtl"] .lang-chips,
 html[dir="rtl"] .hub-meta{direction:rtl}
 html[dir="rtl"] .overlay-close{right:auto; left:var(--pad)}
 html[dir="rtl"] .nav-lang-menu{right:auto; left:0}
+html[dir="rtl"] .overlay .nav-lang-menu{left:auto; right:0}
+html[dir="rtl"] a[href^="tel:"]{direction:ltr; unicode-bidi:isolate}
 html[dir="rtl"] .skip-link{left:auto; right:1rem}
 
 </style>
@@ -543,20 +558,20 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
         <li><a href="kontakt.html" data-i18n="nav.kontakt">Kontakt</a></li>
       </ul>
     </nav>
-    <div class="nav-lang" id="navLang">
-      <button type="button" class="nav-lang-btn" id="navLangBtn" aria-haspopup="true" aria-expanded="false" aria-controls="navLangMenu">
+    <div class="nav-lang" id="navLang" data-lang-menu>
+      <button type="button" class="nav-lang-btn" aria-haspopup="true" aria-expanded="false" aria-controls="navLangMenu" data-i18n-attr="aria-label:nav.language" aria-label="Sprache">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 4 6.1 4 9s-1.5 6.3-4 9c-2.5-2.7-4-6.1-4-9s1.5-6.3 4-9z"/></svg>
-        <span id="navLangCode">DE</span>
+        <span class="lang-current">Deutsch</span>
         <svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>
       </button>
-      <div class="nav-lang-menu" id="navLangMenu" role="menu" aria-label="Sprache / Language">
-        <button type="button" class="lang-btn" data-lang="de" aria-current="true" role="menuitem">Deutsch</button>
-        <button type="button" class="lang-btn" data-lang="en" role="menuitem">English</button>
-        <button type="button" class="lang-btn" data-lang="es" role="menuitem">Español</button>
-        <button type="button" class="lang-btn" data-lang="fr" role="menuitem">Français</button>
-        <button type="button" class="lang-btn" data-lang="tr" role="menuitem">Türkçe</button>
-        <button type="button" class="lang-btn" data-lang="ru" role="menuitem">Русский</button>
-        <button type="button" class="lang-btn" data-lang="ar" role="menuitem">العربية</button>
+      <div class="nav-lang-menu" id="navLangMenu" role="menu">
+        <button type="button" class="lang-btn" data-lang="de" lang="de" role="menuitem">Deutsch</button>
+        <button type="button" class="lang-btn" data-lang="en" lang="en" role="menuitem">English</button>
+        <button type="button" class="lang-btn" data-lang="es" lang="es" role="menuitem">Español</button>
+        <button type="button" class="lang-btn" data-lang="fr" lang="fr" role="menuitem">Français</button>
+        <button type="button" class="lang-btn" data-lang="tr" lang="tr" role="menuitem">Türkçe</button>
+        <button type="button" class="lang-btn" data-lang="ru" lang="ru" role="menuitem">Русский</button>
+        <button type="button" class="lang-btn" data-lang="ar" lang="ar" dir="rtl" role="menuitem">العربية</button>
       </div>
     </div>
       <button class="burger" id="burger" aria-expanded="false" aria-controls="overlay" data-i18n-attr="aria-label:nav.menuOpen" aria-label="Menü öffnen">
@@ -582,15 +597,24 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
     <a class="btn btn-primary" href="index.html#termin"><span data-i18n="nav.cta">Termin vereinbaren</span>
       <svg class="arr" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 3.5 13.5 8 9 12.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
   </div>
-  <div class="overlay-lang" role="group" aria-label="Sprache / Language">
-    <span class="overlay-lang-label">Sprache · Language</span>
-    <button type="button" class="lang-btn" data-lang="de" aria-current="true">DE</button>
-    <button type="button" class="lang-btn" data-lang="en">EN</button>
-    <button type="button" class="lang-btn" data-lang="es">ES</button>
-    <button type="button" class="lang-btn" data-lang="fr">FR</button>
-    <button type="button" class="lang-btn" data-lang="tr">TR</button>
-    <button type="button" class="lang-btn" data-lang="ru">RU</button>
-    <button type="button" class="lang-btn" data-lang="ar">AR</button>
+  <div class="overlay-lang">
+    <span class="overlay-lang-label" data-i18n="nav.language">Sprache</span>
+    <div class="nav-lang" data-lang-menu>
+      <button type="button" class="nav-lang-btn" aria-haspopup="true" aria-expanded="false" aria-controls="overlayLangMenu" data-i18n-attr="aria-label:nav.language" aria-label="Sprache">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 4 6.1 4 9s-1.5 6.3-4 9c-2.5-2.7-4-6.1-4-9s1.5-6.3 4-9z"/></svg>
+        <span class="lang-current">Deutsch</span>
+        <svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>
+      </button>
+      <div class="nav-lang-menu" id="overlayLangMenu" role="menu">
+        <button type="button" class="lang-btn" data-lang="de" lang="de" role="menuitem">Deutsch</button>
+        <button type="button" class="lang-btn" data-lang="en" lang="en" role="menuitem">English</button>
+        <button type="button" class="lang-btn" data-lang="es" lang="es" role="menuitem">Español</button>
+        <button type="button" class="lang-btn" data-lang="fr" lang="fr" role="menuitem">Français</button>
+        <button type="button" class="lang-btn" data-lang="tr" lang="tr" role="menuitem">Türkçe</button>
+        <button type="button" class="lang-btn" data-lang="ru" lang="ru" role="menuitem">Русский</button>
+        <button type="button" class="lang-btn" data-lang="ar" lang="ar" dir="rtl" role="menuitem">العربية</button>
+      </div>
+    </div>
   </div>
   <div class="overlay-foot">
     <a href="tel:+4313460671">01 / 346 06 71</a>
@@ -934,6 +958,8 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
 <script src="js/notice.js"></script>
 <script src="js/magnetic.js"></script>
 <script src="js/i18n.js"></script>
+<script src="js/lang-menu.js"></script>
+<script src="js/nav-fit.js"></script>
 <script>
 (function(){
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1199,25 +1225,6 @@ html[dir="rtl"] .skip-link{left:auto; right:1rem}
     addEventListener('keydown',e=>{if(e.key==='Escape'&&document.body.classList.contains('menu-open'))close();});
   })();
 
-  /* Desktop language dropdown */
-  (function(){
-    const navLang=document.getElementById('navLang');
-    const navLangBtn=document.getElementById('navLangBtn');
-    const navLangCode=document.getElementById('navLangCode');
-    if(!navLang||!navLangBtn) return;
-    const close=()=>{navLang.classList.remove('open'); navLangBtn.setAttribute('aria-expanded','false');};
-    const open=()=>{navLang.classList.add('open'); navLangBtn.setAttribute('aria-expanded','true');};
-    navLangBtn.addEventListener('click', e=>{
-      e.stopPropagation();
-      navLang.classList.contains('open') ? close() : open();
-    });
-    document.addEventListener('click', e=>{ if(!navLang.contains(e.target)) close(); });
-    addEventListener('keydown', e=>{ if(e.key==='Escape') close(); });
-    navLang.querySelectorAll('.lang-btn').forEach(btn=>btn.addEventListener('click', close));
-    const updateCode=()=>{ navLangCode.textContent=(window.i18n?window.i18n.current:'de').toUpperCase(); };
-    window.addEventListener('i18n:change', updateCode);
-    updateCode();
-  })();
 
   document.getElementById('year').textContent=new Date().getFullYear();
 })();

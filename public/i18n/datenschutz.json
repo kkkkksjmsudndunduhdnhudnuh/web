@@ -1,5 +1,6 @@
 {
   "en": {
+    "nav.language": "Language",
     "nav.leistungen": "Services",
     "nav.aerztin": "Your Doctor",
     "nav.praxis": "Practice & Hours",
@@ -78,6 +79,7 @@
     "ds.note": "This privacy policy serves as a general template and does not replace individual legal advice. Please have the information reviewed legally before publication."
   },
   "es": {
+    "nav.language": "Idioma",
     "nav.leistungen": "Servicios",
     "nav.aerztin": "Su médica",
     "nav.praxis": "Consulta y horarios",
@@ -156,6 +158,7 @@
     "ds.note": "Esta política de privacidad sirve como plantilla general y no sustituye el asesoramiento legal individual. Por favor, haga revisar la información legalmente antes de su publicación."
   },
   "fr": {
+    "nav.language": "Langue",
     "nav.leistungen": "Prestations",
     "nav.aerztin": "Votre médecin",
     "nav.praxis": "Cabinet & horaires",
@@ -234,6 +237,7 @@
     "ds.note": "Cette politique de confidentialité sert de modèle général et ne remplace pas un conseil juridique individuel. Veuillez faire vérifier ces informations sur le plan juridique avant publication."
   },
   "tr": {
+    "nav.language": "Dil",
     "nav.leistungen": "Hizmetler",
     "nav.aerztin": "Doktorunuz",
     "nav.praxis": "Muayenehane & Saatler",
@@ -312,6 +316,7 @@
     "ds.note": "Bu gizlilik politikası genel bir şablon olarak hizmet vermektedir ve bireysel hukuki danışmanlığın yerini tutmaz. Lütfen yayınlamadan önce bilgileri hukuki olarak kontrol ettirin."
   },
   "ru": {
+    "nav.language": "Язык",
     "nav.leistungen": "Услуги",
     "nav.aerztin": "Ваш врач",
     "nav.praxis": "Часы приёма",
@@ -390,6 +395,7 @@
     "ds.note": "Данная политика конфиденциальности служит общим образцом и не заменяет индивидуальную юридическую консультацию. Перед публикацией просим проверить информацию с юридической точки зрения."
   },
   "ar": {
+    "nav.language": "اللغة",
     "nav.leistungen": "الخدمات",
     "nav.aerztin": "طبيبتكم",
     "nav.praxis": "العيادة وساعات العمل",

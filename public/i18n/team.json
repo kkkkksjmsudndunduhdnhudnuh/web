@@ -1,5 +1,6 @@
 {
   "en": {
+    "nav.language": "Language",
     "nav.leistungen": "Services",
     "nav.aerztin": "Your Doctor",
     "nav.praxis": "Practice & Hours",
@@ -46,6 +47,7 @@
     "team.ctaHeading": "Get to know us <em>in person.</em>"
   },
   "es": {
+    "nav.language": "Idioma",
     "nav.leistungen": "Servicios",
     "nav.aerztin": "Su médica",
     "nav.praxis": "Consulta y horarios",
@@ -92,6 +94,7 @@
     "team.ctaHeading": "Conózcanos <em>en persona.</em>"
   },
   "fr": {
+    "nav.language": "Langue",
     "nav.leistungen": "Prestations",
     "nav.aerztin": "Votre médecin",
     "nav.praxis": "Cabinet & horaires",
@@ -138,6 +141,7 @@
     "team.ctaHeading": "Faites notre connaissance <em>en personne.</em>"
   },
   "tr": {
+    "nav.language": "Dil",
     "nav.leistungen": "Hizmetler",
     "nav.aerztin": "Doktorunuz",
     "nav.praxis": "Muayenehane & Saatler",
@@ -184,6 +188,7 @@
     "team.ctaHeading": "Bizi <em>şahsen</em> tanıyın."
   },
   "ru": {
+    "nav.language": "Язык",
     "nav.leistungen": "Услуги",
     "nav.aerztin": "Ваш врач",
     "nav.praxis": "Часы приёма",
@@ -230,6 +235,7 @@
     "team.ctaHeading": "Познакомьтесь с нами <em>лично.</em>"
   },
   "ar": {
+    "nav.language": "اللغة",
     "nav.leistungen": "الخدمات",
     "nav.aerztin": "طبيبتكم",
     "nav.praxis": "العيادة وساعات العمل",

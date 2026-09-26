@@ -1,5 +1,6 @@
 {
   "en": {
+    "nav.language": "Language",
     "nav.leistungen": "Services",
     "nav.aerztin": "Your Doctor",
     "nav.praxis": "Practice & Hours",
@@ -44,6 +45,7 @@
     "imp.note": "Please also see our <a href=\"datenschutz.html\">privacy policy</a>."
   },
   "es": {
+    "nav.language": "Idioma",
     "nav.leistungen": "Servicios",
     "nav.aerztin": "Su médica",
     "nav.praxis": "Consulta y horarios",
@@ -88,6 +90,7 @@
     "imp.note": "Consulte también nuestra <a href=\"datenschutz.html\">política de privacidad</a>."
   },
   "fr": {
+    "nav.language": "Langue",
     "nav.leistungen": "Prestations",
     "nav.aerztin": "Votre médecin",
     "nav.praxis": "Cabinet & horaires",
@@ -132,6 +135,7 @@
     "imp.note": "Veuillez consulter également notre <a href=\"datenschutz.html\">politique de confidentialité</a>."
   },
   "tr": {
+    "nav.language": "Dil",
     "nav.leistungen": "Hizmetler",
     "nav.aerztin": "Doktorunuz",
     "nav.praxis": "Muayenehane & Saatler",
@@ -176,6 +180,7 @@
     "imp.note": "Lütfen <a href=\"datenschutz.html\">gizlilik politikamıza</a> da göz atın."
   },
   "ru": {
+    "nav.language": "Язык",
     "nav.leistungen": "Услуги",
     "nav.aerztin": "Ваш врач",
     "nav.praxis": "Часы приёма",
@@ -220,6 +225,7 @@
     "imp.note": "См. также нашу <a href=\"datenschutz.html\">политику конфиденциальности</a>."
   },
   "ar": {
+    "nav.language": "اللغة",
     "nav.leistungen": "الخدمات",
     "nav.aerztin": "طبيبتكم",
     "nav.praxis": "العيادة وساعات العمل",
